@@ -1,0 +1,568 @@
+\usepackage[bottom=4cm, right=4cm]{geometry}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% LOAD FIRST
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%% Encoding
+\usepackage[latin1]{inputenc}
+
+%% Sprache
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/required/babel/babel.pdf
+\usepackage[english]{babel}
+\usepackage{blindtext}
+%% Besserer Flattersatz (Linksbuendig, statt Blocksatz)
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/ms/ragged2e.pdf
+\usepackage{ragged2e}
+
+%% Bilder
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/required/graphics/grfguide.pdf
+\usepackage[]{graphicx}
+
+%% Farben
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/xcolor/xcolor.pdf
+% Incompatible: Do not load when using pstricks !
+\usepackage[table,usenames,dvipsnames]{xcolor} % Load for using rowcolors command in tables
+
+
+%\usepackage[nointegrals]{wasysym}
+
+%% Mathematik Basispaket
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/required/amslatex/math/amsldoc.pdf
+\usepackage[]{amsmath}
+
+
+
+% damit es nicht zu "no room for new \dimen"-Fehler kommt
+\usepackage{etex}
+
+\usepackage{tikz}
+\usepackage{tkz-graph}
+%  \usepackage{ifthen}
+%  \usepackage{xstring}
+%  \usepackage{calc}
+%  \usepackage{pgfopts}
+
+% See http://pgfplots.sourceforge.net/pgfplots.pdf
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usetikzlibrary{pgfplots.groupplots}
+\usetikzlibrary{patterns}
+
+% argument #1: any options
+\newenvironment{customlegend}[1][]{%
+    \begingroup
+    % inits/clears the lists (which might be populated from previous
+    % axes):
+    \csname pgfplots@init@cleared@structures\endcsname
+    \pgfplotsset{#1}%
+}{%
+    % draws the legend:
+    \csname pgfplots@createlegend\endcsname
+    \endgroup
+}%
+
+% makes \addlegendimage available (typically only available within an
+% axis environment):
+\def\addlegendimage{\csname pgfplots@addlegendimage\endcsname}
+
+\usepackage{epstopdf}
+
+
+%prevent number and text in list of figures to overlap
+\makeatletter
+\renewcommand*\l@figure{\@dottedtocline{1}{1.5em}{3em}}% 3em instead of 2.3em
+\let\l@table\l@figure
+\makeatother
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% TEXT
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%% Schriftart
+
+%% http://www.tug.dk/FontCatalogue/mathfonts.html
+
+
+
+\usepackage{lmodern}
+%\usepackage{kpfonts}
+%\usepackage{mathptmx}
+%\usepackage[sc]{mathpazo}
+%\usepackage{charter}
+
+\usepackage[T1]{fontenc}
+%\usepackage{ae,aecompl}
+
+%Optischer Randausgleich mit pdfTeX
+\usepackage[%
+	expansion=false, % if true: better typography, but larger PDF file (and not compatible with all fonts)
+	protrusion=true
+]{microtype}
+
+%% Zum Unterstreichen
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/misc/ulem.sty
+\usepackage[normalem]{ulem}
+
+%%% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/soul/soul.pdf
+\usepackage{soul}	% Unterstreichen, Sperren
+
+%% Control the look & feel of the captions from floating environments like figure and table.
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/caption/caption.pdf
+\usepackage{caption}
+% Aussehen der Captions
+\captionsetup{
+   margin = 10pt,
+   font = {small,rm},
+   labelfont = {small,bf},
+   format = plain, % oder 'hang'
+   indention = 0em,  % Einruecken der Beschriftung
+   labelsep = colon, %period, space, quad, newline
+   justification = RaggedRight, % justified, centering
+   singlelinecheck = true, % false (true=bei einer Zeile immer zentrieren)
+   position = bottom %top
+}
+%%% Bugfix Workaround (Matthias Pospiech!?)
+\DeclareCaptionOption{parskip}[]{}
+\DeclareCaptionOption{parindent}[]{}
+
+%% Überschriften komlett Umdefinieren
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/titlesec/titlesec.pdf
+\usepackage{titlesec}
+
+%% Mehrere Text-Spalten
+\usepackage{multicol}
+
+%%
+% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/paralist/paralist.pdf
+\usepackage{paralist}
+
+%% Better than 'paralist' and 'enumerate' because it uses a keyvalue interface !
+%  Do not load together with package 'enumerate'.
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/enumitem/enumitem.pdf
+\usepackage{enumitem}
+
+%% Schriftanpassung nach scrguide.pdf
+\setkomafont{subsection}{\sffamily}
+
+%% Chapter-Style definieren
+% --> Rechtsbündig: Große Kapitelnummer, darunter der Name
+\titleformat{\chapter}[display]
+{\filleft\usekomafont{chapter}\Huge}
+{\fontsize{100pt}{50pt}\selectfont\thechapter}
+{-2ex} %is vertical space in [display] mode
+%Platz vor dem ganzen Krempel
+{\vspace{1ex}} %1ex ist die Höhe von x im aktuellen Font
+%Platz danach
+[\vspace{1ex}]
+
+
+\usepackage{nowidow}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% TABELLEN (tabularx wird von ltxtable geladen!?)
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%% Tabellen ueber mehere Seiten
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/carlisle/ltxtable.pdf
+\usepackage{ltxtable} % Longtable + tabularx
+                      % (multi-page tables) + (auto-sized columns in a fixed width table)
+%% bessere Abstaende innerhalb der Tabelle (Layout))
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/booktabs/booktabs.pdf
+\usepackage{booktabs}
+
+%% Erweiterte Funktionen innerhalb von Tabellen
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/multirow/multirow.sty
+\usepackage{multirow} % Mehrfachspalten
+
+%% Tabellen: Ausrichtung an Komma oder Punkt
+\usepackage{dcolumn}
+
+\usepackage{pbox}
+\usepackage{footnote}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% FARBEN
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\definecolor{sectioncolor}{RGB}{0, 0, 0}    % Schwarz
+
+% Farbe des Textes
+\definecolor{textcolor}{RGB}{0, 0, 0}        % Schwarz
+
+% Farbe fuer grau hinterlegte Boxen (fuer Paket framed.sty)
+\definecolor{shadecolor}{gray}{0.90}
+
+% Farben fuer die Links im PDF
+\definecolor{pdfurlcolor}{rgb}{0.6,0,0}
+\definecolor{pdffilecolor}{rgb}{0,0.4,0}
+\definecolor{pdflinkcolor}{rgb}{0,0,0.75}
+
+% Java Syntax Highlighting
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+
+% more
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+%colors for teh dbs
+\colorlet{EventStoreClr}{SpringGreen}
+\colorlet{HBaseClr}{Dandelion}
+\colorlet{PostgresClr}{Cyan}
+\colorlet{RedisClr}{Apricot}
+
+
+\definecolor{plot1}{RGB}{128,0,128}
+\definecolor{plot2}{RGB}{128,128,128}
+\definecolor{plot3}{RGB}{236,217,198}
+\definecolor{plot4}{RGB}{255,178,178}
+\definecolor{plot5}{RGB}{178,178,255}
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% LITERATUR
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+% ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/natbib/natbib.pdf
+%\usepackage[%
+	%round,	%(default) for round parentheses;
+%	square,	% for square brackets;
+	%curly,	% for curly braces;
+	%angle,	% for angle brackets;
+	%colon,	% (default) to separate multiple citations with colons;
+%	comma,	% to use commas as separaters;
+	%authoryear,% (default) for author-year citations;
+%	numbers,	% for numerical citations;
+	%super,	% for superscripted numerical citations, as in Nature;
+%	sort,		% orders multiple citations into the sequence in which they appear in the list of references;
+%	sort&compress,    % as sort but in addition multiple numerical citations
+                   % are compressed if possible (as 3-6, 15);
+	%longnamesfirst,  % makes the first citation of any reference the equivalent of
+                   % the starred variant (full author list) and subsequent citations
+                   %normal (abbreviated list);
+	%sectionbib,      % redefines \thebibliography to issue \section* instead of \chapter*;
+                   % valid only for classes with a \chapter command;
+                   % to be used with the chapterbib package;
+	%nonamebreak,     % keeps all the authors names in a citation on one line;
+                   %causes overfull hboxes but helps with some hyperref problems.
+%]{natbib}
+
+%% Bibliography styles created with custombib
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/custom-bib/makebst.pdf
+%\bibliographystyle{bib/bst/AlphaDINFirstName}
+\bibliographystyle{alpha}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% BILDER & GRAFIKEN
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+% Stellt die Option [H] fuer Floats zur Verfügung
+\usepackage{float}
+
+% Floats immer erst nach der Referenz setzen
+\usepackage{flafter}
+ 
+%% Platz ober- und unterhalb des Bildes
+\setlength{\intextsep}{0.5\baselineskip} 
+
+%%% Doc: http://www.ctan.org/tex-archive/macros/latex/contrib/sidecap/sidecap.pdf
+\usepackage[%
+%	outercaption,%	(default) caption is placed always on the outside side
+%	innercaption,% caption placed on the inner side
+%	leftcaption,%  caption placed on the left side
+	rightcaption,% caption placed on the right side
+%	wide,%			caption of float my extend into the margin if necessary
+%	margincaption,% caption set into margin
+	ragged,% caption is set ragged
+]{sidecap}
+
+\renewcommand\sidecaptionsep{2em}
+%\renewcommand\sidecaptionrelwidth{20}
+\sidecaptionvpos{table}{c}
+\sidecaptionvpos{figure}{c}
+
+%% Subfigures
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/subfig/subfig.pdf
+%  Incompatible: loads package capt-of. Loading of 'capt-of' afterwards will fail therefor
+\usepackage{subfig}
+
+% Aussehen der Captions fuer subfigures (subfig-Paket)
+\captionsetup[subfloat]{%
+   margin = 10pt,
+   font = {small,rm},
+   labelfont = {small,bf},
+   format = plain, % oder 'hang'
+   indention = 0em,  % Einruecken der Beschriftung
+   labelsep = space, %period, space, quad, newline
+   justification = RaggedRight, % justified, centering
+   singlelinecheck = true, % false (true=bei einer Zeile immer zentrieren)
+   position = bottom, %top
+   labelformat = parens % simple, empty % Wie die Bezeichnung gesetzt wird
+}
+
+%% Bilder von Text Umfliessen lassen
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/wrapfig/wrapfig.sty
+% defines wrapfigure and wrapfloat
+\usepackage{wrapfig}
+
+% Platz ober- und unterhalb des Bildes
+\setlength{\intextsep}{0.5\baselineskip} 
+%\setlength{\wrapoverhang}{\marginparwidth} % Overlap des Bildes ...
+%\addtolength{\wrapoverhang}{\marginparsep} % ... in den margin
+%\setlength{\columnsep}{1em} % Abstand zum Text
+
+% Make float placement easier ???
+\renewcommand{\floatpagefraction}{.75} % vorher: .5
+\renewcommand{\textfraction}{.1}       % vorher: .2
+\renewcommand{\topfraction}{.8}        % vorher: .7
+\renewcommand{\bottomfraction}{.5}     % vorher: .3
+\setcounter{topnumber}{3}              % vorher: 2
+\setcounter{bottomnumber}{2}           % vorher: 1
+\setcounter{totalnumber}{5}            % vorher: 3
+
+%%% Doc: http://www.ctan.org/tex-archive/macros/latex/contrib/sidecap/sidecap.pdf
+\usepackage[%
+%	outercaption,%	(default) caption is placed always on the outside side
+%	innercaption,% caption placed on the inner side
+%	leftcaption,%  caption placed on the left side
+	rightcaption,% caption placed on the right side
+%	wide,%			caption of float my extend into the margin if necessary
+%	margincaption,% caption set into margin
+	ragged,% caption is set ragged
+]{sidecap}
+
+\renewcommand\sidecaptionsep{2em}
+%\renewcommand\sidecaptionrelwidth{20}
+\sidecaptionvpos{table}{c}
+\sidecaptionvpos{figure}{c}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% KOPF- UND FUSSZEILEN
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+% ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/koma-script/scrguide.pdf
+\usepackage[%
+   automark,         % automatische Aktualisierung der Kolumnentitel
+   nouppercase,      % Grossbuchstaben verhindern
+   %markuppercase    % Grossbuchstaben erzwingen
+   %markusedcase     % vordefinierten Stil beibehalten
+   %komastyle,       % Stil von Koma Script
+   %standardstyle,   % Stil der Standardklassen
+]{scrpage2}
+
+\renewcommand*{\chaptermark}[1]{%
+  \markboth{\chaptermarkformat #1}{}}
+\renewcommand*{\sectionmark}[1]{%
+  \markright{\sectionmarkformat #1}}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% MATHE & FORMELN
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%% Bracket Schreibweise
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/misc/braket.sty
+\usepackage{braket}
+
+%% Durchstreichen
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/misc/cancel.sty
+\usepackage{cancel}
+
+%% Hervorheben
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/mh/doc/empheq.pdf
+\usepackage{empheq}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% LISTINGS & CODE & DIAGRAMME (UML)
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%% Listings Paket
+%  http://www.pvv.ntnu.no/~berland/latex/docs/listings.pdf
+\usepackage{listings}
+\lstloadlanguages{Java,SQL,XML}
+
+%% für alle Listings
+\lstset{ 
+		 backgroundcolor=\color{gray!12},
+         basicstyle=\footnotesize\ttfamily, % Standardschrift    
+         numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+%         stepnumber=1,               % Abstand zwischen den Zeilennummern
+         numbersep=5pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs
+         extendedchars=true,         %
+         breaklines=true,            % Zeilen werden Umgebrochen    
+         showspaces=false,           % Leerzeichen anzeigen ?%         showtabs=false,             % Tabs anzeigen ?
+         showstringspaces=false,     % Leerzeichen in Strings anzeigen ?
+		 %frame=single,
+		 %frame={l,r,b},
+		 rulecolor=\color{black!60},
+		 %captionpos=b,
+		 xleftmargin=15pt,
+		 framexleftmargin=14pt,
+		 %framexrightmargin=4pt,
+         %framexbottommargin=4pt,
+         %framextopmargin=4pt,
+         belowcaptionskip=5pt,
+ }
+ 
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{black!60}{\parbox{0.985\textwidth}{\hspace{13pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont={white},textfont={sf,white},
+singlelinecheck=false, margin=1pt, font={bf,small}}
+
+\lstdefinestyle{Java}
+{
+  keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{javared}, % Farbe der String
+  commentstyle=\color{javagreen}, % Farbe der Kommentare
+  morecomment=[s][\color{javadocblue}]{/**}{*/},
+  morekeywords={public,lang}
+}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b][\color{javadocblue}]",
+  morestring=[s][\color{black}]{>}{<},
+  %morecomment=[s]{<?}{?>},
+  %stringstyle=\color{javadocblue},
+  identifierstyle=\color{javagreen},
+  keywordstyle=\color{javapurple},
+  morekeywords={category,lang}% list your attributes here
+}
+
+%% tikz-uml zur Darstellung von UML-Diagrammen
+%  http://www.ensta-paristech.fr/~kielbasi/tikzuml/index.php?lang=en
+\usepackage{packages/tikz-uml}	% aus dem Ordner packages, da nicht im MikTex-Repository!
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% SONSTIGES
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\setcounter{lofdepth}{1}  % Tiefe Abbildungsverzeichnis, 1 = nur figures, 2 = figures + subfigures
+\setcounter{secnumdepth}{2}    % Tiefe der Nummerierung
+\setcounter{tocdepth}{2}	   % Tiefe Inhaltsverzeichnis
+
+%% Intelligente Querverweise
+%  http://www.ctex.org/documents/packages/bibref/varioref.pdf
+\usepackage[english]{varioref}
+
+%% Fussnoten/Endnoten
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/footmisc/footmisc.pdf
+\usepackage[
+   bottom,      % Footnotes appear always on bottom. This is necessary
+                % especially when floats are used
+   stable,      % Make footnotes stable in section titles
+   perpage,     % Reset on each page
+   %para,       % Place footnotes side by side of in one paragraph.
+   %side,       % Place footnotes in the margin
+   ragged,      % Use RaggedRight
+   %norule,     % suppress rule above footnotes
+   multiple,    % rearrange multiple footnotes intelligent in the text.
+   %symbol,     % use symbols instead of numbers
+]{footmisc}
+
+%% Advanced features for clever quotations
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/csquotes/csquotes.pdf
+\usepackage[%
+   babel,            % the style of all quotation marks will be adapted
+                     % to the document language as chosen by 'babel'
+   german=quotes,		% Styles of quotes in each language
+   english=british,
+   french=guillemets
+]{csquotes}
+
+\renewcommand*{\mkblockquote}[4]{\enquote{#1}#2#4#3}
+
+
+% Use “\cite{NEEDED}” to get Wikipedia-style “citation needed” in document
+\usepackage{ifthen}
+\let\oldcite=\cite
+\renewcommand\cite[1]{\ifthenelse{\equal{#1}{NEEDED}}{\ensuremath{^\texttt{\color{red}[citation~needed]}}}{\oldcite{#1}}}
+
+%\usepackage[disable]{todonotes}
+\usepackage{todonotes}
+
+% margin notes aligned with paragraph
+\newcommand{\mnote}[1]{{\hspace{0pt}\marginpar[\raggedleft\emph{\small{#1}}]{\raggedright\emph{\small{#1}}}}\ignorespaces}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%% LINKS (hyperref am Besten zum Schluss Laden laut Doku)
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%% Setzen von URLs. In Verbindung mit hyperref sind diese auch aktive Links.
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/misc/url.sty
+\usepackage{url}
+\urlstyle{sf}
+
+%% Basispaket hyperref
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/hyperref/doc/manual.pdf
+\usepackage[
+   % Farben fuer die Links
+   colorlinks=false,%true,         % Links erhalten Farben statt Kaeten
+   urlcolor=pdfurlcolor,    % \href{...}{...} external (URL)
+   filecolor=pdffilecolor,  % \href{...} local file
+   linkcolor=pdflinkcolor,  %\ref{...} and \pageref{...}
+   citecolor=pdffilecolor,	% Farbe von Links zum Literaturverzeichnis
+   % Links
+   raiselinks=true,			% calculate real height of the link
+   breaklinks,              % Links überstehen Zeilenumbruch
+   backref=page,            % Backlinks im Literaturverzeichnis (section, slide, page, none)
+   pagebackref=true,        % Backlinks im Literaturverzeichnis mit Seitenangabe
+   verbose,					% extra diagnostic messages are printed in the log file
+   hyperindex=true,         % backlinkex index
+   linktocpage=true,        % Inhaltsverzeichnis verlinkt Seiten
+   hyperfootnotes=false,    % Keine Links auf Fussnoten
+   % Bookmarks
+   bookmarks=true,          % Erzeugung von Bookmarks fuer PDF-Viewer
+   bookmarksopenlevel=1,    % Gliederungstiefe der Bookmarks
+   bookmarksopen=true,      % Expandierte Untermenues in Bookmarks
+   bookmarksnumbered=true,  % Nummerierung der Bookmarks
+   bookmarkstype=toc,       % Art der Verzeichnisses
+   % Anchors
+   plainpages=false,        % Anchors even on plain pages ?
+   pageanchor=true,         % Pages are linkable
+   % PDF Informationen
+   pdftitle={},             % Titel
+   pdfauthor={},            % Autor
+   pdfcreator={LaTeX, hyperref, KOMA-Script}, % Ersteller
+   %pdfproducer={pdfeTeX 1.10b-2.1} %Produzent
+   pdfstartview=FitH,       % Dokument wird Fit Width geaefnet
+   pdfpagemode=UseOutlines, % Bookmarks im Viewer anzeigen
+   pdfpagelabels=true      % set PDF page labels
+]{hyperref}
+
+%% Links auf Gleitumgebungen springen nicht zur Beschriftung, sondern zum Anfang der Gleitumgebung
+%  ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/oberdiek/hypcap.pdf
+\usepackage[all]{hypcap}
+
+%% Erweitert Angabe eines Zitats (im Literaturverzeichnis)
+\renewcommand*{\backrefalt}[4]{%
+   	% alternative interface
+   	% #1: number of distinct back references
+   	% #2: backref list with distinct entries
+   	% #3: number of back references including duplicates
+   	% #4: backref list including duplicates
+   	\ifnum#1>0 %
+	   	\mbox{(cited on %
+	   	\ifnum#1=1 %
+			   page~%
+		   \else
+	   		pages~%
+	   	\fi
+	   	#2)}%
+   	\fi
+   }
+
+   
+  

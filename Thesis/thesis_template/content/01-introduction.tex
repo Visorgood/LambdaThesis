@@ -1,0 +1,201 @@
+\chapter{Introduction}
+\label{chap:introduction}
+
+Both psychology and psychiatry heavily rely on observing humans.
+They fundamentally assume that a person's mental state affects his interactions with the environment.
+The other way around it is possible to derive a person's mental state by observing his actions.
+If a driver maneuvers his car more aggressively than usual, we can safely assume that he is stressed.
+It is however inherently hard to gather such data.
+
+Traditional observation methods are too expensive and often inapplicable.
+One approach is to let users collect data about themselves, e.g.\ by using a diary.
+Another one is to keep them in a controlled environment that makes it possible for external parties to note down their actions.
+A third approach is shadowing, where a follower observes a user's every move and collects this data for him.
+However all those methods inherently restrict the user and are biased towards the observer.
+They are also expensive and very time consuming which makes them infeasible for a broader audience.
+Recent technological developments allow the collection of data in a far less intrusive way.
+
+Smartphones are a quantity rich source of data.
+In contrast to  mobile sensors like wristbands, which e.g.\ measure the heart rate, they are already an everyday companion for many users.
+They take them wherever they go and use them throughout the day, mostly performing numerous short interactions.
+For many people it is the first and the last device they use during their waking hours.
+They possess a large number of different sensors which provide analyzable data.
+Additionally, they capture a big part of people's social interactions.
+This makes them especially suited for this use case.
+
+
+
+% Every process conducts potential data.
+% In the digital age more and more processes in the real world actually produce data.
+% Back in the days all conversations were held face to face.
+% Nowadays people often send short messages to each other via mobile devices.
+% Asking for the way becomes unnecessary when everybody has a navigation system built into their car.
+% This also captures the location of the person at every point in time.
+% These are only two exemplary situations where usable data occurs which remains unused yet.
+% 
+% The central thesis is that emotions and inner processes manifest in physical interactions of people with their devices.
+% An upset person will drive his car more aggressively than a balanced one.
+% The other way around we are able to extract a person's mood by observing his behavior.
+% Smartphones are especially suited to observe such interactions.
+% Users take them wherever they go and use them throughout the day, mostly performing numerous short interactions.
+% For many people it is the first and the last device they use during their waking hours.
+% They possess a number of different sensors, which provide analyzable data.
+% 
+% Actually collecting, storing and investigating this data can be subsumed with the term Big Data.
+% It describes collecting as much data as possible without any primary target.
+% The idea is to answer some question in the future by having sufficient data to incorporate.
+% This leads to the idea of the Menthal (menthal health analytics) project.
+
+Menthal (mental health analytics) is a research project on the intersection between psychology and mobile computing.
+At its core it contains a mobile software that logs interactions, locations and app usages of users.
+This application is used by several subprojects which all focus on human behavior.
+%Several subprojects incorporate this software to investigate human behavior.
+OpenMenthal is a smartphone app for Self Monitoring where people analyze themselves on their own.
+They are supported by automatic data collection and aggregation.
+The users can review their data as graphs of time series.
+MenthalDepressed tries to capture the mood level of a person by observing changes in their interactions with other people.
+If someone for instance starts talking to fewer and fewer people, it might be an indicator of some mental issue.
+Both deal with the analysis of potentially large data sets.
+This poses new challenges for storing, managing and processing this data.
+
+In this thesis we present a structured approach for finding a suitable data storage technology to cope with the challenges of our particular use case.
+These are the Big Data scenario, the high frequency of inserts and the ability to handle continuous queries.
+% More precisely we will deal with large amounts of data which will not fit on a single machine.
+The data is heterogeneous because the type and characteristics of data sources may change over time.
+We can think of including new sensors or adapting to different mobile phones.
+We expect high rates of new incoming data which a system has to handle.
+%The execution of continuous queries has to meet strict time constraints to be able to handle the incoming stream of data.
+The arrival of new data triggers aggregations which we thus have to perform continuously in a given time frame.
+In order to fulfill these requirements in the limited time frame of our thesis we have to exhaust all given assumptions.
+For example, we do not join the data of different users.
+This level of optimization requires revisiting every single aspect of traditional database system architectures.
+
+This thesis consists of twelve chapters which can be divided into three parts.
+The first part builds the foundation by introducing the mobile data scenario and data management in general.
+Chapter 2 introduces the fundamentals of capturing data on mobile devices.
+It also discusses the common characteristics and particularities of time series data in this context.
+Chapter 3 presents the basic aspects of data storage.
+It addresses the question of how to store and retrieve data efficiently.
+Chapter 4 compares the most common database models, based on the previously introduced concepts.
+It discusses traditional approaches like the relational model as well as the more novel NoSQL systems.
+Chapter 5 turns to the real world and provides an overview of the database system market.
+In particular, it outlines four archetypical systems we employ throughout the rest of this thesis.
+These are the EventStore from Marburg University, the column-family store HBase, the relational database system PostgreSQL and the in-memory key-value store Redis.
+
+The second part deals with the requirements of our particular scenario and proposes a suitable architecture.
+The sixth chapter takes a closer look at the two main use cases within the Menthal project, namely Quantified Self (Self Tracking) and illness detection.
+It declares the focus on Quantified Self and extracts functional and nonfunctional requirements from the specified use case description.
+On this foundation Chapter 7 proposes an architecture for a Menthal backend.
+It describes the different components and their basic responsibilities.
+It states problems which arise and sketches solutions.
+However it does not provide a full implementation description.
+
+The third part deals with the most compelling question of what database technology fits the best within this architecture.
+To this end Chapter 8 describes a new benchmark for testing different database systems.
+In contrast to existing benchmarks it focuses on the data and query load we expect in the scope of the project.
+The chapter begins by describing an algorithm for artificial data generation based on empirical studies.
+Furthermore, it defines queries to review certain aspects of the investigated systems.
+Chapter 9 deals with the implementation of the benchmark and the adaptation of the different database systems.
+It presents a detailed description of the data generation and specifies for each system a way of storing and querying this data.
+The tenth chapter presents the results of an experiment based on the benchmark.
+It interprets the observations and points out the differences in the performance of the systems.
+Chapter 11 treats the non-performance aspect of the database systems.
+It presents our experiences during the implementation phase of the benchmark and gives an impression of how well the systems support the development process.
+Finally, Chapter 12 concludes the thesis by summarizing our work and providing an outlook on future research questions.
+
+
+
+
+
+
+% 
+% Bei jedem Prozess fallen potentiell Daten an.
+% Im digitalen Zeitalter ist dies immer häufiger tatsächlich der Fall.
+% Wo früher eine Gespräch face to face stattfand, wird heute eine SMS geschickt.
+% Früher hat man nach dem WEeg gefragt oder Landkarten verwendet.
+% Heute hat jedermann ein Navigationsgerät im Auto.
+% Dieses erfasst zudem jederzeit den STandort der betreffenden Person.
+% 
+% Dies sind nur zwei Beispiele in denen verwertbare Daten anfallen, die bisher aber nicht genutzt werden.
+% Hier setzt unsere zentrale These an, dass sich Gefühle und innere Vorgänge in den physischen Aktionen von Menschen mit Geräten wiederspiegeln.
+% Ein aufgeregter Mensch wird aggresiver im STraßenverkehr vorgehen, als ein ausgeglichener.
+% Andersherum lassen sich aus den Interaktionen von Menschen mit Maschinen Rückschlüsse auf ihren Gemütszustand ziehen.
+% 
+% 
+% 
+% 
+% three approaches
+%   - self tracking
+%     - people can easily collect data about themselves
+%   - cell phone abuse
+%   - smartphones
+%     - people use smartphones all day errday
+%     - there are lots of information to gather on the devices
+%     - Big Data approach
+%       - collect as much data as possible
+%       - make use of this data
+%       - question makein
+%         - self monitoring/quantified self
+%         - analysis
+%           - 
+% 
+% 
+% People collect data about themselves for ages.
+% Typically sportsmen track their training progress over large periods of time.
+% Health related issues on the other hand are traditionally measured by doctors.
+% In recent years
+% 
+% Introduction\ldots
+% 
+% - Menthal project
+%   - target
+%     - stress detection
+%       - mistakes in texts in comparison to normal
+%     - depressions
+%       - motion radius
+%       - number of people talk to
+%     - misuse of mobile telecommunication devices
+%   - 24/7 observation (not possible in hospital/psychiatry)
+%   - collect much data without knowing relevance
+%     -> Big Data approach
+%   - anaonymization/preserve privacy
+%     - ethical concerns
+%     - confidentiality
+%     - provide content to other scientists
+%   - collect events
+%   - visualize collected data/aggregation
+%     - self observation
+%   - stress detection algorithms
+%   - HCI
+%   - quantitative analysis
+%   - early detection burnout
+%   - alzheimers
+%   - serious games
+%     - ``enforce'' ``good'' behavior
+%   - cooperation
+%     - study of 150 participants
+%     - psychologists
+%     - correlations of personality traits and genetic markers
+%   - OpenMenthal
+%     - Smartphone app for publicity (android)
+%   - MenthalDepressed
+%     - monitor depression
+%   - MenthalSkilled
+%     - cognitive games in customized lockscreens
+%   - MenthalDopa
+%     - parkinsons
+%     
+%  - Structure of thesis
+%    - Mobile sensor data characteristics
+%      - time series
+%      - mobile devices sensors (GPS, \ldots)
+%    - foundations of data base systems
+%    - database models
+%    - database market overview/taxonomy/classification
+%    - benchmark
+%      - what is a benchmark
+%      - related work
+%      - our concept
+%      - our implementation
+%      - our results
+%    - Concepts for DataStore 1

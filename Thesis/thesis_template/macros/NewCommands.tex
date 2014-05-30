@@ -1,0 +1,18 @@
+%% New Commands
+\newcommand{\package}[1]{\texttt{\itshape#1}}
+\newcommand{\command}[1]{\texttt{#1}}
+\newcommand{\env}[1]{\texttt{#1}}
+
+%include author in section title in a flexible way
+\newcommand{\authorsection}[2]{
+\ifx&#2&%
+  % #2 is empty
+  \section{#1 \color{red}{NO AUTHOR}}
+\else
+  \section{#1 \small[#2]}
+\fi
+}
+
+
+% \newcommand{\authorsection}[2]{
+%    \section{#1$_{#2}$}}

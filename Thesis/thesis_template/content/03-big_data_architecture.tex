@@ -1,0 +1,102 @@
+\chapter{Big Data Architecture}
+\label{chap:big_data_architecture}
+
+Traditionally, the process of making decisions is expensive and experiences siginificant error.
+Simple reasoning is a straighforward approach, but it can work only till the certain point.
+The main problem is that it can be easily ruined by the wrong assumptions.
+Hence one would preferably use evidence based approaches, that built on the accumulated data.
+The most commonly used tools for this purpose are surveys and experiments, carryied out on a control group.   
+However, they both have significant disadvantages, that makes the process of making decisions more complicated. 
+On the one hand, surveys and experiments involve human resources, that leads to high expenses.
+On the other hand, these approaches are also vulnerable to errors.
+A lot of various reasons can cause an error, such as a survey composed in a wrong way, or a not representative control group.
+ 
+Fortunately, this situation has changed dramatically in recent years.
+First of all, data has become available for free, as a by-product of other processes (such as log files).
+Moreover, constant reduction of data storage costs allows to warehouse enormous amounts of information, without troubling about the size limits.
+Owing to the progress in the information technologies area, both transfering and processing of huge data volumes become easy.
+All this gives us an alternative solution to the problem of making decisions, that avoids the drawbacks of the strategies presented above.
+The name of this solution is Big Data.
+
+The main distinguishing feature of Big Data is that data collection is independet of use case.
+Information is collected because it is available and cheap, with the hope that later on it can be used to answer a question that has not arised yet.
+For example, Facebook stores all available data about the users, like demographic information, geographic location, connections with other users, visited websites, clicked links, etc.
+As a result it has a huge amount of data, which, with the right approach, can give lots of useful information. 
+For instance, afterwards it can be used in targeted advertising, or for performing the social network analysis.
+
+\mnote{Big Data}
+There is no consensus about the origins of the term "Big Data", but most of the sources claim that it is first mentioned in the press in 2008.
+People start actively using it since 2009 and it spreads quickly owing to its precise and capacious meaning. 
+Big Data is characterized by its high (i) velocity, (ii) volume and (iii) variety. [reference]
+
+\mnote{volume}
+(i)Due to the origin of Big Data it always has enormous size.
+For instance, by the end of 2013, the number of Facebook users reaches 1.23 billion.
+Each of them not only has some profile information, but also communicates with other users, shares data, updates the timeline and so forth.
+As a result, Facebook deals with storing and processing petabytes of data.
+Another example is the information received from all types of sensors.
+Sensor is a converter that measures and transforms physical quantity into a digital signal.
+Sensors find an application in various fields: manufacturing industry, transportation systems, meteorology, medicine, even modern smartphones have lots of sensors.
+The key feature of a sensor is that often it does its job constantly, continuously producing the flow of information, what leads to the large volumes of data.
+The ability to process large amounts of information is the main benefit of Big Data analytics, since with its vast volume it is possible to construct better models.
+
+\mnote{velocity}
+(ii)On the other hand, the velocity of Big Data transmission and processing should be high.
+For instance, it can help to improve traffic in a metropolian areas, offering various travel alternatives for a vehicle, basing on analysis of incoming data about the situation on the roads.
+Rapidity of data processing can be necessary in other cases as well.
+Sometimes high processing speed can even be indispensable to life, when using in medicine, for example.
+Special systems monitor the state of a patient, immediately alerting caregivers in the case of dangerous anomaly occurence. 
+
+\mnote{variety}
+(iii)Finally, it is apparent that the set of Big Data sources is highly diverse.
+Apart from all the examples, mentioned above, a variety of other large volume information generators exists.
+They differ in the type of produced data - it can be text, images, sounds, raw feed incoming directly from sensors, etc.
+Furthermore, they differ in the way how data is collected, how urgently it should be processed and which storage capabilities are available for its warehousing.
+All these three "v": volume, velocity and variety constitute a criterion, that allocates Big Data observation into a distinct sector of computer science, which requires ad hoc decisions and a special approach.
+
+\mnote{Batch processing}
+It is important to mention two fundamentally different ways of processing the Big Data, namely Batch and Real Time data processing.
+In the first case, data is handled in batches, i.e. process collects the data until the batch size is obtained, and only after this the process can perform the necessary actions on a batch as a whole.
+This gives several advantages.
+Obviously, it becomes possible to process multiple operations in one request, instead of handling each operation individually.
+Batch processing can be done in the appropriate time, when the computing resources are less busy.
+Furthermore, one can set a priority for each task, beginning with more urgent operations.
+There is no need in a close supervision of a run, batch porcessing is mostly autonomous.
+However, there is a significant drawback.
+The results are always obtained with a time delay.
+
+\mnote{Real Time processing}
+On the other hand, the main idea of real time data processing, as it follows from the name, that the data is handled at the moment of arrival.
+The advantage of the latter is that the results are ready almost immediately, which can be an essential requirement in such areas as medicine or security threat prediction. 
+Moreover, the information is always available and up-to-date.
+This huge benefit of real time processing makes it more and more popular, despite the fact that it requires greater effort to design and maintain. 
+
+
+%big dATA TECHNOGLY IS A UMBRELLA OF VARIOSU SYSTEMS
+%- Gathering, storing, processing data (alternatives SQL-noSQL)
+% 	volume (distributed)
+% 	speed
+% 	variety (where and how to store particular type of data)
+% 	not one general solution
+% 
+% 
+% big data architectures have to be targeted to each specific scenario
+% 
+% -BD architecture requirements
+% - naive approaches (?)
+% - Google architecture in general
+% 	GFS
+\mnote{Google File System}
+Google File System (GFS) is a scalable distributed file system, which supports Big Data operations.
+The underlying idea is the following: Google Search Engine and some other Google systems process vast amount of data, which is spread all over the world.
+Hence the file system should be highly extensible, fault tolerate and give an opportunity to use cheap hardware components.
+Furthermore, it has some specific usage features.
+For example, most of the time the stored data stays unchanged and new data is only appended.
+GFS architecture design helps to meet all these requirements.
+Each GFS cluster contains one master server and several chunkservers.
+Each chunk, in its turn, combines multiple files.
+The master node manages the mapping from files to chunks, location of chunks, access control, garbage collection and some other tasks.
+To prevent the master being a bottleneck, clients pass through it only file system control data, e.g. a client can ask which chunkservers it should contact.
+After receiving a reply, the client directly transfers data to the given chunkserver, dispensing master node from overload. 
+% 	MapReduce
+% - Facebook architecture

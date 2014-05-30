@@ -1,0 +1,14 @@
+# The output
+#/*.pdf
+
+# Temp
+/tmp
+/thesis.synctex.gz
+/thesis.brf
+/thesis.lol
+
+# Bibliography
+/bibliography/*.bak
+
+*.aux
+/thesis.pdf

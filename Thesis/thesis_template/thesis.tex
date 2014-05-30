@@ -1,0 +1,62 @@
+%% DOC: http://mirror.ctan.org/macros/latex/contrib/koma-script/scrguide.pdf
+\documentclass[
+	% DEFAULT: final, a4paper, 11pt
+	twoside,
+	DIV11,				% Seitengroesse (siehe scrguide.pdf)
+	BCOR5mm,			% Zusaetzlicher Rand auf der Innenseite
+	pagesize,			% Schreibt die Papiergroesse in die Datei, wichtig fuer Konvertierungen
+	headsepline,		% Linie unter Kopfzeile
+	parskip=half,		% Abstand zwischen zwei Absätzen
+	bibtotoc,			% Bibliographie ins Inhaltsverzeichnis
+	liststotoc,			% Abb.- und Tabellenverzeichnis ins Inhaltsverzeichnis
+	cleardoubleempty	% Vakatseiten bleiben leer (etwa Seite vor einem Kapitel, das auf rechts beginnt)
+]{scrbook}
+
+%% Preambel
+\input{preambel/preambel}
+
+%% Commands
+\input{macros/DocumentInformation}
+\input{macros/NewCommands}
+\input{macros/TableCommands}
+
+%% Silbentrennung
+\input{preambel/hyphenation}
+
+
+%% DOKUMENT
+\begin{document}
+
+\pagenumbering{gobble}	% turn off page numbering
+%\sloppy		% Schaltet auf eine großzügige Formatierungsweise um, die relativ wenige Worttrennungen
+				% am Zeilenende erzeugt, dafür aber auch etwas größere Wortabstände innerhalb der Zeilen zuläßt.
+
+%% Titel
+\input{content/00-title}
+
+%% Inhaltsverzeichnis
+\frontmatter		% preface (roman numbering)
+\tableofcontents
+
+%% Inhalt
+
+
+\mainmatter			% arabic numbering for content
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\chead{\leftmark \hfill \rightmark}
+\cfoot[\pagemark]{\pagemark}
+\input{content/03-big_data_architecture}
+
+
+%% Bibliographie
+\backmatter
+%\nocite{*}
+\bibliography{bibliography/literature}
+
+\appendix
+\listoffigures
+\listoftables
+\lstlistoflistings
+
+\end{document}
