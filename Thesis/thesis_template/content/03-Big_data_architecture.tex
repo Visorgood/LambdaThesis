@@ -151,7 +151,8 @@ Thus the system should be highly fault tolerant, with timely error detection and
 
 Big Data technology is an umbrella of various systems. 
 Data has to be collected, processed, transmitted, stored, protected from attacks, etc.
-The [Figure 3.1] shows the general flow of data within the Big Data concept.
+The Figure~\ref{fig:big_data_flow} shows the general flow of data within
+the Big Data concept.
 Each of the presented steps involves a batch of technologies.
 For example, depending on data type and size, one can choose SQL (MySQL, Oracle, Teradata, etc.) or NoSQL (Cassandra, MongoDB, Apache HBase, etc.) solutions for storing Big Data.
 Similarly, depending on the application, Real Time processing (Storm, Spark Streaming, etc.) or Batch processing (Apache Hadoop, etc.) technologies are used. 
@@ -161,7 +162,7 @@ Thereby, it is apparent that no one general solution exists for every Big Data p
   \centering
   \includegraphics [width=0.9\textwidth]{images/big_data_flow}
   \caption{Big Data Flow}
-  \label{Fig.3.1:Big Data Flow}
+  \label{fig:big_data_flow}
 \end{figure}
 
 Well thought-out structure of Big Data architecture is of big importance.
@@ -185,7 +186,8 @@ Gmail, Google's email service, had 425 million users in 2012.
 These are just several examples of large-scale Google projects, that processes huge amounts of data.
 Therefore, Google introduces a batch of solutions for building scalable systems. 
 
-The overall structure of Google Big Data architecture is presented in [Figure 3.2].
+The overall structure of Google Big Data architecture is presented on the
+Figure~\ref{fig:google_architecture}.
 The lowest layer is Linux kernel, that serves as a basis for Google File System.
 Google File System is a scalable and highly available file system. 
 These properties are achieved by replicating data across several machines.
@@ -198,8 +200,8 @@ Let us explain in more detail the primary features and internal structure of the
 \begin{figure}
   \centering
   \includegraphics [width=0.9\textwidth]{images/Google_architecture}
-  \caption{Big Data Flow}
-  \label{Fig.3.1:Big Data Flow}
+  \caption{Google Architecture}
+  \label{fig:google_architecture}
 \end{figure}
 
 \authorsection{Google File System}{SP}
@@ -215,7 +217,8 @@ Most of the time the stored data stays unchanged and new data is only appended.
 The append operation, in its turn, should provide the concurrent access for multiple clients.
 GFS architecture design helps to meet all these requirements.
 
-[Figure 3.3] illustrates the main components of the GFS Architecture.
+The Figure~\ref{fig:GFS_architecture} illustrates the main components of the GFS
+Architecture.
 Each GFS cluster contains one master server and several chunkservers.
 The master has a "shadow" node, that provides read-only access when the primary master is down. 
 Chunkserver stores chunks as Linux files on local disk.
@@ -226,8 +229,8 @@ One chunk combines multiple files and has a fixed size of 64 megabytes.
 \begin{figure}
   \centering
   \includegraphics [width=0.9\textwidth]{images/GFS_architecture}
-  \caption{Big Data Flow}
-  \label{Fig.3.1:Big Data Flow}
+  \caption{GFS Architecture}
+  \label{fig:GFS_architecture}
 \end{figure}
 
 The large size of chunk gives several advantages.
@@ -272,13 +275,14 @@ To keep a mutation order consistent at all the replicas, GFS uses a technique of
 The master gives a lease to one of the replicas, that becomes a primary replica.
 The primary chooses an order for all the chunk's mutations and each replica then follows this order when applying mutations.
 
-The flow of write control is shown on [Figure 3.4] in more details.
+The flow of write control is shown on the Figure~\ref{fig:write_control_flow} in
+more details.
 
 \begin{figure}
   \centering
   \includegraphics [width=0.9\textwidth]{images/write_control_flow}
-  \caption{Big Data Flow}
-  \label{Fig.3.1:Big Data Flow}
+  \caption{Write control flow}
+  \label{fig:write_control_flow}
 \end{figure}
 
 1. The client sends a request to the master.
@@ -340,13 +344,14 @@ The MapReduce library groups these intermediate pairs together by the key and pa
 It passes them via iterator that allows to handle a large data set without keeping it in memory.
 The Reduce function merges the values with the same key, possibly decreasing a given set of values.
 One Reduce function invocation most of the time produces a single output value, or even none.
-[Figure 3.5] illustrates a pseudo-code for a simple MapReduce task.
+The Figure~\ref{fig:mapreduce_pseudo_code} illustrates a pseudo-code for a simple
+MapReduce task.
 
 \begin{figure}
   \centering
   \includegraphics [width=0.9\textwidth]{images/MapReduce_pseudo_code}
-  \caption{Big Data Flow}
-  \label{Fig.3.1:Big Data Flow}
+  \caption{Pseudo code of the MapReduce programming model}
+  \label{fig:mapreduce_pseudo_code}
 \end{figure}
 
 We visualize the overall flow of a MapReduce operation in [Figure 3.6].
