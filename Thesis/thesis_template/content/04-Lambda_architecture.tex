@@ -2,12 +2,12 @@
 \label{chap:lambda_architecture}
 
 The Lambda architecture \cite{MarzWarren201401} is a new solution
-for creating a BigData system of any type. It provides the model for scalable, fault-tolerant, distibuted processing
-of data. It uses both batch and online processing to answer the queries. It
-provides human fault-tolerance, what is often overlooked in other approaches.
-The Lambda architecture lets developer to concentrate on the bussiness-logik,
-instead of thinking about distributing computations, replication of dataset and
-how to manage intense grow of input data.
+for creating a BigData system of any type. It provides the model for scalable,
+fault-tolerant, distibuted processing of data. It uses both batch and online
+processing to answer the queries. It provides human fault-tolerance, what is
+often overlooked in other approaches. The Lambda architecture lets developer to
+concentrate on the bussiness-logik, instead of thinking about distributing
+computations, replication of dataset and how to manage intense grow of input data.
 
 The core of the Lambda architecture is the equation "query = function(all
 data)". The idea is that to answer any kind of query one can take the whole
@@ -36,7 +36,17 @@ At the same time the actual value is the one with the oldest timestamp.
 \authorsection{General structure}{VI}
 
 General view of the Lambda architecture is depicted on the
-Figure~\ref{fig:lambda_architecture}.
+Figure~\ref{fig:lambda_architecture}. It consists of three main elements: batch
+layer, serving layer and speed layer. Batch layer contains master dataset, that
+allows only appending data. One executes computations on the whole master
+dataset to obtain batch views, that are useful to answer queries. Serving
+layer is the place where batch views are stored. It is also responsible for
+providing interface for making particular queries from those views. Speed layer
+provides temporal views. They contain sketches of data, that was obesrved during
+ongoing batch processing in the batch layer. It is important, because batch
+processing can last several hours or even longer. Speed layer is much more
+complex than batch layer, and it provides only approximated results. We discuss
+it in more details in the particular chapter.
 
 \begin{figure}[H]
   \centering
@@ -45,11 +55,31 @@ Figure~\ref{fig:lambda_architecture}.
   \label{fig:lambda_architecture}
 \end{figure}
 
-
-\authorsection{Interaction of the components}{VI}
-
 \authorsection{Batch layer}{VI}
+
+Batch layer is the part of the Lambda architecture, that contains master dataset
+and precomputes batch views, useful for answering queries. One can think about
+master dataset as a very large list of records. This is of course simplified
+representation, but for current discussion it is enough. When new piece of data
+arrives to the system, it is being added to the master dataset. It can never
+change old records, or cause deletion. This is what is called immutability of
+data. This is a very important property, that provides human foult-tolerance,
+and at the same time allows to execute queries on the whole history of changes.
+
+Computation of batch views is being repeated continuously from scratch. This is
+inherently distributed operation. That means that developer doesn't have to
+think about concurrency and threads. He only wrties simple one-threaded code,
+that is distributed than in the cluster. MapReduce is a perfect example of
+a batch execution. Apache Hadoop is an example of framework that can be used for
+computations in the batch layer.
 
 \authorsection{Serving layer}{VI}
 
+Serving layer is a place where batch views are loaded and indexed for very fast
+access. It is represented by a specific distibuted database without ability to
+make random writes. That simplifies things extremely, because opportunity
+to make random writes brings most of complexity in databases. One example of
+database that can be used for serving layer is ElephantDB.
+
 \authorsection{Speed layer}{VI}
+
