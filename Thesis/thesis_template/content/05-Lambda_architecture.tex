@@ -2,53 +2,87 @@
 \label{chap:lambda_architecture}
 
 The Lambda architecture is a new solution for creating generic BigData systems \cite{MarzWarren201401}.
-It provides the model for scalable, fault-tolerant, distibuted processing of data.
-It uses both batch and online processing to answer the queries.
+It provides model for scalable, fault-tolerant, distibuted processing of data.
+It uses both batch and online processing to answer queries.
 It provides human fault-tolerance, what is often overlooked in other approaches.
 The Lambda architecture lets developer to concentrate on the logik and
 algorithms, instead of thinking about maintainance of the system, e.g.
 distributing computations, replication of dataset and how to manage intense grow of input data.
 
-The core purpose of any information system is to answer queries.
+The core purpose of any information system is to answer specific queries having
+data, gathered during functioning of the system.
 Any query can be generically considered as a function of the whole dataset.
-That means, that taking all available data, one can derive all information, that
+That means, that taking all available data, one can derive information, that
 answers specific query.
-(Running example.)
+[Running example]
 
-The problem is, that it is unreasonably expensive, and even infeasible in the
-most cases. Data stored in the system is raw.
-That means, that it can not be derived from any other data, and all types of
-queries, useful in the current context, can be answered using it.
-As a result, many queries requiere much computations to apply to the original
-dataset.
-In the BigData context, that can mean hours of processing, while we need often
-low-latency response.
-(Running example.)
+Another important concept is that only raw data \mnote{raw data} must be
+gathered in the system.
+Its property is that it can not be derived from any other data.
+It demands, nevertheless, that all types of queries, useful in the current
+context, can be answered.
+[Running example]
 
-To solve this issue one can create views, that are helpful for answeing particular queries, in advance.
-How?
-[paragraph]
+As a result of huge amounts of available data and its inherent rawness,
+answering particular query is often unreasonably expensive or even infeasible. 
+That is because query answer demands usually a piece of information, that is far
+away from what raw data in the system describes.
+It requires often execution of complex algorthims on the whole dataset.
+In the BigData context that can mean hours of processing, while low-latency
+response is typically a condition.
+[Running example]
 
-The problem of such approach is that indexing all the data and creating
-views is high-latency operation.
-Why?
-It can take several hours to be done.
-[paragraph]
+To solve this issue one can create batch views.
+Batch view \mnote{batch view} is a specific data structure.
+It contains derived data, that is a result of execution of specific algorithms
+and aggregations on the whole dataset.
+It is used for answering particular query.
+Batch views are created in advance.
+They can be used then in the query-time providing useful information.
+[Running example]
 
-To overcome this delay the Lambda architecture provides online processing of the
-data coming in the real-time, that has not yet appeared in the precomputed views.
-[paragraph]
+Batch views are created in the infinite loop.
+After the process of creation is completed, it starts again.
+Processing all the data and creating batch views is high-latency operation.
+It can take hours and even days to be done.
+As a result batch views are always out-of-date.
 
-As a result, to answer the query both things are used: views, computed on the
-whole dataset in advance, and sketch of the very new data.
-[paragraph]
+To overcome this delay the Lambda architecture provides online processing.
+It maintains additional data structures, called real-time views \mnote{real-time
+view}.
+They store information, derived from data arriving during current batch
+processing.
+Real-time views are normally different from batch views, and also more complex.
+That is because they must be updated and available continuously, as new data
+arrives.
+This demands usage of such techniques like sketch algorithms.
+It is described in all details in the particular chapter.
+It worth to mention that real-time views contain often approximated information,
+because of requirements they must obey.
+But that is not a crucial problem, because they do not accumulate error for a
+too long time.
+Real-time view exists only during current batch processing.
+When it is done, real-time views are dropped, and start to be created from the
+beginning.
+
+Summarizing, to answer the query system uses both things: batch views, computed
+in the previous batch processing of the whole dataset, and real-time views,
+gathering information from data coming during current batch processing.
+Information from both types of views is then merged to provide answer to the
+particular query.
+Batch views provide information, that complete, but out-of-date for
+several hours.
+Real-time views contain information, gathered during current batch processing.
 
 One key aspect of the Lambda architecture, that makes a difference with the
 other approaches, is that human fault-tolerance is concerned inherently.
+Human fault-tolerance \mnote{human fault-tolerance} is
+
 This is important issue, because mistakes in programming code are guarantied.
 And as a result, deleting or updating the data in a wrong way is also possible.
+
 The Lambda architecture doesn't allow to modify data. This is called
-\mnote{Immutability} immutability.
+immutability \mnote{immutability}.
 Data can be only added, and never can be deleted or updated.
 This leads to completely different model of storing data.
 Instead of having simple tuple for a particular entity, every value of a tuple
