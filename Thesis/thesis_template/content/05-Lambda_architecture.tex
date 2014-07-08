@@ -48,7 +48,7 @@ It can take hours and even days to be done.
 As a result batch views are always out-of-date.
 
 To overcome this delay the Lambda architecture provides online processing.
-It maintains additional data structures, called real-time views \mnote{real-time
+It maintains additional data structures, called real-time views\mnote{real-time
 view}.
 They store information, derived from data arriving during current batch
 processing.
@@ -74,38 +74,51 @@ Batch views provide information, that complete, but out-of-date for
 several hours.
 Real-time views contain information, gathered during current batch processing.
 
-One key aspect of the Lambda architecture, that makes a difference with the
-other approaches, is that human fault-tolerance is concerned inherently.
-Human fault-tolerance \mnote{human fault-tolerance} is
-
-This is important issue, because mistakes in programming code are guarantied.
-And as a result, deleting or updating the data in a wrong way is also possible.
+One more key aspect of the Lambda architecture, that makes a difference with
+other approaches, is that human fault-tolerance is inherent.
+Human fault-tolerance \mnote{human fault-tolerance} is robustness of the
+system to mistakes in programming code.
+This is important issue, because programmers' mistakes are guarantied.
+As a result, deleting or updating the data in a wrong way is also possible.
 
 The Lambda architecture doesn't allow to modify data. This is called
-immutability \mnote{immutability}.
-Data can be only added, and never can be deleted or updated.
-This leads to completely different model of storing data.
+immutability\mnote{immutability}.
+Data can be only added, and never deleted or updated.
+This drammatically simplifies complexity of the system, because
+maintainance of modifications in the distributed environment is not an easy
+task.
+But even more important, that mistakes in programming code can not ruin the
+whole dataset anymore, what is a crucial requirement.
+If the programming mistake occurs in the system, it can only write wrong data to
+the dataset, that can be simply deleted later.
+But all proper data is always safe. 
+
+Immutability of data leads to completely different model of the way how
+data is stored.
 Instead of having simple tuple for a particular entity, every value of a tuple
 is stored separately and has timestamp.
-Such technique allows to have the whole history of editions of all attributes, what can be useful to make quesries that use history of changes.
+Such technique allows to have the whole history of editions of all attributes,
+what can be useful to make queries, that use history of changes.
 At the same time the actual value is the one with the oldest timestamp.
 
 \authorsection{General structure}{VI}
 
 General view of the Lambda architecture is depicted on the
 Figure~\ref{fig:lambda_architecture}.
-It consists of three main elements: batch layer, serving layer and speed layer.
+The system itself consists of three main elements: batch layer, serving layer
+and speed layer.
+It receives data from the source, that is specific for each usecase, and answers
+the number of queries.
 Batch layer contains master dataset, that allows only appending data.
-One executes computations on the whole master dataset to obtain batch views,
-that are useful to answer queries.
+It executes computations on the whole master dataset to obtain batch views,
+that are particularly useful to answer queries.
 Serving layer is the place where batch views are stored.
-It is also responsible for providing interface for making particular queries from those views.
-Speed layer provides temporal views.
-They contain sketches of data, that was obesrved during ongoing batch processing
-in the batch layer.
-It is important, because batch processing can last several hours or even longer.
+It is also responsible for providing interface for making queries from those views.
+Speed layer provides real-time views.
+They contain sketches of data, that is being obesrved during ongoing batch
+processing in the batch layer.
 Speed layer is much more complex than batch layer, and it provides only approximated results.
-We discuss it in more details in the particular chapter.
+We discuss each layer in more details in particular chapters.
 
 \begin{figure}[H]
   \centering
@@ -117,20 +130,31 @@ We discuss it in more details in the particular chapter.
 \authorsection{Batch layer}{VI}
 
 Batch layer is the part of the Lambda architecture, that contains master dataset
-and precomputes batch views, useful for answering queries.
-One can think about master dataset as a very large list of records.
+and computes batch views, useful for answering queries.
+It is responsible for storage of all the data, that arrives from the source.
+Batch layer also processes that data to produce batch views, applying different
+algorithms and aggregations.
+
+Master dataset \mnote{master dataset} is a storage of data in the system.
+One can think about it as of a very large list of records.
 This is of course simplified representation, but for current discussion it is
 enough.
 When new piece of data arrives to the system, it is being added to the master dataset.
-It can never change old records, or cause deletion.
-This is what is called immutability of data.
-This is a very important property, that provides human foult-tolerance, and at
-the same time allows to execute queries on the whole history of changes.
+It does not allow ever to modify or delete existing records.
+This is the propery of data immutability, that provides human foult-tolerance,
+and at the same time allows to execute queries on the whole history of changes.
+
+Important property of data, that is stored in the master dataset, is that it
+must be raw.
+That means, it can not be derived from any other data.
+At the same time, it must be posible to answer all queries using this data.
+!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Computation of batch views is being repeated continuously from scratch.
 This is inherently distributed operation.
-That means that developer doesn't have to think about concurrency and threads.
-He only wrties simple one-threaded code, that is distributed than in the cluster.
+That means that developer does not have to think about concurrency and threads.
+He only wrties simple one-threaded code, that is distributed then in the
+cluster.
 MapReduce is a perfect example of a batch execution.
 Apache Hadoop is an example of framework that can be used for computations in
 the batch layer.
