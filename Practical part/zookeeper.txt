@@ -1,0 +1,53 @@
+sudo touch /etc/apt/sources.list.d/cloudera.list
+
+sudo chmod 666 /etc/apt/sources.list.d/cloudera.list
+
+echo "deb [arch=amd64] http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh precise-cdh4 contrib" >> /etc/apt/sources.list.d/cloudera.list
+
+echo "deb-src http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh precise-cdh4 contrib" >> /etc/apt/sources.list.d/cloudera.list
+
+sudo apt-get install curl
+
+curl -s http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh/archive.key | sudo apt-key add -
+
+sudo apt-get update
+
+sudo touch /etc/apt/preferences
+
+Package: *
+Pin: release n=trusty
+Pin-Priority: 100
+
+Package: *
+Pin: release n=precise-cdh4
+Pin-Priority: 600
+
+sudo apt-get install zookeeper-server
+
+кривой вариант:
+
+wget -cv http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh/pool/contrib/z/zookeeper/zookeeper_3.4.5+26-1.cdh4.7.0.p0.17~precise-cdh4.7.0_all.deb
+
+sudo dpkg -i ./zookeeper_3.4.5+26-1.cdh4.7.0.p0.17~precise-cdh4.7.0_all.deb
+
+sudo apt-mark hold zookeeper
+
+sudo apt-get -f install
+
+sudo apt-get install zookeeper-server
+
+testing:
+user@TestMain:/usr/lib/zookeeper/bin$ sh zkServer.sh start
+
+echo ruok | nc TestMain 2181
+echo status | nc TestMain 2181
+
+или: (но так не работает)
+
+wget -cv http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh/pool/contrib/z/zookeeper/zookeeper-server_3.4.5+26-1.cdh4.7.0.p0.17~precise-cdh4.7.0_all.deb
+
+sudo dpkg -i ./zookeeper-server_3.4.5+26-1.cdh4.7.0.p0.17~precise-cdh4.7.0_all.deb
+
+sudo apt-mark hold zookeeper-server
+
+sudo apt-get -f install

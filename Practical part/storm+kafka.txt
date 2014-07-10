@@ -1,0 +1,33 @@
+I am not completely sure that this is the easiest and right way how to use the combination Storm-Kafka, but I hope that in the further process the details will become more clear. The only important thing now that it works :)
+
+Storm + Kafka
+
+1) Install Storm (+Hadoop and other stuff) using fabfile.py with command "fab all"
+
+2) Install Kafka using QuickStart tutorial (Step 1-4) http://kafka.apache.org/documentation.html#quickstart
+
+Download command:
+wget -cv http://mirror.serversupportforum.de/apache/kafka/0.8.1.1/kafka_2.9.2-0.8.1.1.tgz
+
+IMPORTANT: Instead of using built-in Zookeeper instance (zookeeper-server-start.sh it tutorial) I use existing Zookeeper, which was installed in the first step and is already running. You can check it with the following command:
+sudo supervisorctl status
+All the details are here: http://www.michael-noll.com/tutorials/running-multi-node-storm-cluster/
+
+IMPORTANT: and my Zookeeper uses not the standard 2181 port but 5181, so you should replace it in the following config files of Kafka:
+customer.properties
+server.properties
+zookeeper.properties
+
+3) My very simple progect TestStorm contains one spout, which receives data from Kafka and one bolt, which should the number of the same words it receives 
+- external .jar files, used in this project are from:
+	apache-storm-0.9.2-incubating/lib (storm itself)
+	apache-storm-0.9.2-incubating/external/storm-kafka (strom-kafka spout)
+	kafka_2.9.2-0.8.1.1/libs (kafka itself)
+- most of the Kafka settings are in TestTopology.java file:
+	I specify there special Zookeeper path, which I should previously create inside of Zookeeper. For that I use several commands in the terminal:
+	zookeeper_path/zkCli.sh -server localhost:5181
+	create /kafka-spout/kafka-storm-starter
+	ls / (to check if the folder is created)
+- data from Kafka is serialized automatically by DefaultEncoder (Avro? I don't know), so I have to deserialize it, I just use DefaultDecoder in TestBolt code
+
+At least I managed to run it and I've received messages from Kafka in Storm application, however it fails after a short time, I don't know is it on purpose or not, still have to find it out

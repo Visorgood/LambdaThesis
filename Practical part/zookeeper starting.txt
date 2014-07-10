@@ -1,0 +1,77 @@
+1)The default ZooKeeper configuration does not do this on its own, and if you do not set up regular purging ZooKeeper will quickly run out of disk space.
+
+/etc/zookeeper/conf.dist/zoo.cfg
+
+tickTime=2000
+dataDir=/var/lib/zookeeper
+clientPort=2181
+
+# Enable regular purging of old data and transaction logs every 24 hours
+autopurge.purgeInterval=24
+autopurge.snapRetainCount=5
+
+2) It’s critical that you run Zookeeper under supervision, since Zookeeper is fail-fast and will exit the process if it encounters any error case.
+
+sudo apt-get install supervisor
+
+â /etc/supervisor/supervisord.conf
+
+
+[program:storm-supervisor]
+command=/home/user/Documents/storm/apache-storm-0.9.1-incubating/bin/storm supervisor
+autostart=true
+autorestart=true
+startsecs=10
+startretries=999
+log_stdout=true
+log_stderr=true
+logfile=/home/user/Documents/storm/log/supervisor.out
+logfile_maxbytes=20MB
+logfile_backups=10
+
+
+[program:zookeeper]
+command=sh /usr/lib/zookeeper/bin/zkServer.sh start-foreground
+autostart=true
+autorestart=true
+startsecs=10
+startretries=999
+log_stdout=true
+log_stderr=true
+logfile=/home/user/Documents/storm/log/zookeeper.out
+logfile_maxbytes=20MB
+logfile_backups=10
+
+[program:storm-nimbus]
+command=/home/user/Documents/storm/apache-storm-0.9.1-incubating/bin/storm nimbus
+autostart=true
+autorestart=true
+startsecs=10
+startretries=999
+log_stdout=true
+log_stderr=true
+logfile=/home/user/Documents/storm/log/nimbus.out
+logfile_maxbytes=20MB
+logfile_backups=10
+
+[program:storm-ui]
+command=/home/user/Documents/storm/apache-storm-0.9.1-incubating/bin/storm ui
+autostart=true
+autorestart=true
+startsecs=10
+startretries=999
+log_stdout=true
+log_stderr=true
+logfile=/home/user/Documents/storm/log/ui.out
+logfile_maxbytes=20MB
+logfile_backups=10
+
+sudo unlink /var/run/supervisor.sock
+
+sudo /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+
+sudo supervisorctl status
+
+sudo /usr/bin/supervisorctl shutdown
+
+
