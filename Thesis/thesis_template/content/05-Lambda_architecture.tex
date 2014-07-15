@@ -103,8 +103,8 @@ At the same time the actual value is the one with the oldest timestamp.
 
 \authorsection{General structure}{VI}
 
-General view of the Lambda architecture is depicted on the
-Figure~\ref{fig:lambda_architecture}.
+Figure~\ref{fig:lambda_architecture} depicts general view of the Lambda
+architecture.
 The system itself consists of three main elements: batch layer, serving layer
 and speed layer.
 It receives data from the source, that is specific for each usecase, and answers
@@ -129,32 +129,39 @@ We discuss each layer in more details in particular chapters.
 
 \authorsection{Batch layer}{VI}
 
-Batch layer is the part of the Lambda architecture, that contains master dataset
-and computes batch views, useful for answering queries.
-It is responsible for storage of all the data, that arrives from the source.
-Batch layer also processes that data to produce batch views, applying different
-algorithms and aggregations.
+Batch layer has two responsibilities: (i) it holds all data, that arrives from
+the outer source, and (ii) it processes that data to compute batch views, useful
+for answering queries.
 
-Master dataset \mnote{master dataset} is a storage of data in the system.
-One can think about it as of a very large list of records.
-This is of course simplified representation, but for current discussion it is
-enough.
-When new piece of data arrives to the system, it is being added to the master dataset.
-It does not allow ever to modify or delete existing records.
-This is the propery of data immutability, that provides human foult-tolerance,
-and at the same time allows to execute queries on the whole history of changes.
+Batch layer keeps data in master dataset.
+\textit{Master dataset} \mnote{master dataset} is a main storage, that contains
+all data, that ever came.
+It is immutable, in the sense that it allows only addition of new records, and
+does not allow modifications or deletions.
+This property provides human foult-tolerance.
+If master dataset is corrupted - all data is lost.
+And data is of the most importance in our context.
+Because of that master dataset must be carefully designed, set up and protected
+from all types of failures, e.g software, hardware or human.
 
-Important property of data, that is stored in the master dataset, is that it
-must be raw.
-That means, it can not be derived from any other data.
-At the same time, it must be posible to answer all queries using this data.
-!!!!!!!!!!!!!!!!!!!!!!!!!
+One can think about master dataset as of a very large list of records.
+This is only a logical representation, however it is enough for current
+discussion.
+When new piece of data arrives into the system, it is added to the master
+dataset.
+As long as master dataset contains not only all data, but the whole history of
+changes from the beginning of the deployment of the system, we can execute
+queries on the whole history of those changes.
+
+Data, stored in the master dataset, must be raw.
+That means, that it can not be derived from any other data.
+At the same time, it must be possible to answer all queries using it. 
 
 Computation of batch views is being repeated continuously from scratch.
 This is inherently distributed operation.
 That means that developer does not have to think about concurrency and threads.
-He only wrties simple one-threaded code, that is distributed then in the
-cluster.
+He only wrties simple one-threaded code, that is distributed then
+automatically in the cluster.
 MapReduce is a perfect example of a batch execution.
 Apache Hadoop is an example of framework that can be used for computations in
 the batch layer.
