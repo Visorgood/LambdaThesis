@@ -42,13 +42,9 @@ Moreover, Big Data differ in the way how it is collected, how urgently it should
 
 \mnote{Velocity}
 The diversity of Big Data sources causes the high velocity of data input flow.
-For example, [Menthal]
-% remove the next part about real time processing
-Since data arrives at a high speed, there is a high chance that the velocity of its transmission and processing should also be high.
-For instance, it can help to improve traffic in metropolitan areas, offering various travel alternatives for a vehicle, basing on analysis of incoming data about the situation on the roads.
-Rapidity of data processing can be necessary in other cases as well.
-Sometimes high processing speed can even be indispensable to life, when using in medicine, for example.
-Special systems monitor the state of a patient, immediately alerting caregivers in the case of dangerous anomaly occurrence. 
+For example, Menthal, mentioned above, currently receives data from 50 000 users.
+It sums up to almost 30Gb input data per day.
+Therefore, Menthal reseives on average around 24Mb per minute, that sends a challenge how to handle input data flow on such a hight speed.
 
 \mnote{Volume}
 In the end, massive sources variety, multiplied by high velocity of data generation, results in its enormous size.
@@ -67,31 +63,30 @@ The key feature of a sensor is that often it does its job constantly, continuous
 Nest Labs is an American company that manufactures sensor-driven thermostats and smoke detectors.
 The population of United States is about 318 million, so if every hundredth resident uses at least one of Nest thermostats in the house, it sums up to 3.2 million devices.
 One thermostat has a variety of sensors, like activity, temperature, humidity, illumination, etc.
-% per device / in total
-They generate and transmit around 2Mb of data per day, or, consequently, 2.17Tb per year. 
+Each thermostat generates and transmits around 2Mb of data per day.
+Consequently, all Nest thermostats in United States generate around 2.17Pb of data per year. 
 The ability to process large amounts of information is the main benefit of Big Data analytics, since with its vast volume it is possible to construct better models.
 
 \mnote{Batch Processing}
 There are two fundamentally different ways of processing the Big Data, namely Batch and Real Time data processing.
 In the first case, data is handled in batches, i.e. process collects the data until the batch size is obtained, and only after this the process can perform the necessary actions on a batch as a whole.
 This gives several advantages.
-Obviously, it becomes possible to process multiple operations in one request, instead of handling each operation individually.
-That makes data treatment more efficient. 
-% let us consider a simple problem. if we have many data - and write separately need many page writes - seconds, in batches - better
-% write expensive. if each - write for each. if put in batches - efficiency.
-To give a naive example how batching improves the performance, let us describe the problem of I/O operations.
-I/O operations involve physical movement of mechanical devices (e.g. seek motion of hard drive).
-Thus, the speed of sequential writes to a file is higher than random writes, because in the latter case additional time is spent for seek operations between each write.   
-The same principle also works in general case, i.e. combining multiple operations in one batch can significantly enhance performance.
 Batch processing can be done in the appropriate time, when the computing resources are less busy.
 Furthermore, one can set a priority for each task, beginning with more urgent operations.
 There is no need in a close supervision of a run, batch processing is mostly autonomous.
-However, there is a significant drawback.
-The results are always obtained with an arbitrary time delay.
-% create 3 paragraphs:
-%what is Batch Pr
-% what are the advantages?
-% most important  - speed up + example.
+Finally, it becomes possible to process multiple operations in one request, instead of handling each operation individually.
+That makes data treatment more efficient. 
+
+To give a naive example how batching improves the performance, let us describe the problem of I/O operations.
+For instance, an application every second receives data that should be written to the hard disk. 
+There are two options how to implement the writing procedure.
+On one hand, an application can write the input data every time it receives it, i.e. in our case every second.
+On the other hand, it is possible to accumulate input data in memory until it reaches the defined size and than write the whole batch at a time.
+It is known that I/O operations involve physical movement of mechanical devices (e.g. seek motion of hard drive).
+Thus, the speed of sequential writes to a file is higher than random writes, because in the latter case additional time is spent for seek operations between each write.
+This means that in our simple example the second option is preferable, because it decreses the number of seek operation and therefore makes the writing faster.    
+The same principle also works in general case, i.e. combining multiple operations in one batch can significantly enhance performance.
+However, Batch processing has one significant drawback: the results are always obtained with an arbitrary time delay.
 
 \mnote{Real Time Processing}
 Real time processing handles data at the moment of arrival. 
@@ -102,15 +97,62 @@ This fixed delay length varies depending on the application.
 In some cases 10 minutes to perform all the computations is still considered to be a real time processing.
 However, in other cases, more than 1 second delay is unacceptable.
 Real time processing makes the information always available and up-to-date.
+
 These significant advantages results in rising popularity of real time processing, despite the fact that it requires greater effort to design and maintain.
+Real time processing can help to improve traffic in metropolitan areas, offering various travel alternatives for a vehicle, basing on analysis of incoming data about the situation on the roads.
+Rapidity of data processing can be necessary in other cases as well.
+Sometimes high processing speed can even be indispensable to life, when using in medicine, for example.
+Special systems monitor the state of a patient, immediately alerting caregivers in the case of dangerous anomaly occurrence. 
 
 \authorsection{Architectural Requirements}{SP}
 There are some requirements that are common for most of the Big Data architectures.
-Availability, reliability, scalability and performance are important attributes of a distributed architecture.
-% why it is important
+Big Data systems deal with a large volumes of information, that constantly growth, therefore a system should be highly scalable.
+Scalability has a direct impact on performance, thus it is essential to maintain a system performance on a proper level.
+Moreover, availability and reliability are important attributes of a distributed architecture.
+All these properties are described in the following paragraphs.
 
-% start performance scalability reliability-availability (to measure robustness two different metrics and explain each)
-% next paragraph:
+\mnote{Performance}
+Performance is a quantitative characteristic of operation speed.  
+This concept includes a variety of aspects, such as response time, processing speed, latency, bandwidth, etc.
+With regard to extremely high volume and velocity of Big Data the question of system performance is a big issue.
+For fair comparison of multiple systems performance a benchmark is used.
+A benchmark is a sequence of tests that helps to estimate the performance of the system.
+
+\mnote{Scalability}
+Scalability indicates the property to handle an increasing amount of work.
+It means that the performance of the system can be enhanced using additional hardware resources.
+There are two types of scaling, namely vertical and horizontal.
+Vertical scaling means that the single node of a system is enriched, e.g. CPU is added to a computer. 
+Horizontal scaling denotes the enlargement of a system by adding new nodes.
+
+\mnote{Commodity hardware}
+In the context of Big Data architecture the latter method is of great interest for us.
+First, in some cases the system should be distributed geographically.
+For instance, adding new nodes closer to the customer can reduce the network load.
+Second, because of the decreasing computer price it becomes possible to build highly performant systems using commodity machines.
+A commodity computer is a moderately priced machine that is widely available for purchase.
+The usage of inexpensive hardware helps considerably decrease the cost of the system.
+It is especially relevant in the context of Big Data because of its overwhelming scales.
+One of the well-known examples is the Google Lego server.
+In 1996 two students, Larry Page and Sergey Brin, needed a cheap but capacious server to test the Pagerank algorithm on a huge data. 
+[picture?]
+They assembled it using 10 drives 4Gb each and a Lego enclosure. 
+Nowadays Google uses commodity computers for building their computing clusters.
+
+\mnote{Fault tolerance}
+The direct consequence of the cheap hardware is the high failure rate.
+Moreover, the large number of components also increases the probability of failure. 
+Thus the system should be highly fault tolerant, with timely error detection and easy automatic recovery.
+
+\mnote{Large files}
+The world of Big Data introduces its own specific requirements for architecture design.
+The file size can be enormous comparing to the standards.
+It is not rare to work with a file of several gigabytes.
+Storing the data in large files simplifies data processing.
+The size of data itself is huge and it is more efficient to work with several large files than with great number of small files.
+
+There are two metrics to measure the robustbness of a system, namely availability and reliability.
+At first sight they look similar, however these two metrics assess a system from different perspective.
 \mnote{Availability}
 Availability means that a system operates properly at any given moment.
 It can be calculated by the following formula: (total time - down time)/total time.
@@ -123,64 +165,27 @@ Reliability and availability are the opposite concepts.
 The highly available system mentioned above is not reliable, because the intervals of working without failing are relatively short.
 However, the system that is down for one hour but only once per month can be reffered to sufficiently reliable.
 
-% fault tolerance paragraph  
+\authorsection{Architectural Approaches}{SP}
+\mnote{Naive Approach}
+It is natural to start with a naive approach, using widely available and easy to use technologies.
+For example, use a relational database, such as MySQL or PostgreSQL.
+Create a Representational state transfer (REST) API for communication between client and the database.
+As a consequence of chosen RESTful communication, transfer stateless messages via HTTP.
+% should I describe it in ore detail? or put a reference to Chapter 2?
+This straigforward approach is easy to implement, however, at a certain point, it cannot anymore sustain a constantly growing load.
+The datatbase cannot cope anymore with the increased input flow, returning a timeout error.
+In this situation it is reasonable to use horizontal partitioning, also known as sharding.
+This technology allows to spread the write load between multiple database servers.
+However, with growing input flow, the maintaining of shards and auxiliary infrastructure becomes more and more complex, demanding too much effort from developers. 	   
+Hence the biggest IT corporations conduct their own research in this area, designing specific architectural solutions for working with Big Data.
 
-\mnote{Scalability}
-Scalability indicates the property to handle an increasing amount of work.
-% skip `in informatics`
-In informatics it means that the performance of the system can be enhanced using additional hardware resources.
-There are two types of scaling, namely vertical and horizontal.
-Vertical scaling means that the single node of a system is enriched, e.g. CPU is added to a computer. 
-Horizontal scaling denotes the enlargement of a system by adding new nodes.
-In the context of Big Data architecture the latter method is of great interest for us.
-First, because of the decreasing computer price it becomes possible to build highly performant systems using commodity machines.
-Second, in some cases the system should be distributed geographically.
-For instance, adding new nodes closer to the customer can reduce the network load.
-
-% in the context of Big Data - commodity machines paragraph
-
-% big files - file should be able to scale
-
-\mnote{Performance}
-Performance is a quantitative characteristic of operation speed.  
-This concept includes a variety of aspects, such as response time, processing speed, latency, bandwidth, etc.
-With regard to extremely high volume and velocity of Big Data the question of system performance is a big issue.
-For fair comparison of multiple systems performance a benchmark is used.
-A benchmark is a sequence of tests that helps to estimate the performance of the system.
-
-The world of Big Data introduces its own specific requirements for architecture design.
-The file size can be enormous comparing to the standards.
-It is not rare to work with a file of several gigabytes.
-Storing the data in large files simplifies data processing.
-The size of data itself is huge and it is more efficient to work with several large files than with great number of small files.
-
-Another distinctive feature of Big Data architecture is that it is built on commodity machines.
-A commodity computer is a moderately priced machine that is widely available for purchase.
-The usage of inexpensive hardware helps considerably decrease the cost of the system.
-It is especially relevant in the context of Big Data because of its overwhelming scales.
-One of the well-known examples is the Google Lego server.
-In 1996 two students, Larry Page and Sergey Brin, needed a cheap but capacious server to test the Pagerank algorithm on a huge data. 
-[picture?]
-They assembled it using 10 drives 4Gb each and a Lego enclosure. 
-Nowadays Google uses commodity computers for building their computing clusters.
-
-The direct consequence of the cheap hardware is the high failure rate.
-Moreover, the large number of components also increases the probability of failure. 
-Thus the system should be highly fault tolerant, with timely error detection and easy automatic recovery.
-
-%new topic Architectural approaches. Rotate paragraphs:
-
-%as a result:
-Big Data technology is an umbrella of various systems. 
+As a result, Big Data technology becomes an umbrella of various systems. 
 Data has to be collected, processed, transmitted, stored, protected from attacks, etc.
-The Figure~\ref{fig:big_data_flow} shows the general flow of data within
-the Big Data concept.
+The Figure~\ref{fig:big_data_flow} shows the general flow of data within the Big Data concept.
 Each of the presented steps involves a batch of technologies.
 For example, depending on data type and size, one can choose SQL (MySQL, Oracle, Teradata, etc.) or NoSQL (Cassandra, MongoDB, Apache HBase, etc.) solutions for storing Big Data.
 Similarly, depending on the application, Real Time processing (Storm, Spark Streaming, etc.) or Batch processing (Apache Hadoop, etc.) technologies are used. 
 Thereby, it is apparent that no one general solution exists for every Big Data problem.
-% starting with naive approach
-% put paragraph about naive approach
 
 \begin{figure}
   \centering
@@ -189,16 +194,7 @@ Thereby, it is apparent that no one general solution exists for every Big Data p
   \label{fig:big_data_flow}
 \end{figure}
 
-%change the first sentence
-Well thought-out structure of Big Data architecture is of big importance.
 As it follows from the previous paragraph, Big Data architectures have to be targeted to each specific scenario.
 For instance, architecture, designed for processing video data from a web camera, differs significantly from one for handling server log files.
-Menthal, [Menthal: definition] mentioned above, deals with data, that consists of a bulk of key/value pairs. 
-In the following sections we describe the existing Big Data architectures in the context of Menthal needs.
-
-\mnote{Naive Approach}
-% generic appr. fails
-It is natural to start with a naive approach, using widely available and easy to use technologies.
-[Menthal: MySQL + what else?]
-However, at a certain point, a naive approach cannot anymore sustain a constantly growing load.
-Hence the biggest IT corporations conduct their own research in this area, designing specific architectural solutions for working with Big Data.
+Menthal, mentioned in Chapter 2, deals with data, that consists of a bulk of key/value pairs. 
+In the following chapters we describe the existing Big Data architectures in the context of Menthal needs.

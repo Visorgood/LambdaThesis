@@ -1,8 +1,77 @@
 \chapter{The Menthal Story}
 \label{chap:menthal_story}
 
-\authorsection{Mobile sensor data}{NO}
+Nowadays mobile/smartphone addiction becomes a critical problem.
+People constantly use the device, making calls, sending messages, surfing in the Internet or just playing.
+More than a half of adult population of United States own a smartphone.
+People are distracted by their phones even on personal meetings, parties and dates.
+When a person leaves his phone at home, he feels nervious and irritated.
+Some people suffer from a cellphone vibration syndrome, when one feels as if a cellphone is vibrating but infact it is not.
+Sometimes they unlock the phone and check messages or social network pages unconsciously, just to make sure that nothing new has happened. 
 
-\authorsection{Why old systems do not work}{NO}
+And the crucial problem is that people are not able to detect this addiction.
+Few of them can correctly specify the daily time expenditure on the device.
+First, it is difficult to evaluate yourself from the outside.
+Second, even if a person can correctly estimate the wasted time, it is morally unpleasant to confirm these figures.
+Being aware of this statistics, it is possible to change your habits or even to go on a smartphone-free diet.
+Thus, exterior assessment mechanism is needed to calculate how much time a user spend on his smartphone, what applications he uses and when.    
 
-\authorsection{Why do we need a big system}{NO}
+On the other hand, there is no official study how people use their phones.
+For example, France introduses a rule to switch off work phones after 18:00 and till 9:00, to protect employees from official duties outside office hours.
+"digital working time" would have to be measured 
+
+1)app
+-user want to be less addicted to his phone
+2)study
+-there is no official study how people use their phones
+-the rule to switch phones at 18:00
+-to make an interface more friendly
+-to count how long do you use facebook
+3)combining two
+-how to force people use it? - application
+4)technical architecture
+client part + server part
+5)resulting data (how many users, how manys recorded. how large data, how many .. per day, how many in total)
+
+
+The rapid development of technologies, in particular smartphones, allows us to get a huge amount of data almost for free.
+-mobile sensors + Internet
+-the average duration of using a smartphone per day
+-what information can be extracted from mobile sensor data
+
+(The?) Menthal is an application for smartphones that gathers phone usage data and stores it on a server for further analysis, providing user with feetback. 
+-nowadays Menthal has 50 000 active users
+-we receive 1Tb data every month
+-Menthal is still under development
+
+The Menthal story started from a psychological experiment on 60 participants.
+-the key idea
+-methods: questionaries, brain scan
+-data from phone sensors
+
+This experiment developed into an independent smartphone application for mass usage. 
+-it collects data, provides user with feedback and supplies psychologists with data
+-it is settled on one machine with a PostgreSQL database
+-it provides RESTful API and communicates via HTTP
+-the data exchange is stateless
+-the main problem is that it scales nicely for reads, but not for writes
+
+The problem of scaling becomes urgent when Menthal is covered in mass media.
+-newspapers (which?), interview on TV
+-explosive increase of the number of users
+-application is not able to write all incoming data into database, not to mention providing a feetback 
+
+The architecture of the application is changed to meet the new requirements.
+-mirrowed DB, caching - only improves reading, not writing
+-sharding - makes things harder to implement and manage
+-actually we deal with Big Data
+
+The most suitable architectural solution is taking an advantage of recently developed Lambda Architecture.
+-key properties
+-why is it suitable
+ 
+The data collected by Menthal can be used for various purposes.
+-psychological research
+-statistical calculations (what Apps are used most? how is it connected with user group?)
+-services based on results on data analisys (offer applications to users)
+-healthy person - depressed person - to find a desease at a proper time
