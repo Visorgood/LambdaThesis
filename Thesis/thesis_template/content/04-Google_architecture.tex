@@ -1,8 +1,8 @@
 \chapter{Google Architecture}
 \label{chap:google_architecture}
 
-Google is one of the well-known examples of such corporations.
-Its activity directly relates to storing and processing of Big Data.
+Google is one of the well-known examples of corporations that deal with Big Data.
+Its activity directly relates to storing and processing of large volumes of data.
 Google Search engine handles more than three billion searches every day.
 Social networking service Google+ had 540 million users in 2013.
 Gmail, Google's email service, had 425 million users in 2012.
@@ -167,17 +167,22 @@ The MapReduce library groups these intermediate pairs together by the key and pa
 It passes them via iterator that allows to handle a large data set without keeping it in memory.
 The Reduce function merges the values with the same key, possibly decreasing a given set of values.
 One Reduce function invocation most of the time produces a single output value, or even none.
-The Figure~\ref{fig:mapreduce_pseudo_code} illustrates a pseudo-code for a simple
-MapReduce task.
+A pseudo-code for a simple MapReduce task is illustrated below.
 
+\begin{lstlisting}
+def map(key, value):
+	list = []
+	for x in value:
+		if some_condition_holds:
+	 		list.append((key, x))
+	return list
 
-% instead of picture use Latex `Listinhg`
-\begin{figure}
-  \centering
-  \includegraphics [width=0.9\textwidth]{images/MapReduce_pseudo_code}
-  \caption{Pseudo code of the MapReduce programming model}
-  \label{fig:mapreduce_pseudo_code}
-\end{figure}
+def reduce(key, list_of_values):
+	result = 0
+	for x in list_of_values:
+		result += x
+	return (key, result)
+\end{lstlisting}
 
 \begin{figure}
   \centering
@@ -254,58 +259,33 @@ The company introduces its own storage system for these purposes - a Bigtable.
 It is created to store petabytes of data in a distributed way.
 As Google uses Bigtable in various projects, it puts different requirements on data size and latency of the storage system. 
  
+A Bigtable is a sparse, distributed, persistent multidimensional sorted map. [reference]
+It uses three-dimensional mapping: row key, column key and timestamp are mapped to an array of bytes.
+The row key is represented by an arbitrary string with a maximum size of 64Kb.
+Read and write operations under one row key are atomic.
 
-% Bigtable is a distributed storage system for managing
-% structured data that is designed to scale to a very large
-% size: petabytes of data across thousands of commodity
-% servers. Many projects at Google store data in Bigtable,
-% including web indexing, Google Earth, and Google Finance.
-% These applications place very different demands
-% on Bigtable, both in terms of data size (from URLs to
-% web pages to satellite imagery) and latency requirements
-% (from backend bulk processing to real-time data serving).
-% 
-% A Bigtable is a sparse, distributed, persistent multidimensional
-% sorted map. The map is indexed by a row
-% key, column key, and a timestamp; each value in the map
-% is an uninterpreted array of bytes.
-% (row:string, column:string, time:int64) -> string
-% 
-% Every read or write of data under
-% a single row key is atomic (regardless of the number of
-% different columns being read or written in the row),
-% 
-% The row range for a table is dynamically partitioned.
-% Each row range is called a tablet, which is the unit of distribution
-% and load balancing
-% For example, we
-% store data for maps.google.com/index.html under the
-% key com.google.maps/index.html. Storing pages from
-% the same domain near each other makes some host and
-% domain analyses more efcient.
-% 
-% Column keys are grouped into sets called column families,
-% A column key is named using the following syntax:
-% family:qualier.
-% An example
-% column family for the Webtable is language, which
-% stores the language in which a web page was written. We
-% use only one column key in the language family, and it
-% stores each web page's language ID. Another useful column
-% family for this table is anchor; each column key in
-% this family represents a single anchor, as shown in Figure
-% 1. The qualier is the name of the referring site; the
-% cell contents is the link text.
+\mnote{row keys}
+Bigtable stores row keys in lexicographic order and dynamically partitions each row range.
+One partition is called a tablet and it serves as a distribution and load balancing unit.
+For instance, when storing web pages with an URL as a row key, it is optimal to arrange pages from the same domain in one tablet.
+In this case an URL like en.wikipedia.org/index.html is presented as org.wikipedia.en/index.html.
 
-% Each cell in a Bigtable can contain multiple versions of
-% the same data; these versions are indexed by timestamp.
-% Bigtable timestamps are 64-bit integers. They can be assigned
-% by Bigtable, in which case they represent real time in
-% microseconds, or be explicitly assigned by client applications.
-% To make the management of versioned data less onerous,
-% we support two per-column-family settings that tell
-% Bigtable to garbage-collect cell versions automatically.
-% The client can specify either that only the last n versions
-% of a cell be kept, or that only new-enough versions be
-% kept (e.g., only keep values that were written in the last
-% seven days)
+\mnote{column keys}
+Bigtable groups column keys into column families, which serves as an access control units.
+It means that each column family can have different access permissions (e.g. write access for one application and read only for another one).
+It is common to store in one column family data of the same type.
+One can store data under a column key only when a column family comprising this column key is created.
+Number of distinct column families should be kept small, while each column family can contain unbounded number of columns.
+The name of column key is presented as family:qualifier pair, where family should be printable and qualifier can be an arbitrary string.
+For example, the column key name can look like language:en, where 'language' is a column family name and 'en' is a language ID. 
+
+\mnote{timestamps}
+Timestamps are used to store multiple versions of the same information.
+A timestamp can be assigned in different ways.
+On the one hand, Bigtable can use the time in microseconds as a timestamp.  
+On the other hand, a client application can maintain its own unique timestamps.
+Several versions of data are ordered such as the most recent version can be accessed first. 
+Garbage collector processes the outdated data automatically using one of the two column family settings to detect the outdated versions.
+The first setting allows to keep only the last \textit{n} versions of data, while the second setting allows to keep data that was written in the last \textit{m} days.
+
+% more..

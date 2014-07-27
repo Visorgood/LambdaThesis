@@ -28,7 +28,7 @@ For instance, afterwards it can be used in targeted advertising, or for performi
 \mnote{Big Data}
 There is no consensus about the origins of the term "Big Data", but most of the sources claim that it is first mentioned in the press in 2008.
 People start actively using it since 2009 and it spreads quickly owing to its precise and capacious meaning. 
-Big Data is characterized by its high (i) variety, (ii) velocity and (iii) volume. [reference]
+Big Data is characterized by its high (i) variety, (ii) velocity and (iii) volume. [reference - find from wikipedia]
 All these three "v" constitute a criterion that allocates Big Data observation into a distinct sector of computer science, which requires ad hoc decisions and a special approach.
 
 \mnote{Variety}
@@ -165,27 +165,18 @@ Reliability and availability are the opposite concepts.
 The highly available system mentioned above is not reliable, because the intervals of working without failing are relatively short.
 However, the system that is down for one hour but only once per month can be reffered to sufficiently reliable.
 
-\authorsection{Architectural Approaches}{SP}
-\mnote{Naive Approach}
-It is natural to start with a naive approach, using widely available and easy to use technologies.
-For example, use a relational database, such as MySQL or PostgreSQL.
-Create a Representational state transfer (REST) API for communication between client and the database.
-As a consequence of chosen RESTful communication, transfer stateless messages via HTTP.
-% should I describe it in ore detail? or put a reference to Chapter 2?
-This straigforward approach is easy to implement, however, at a certain point, it cannot anymore sustain a constantly growing load.
-The datatbase cannot cope anymore with the increased input flow, returning a timeout error.
-In this situation it is reasonable to use horizontal partitioning, also known as sharding.
-This technology allows to spread the write load between multiple database servers.
-However, with growing input flow, the maintaining of shards and auxiliary infrastructure becomes more and more complex, demanding too much effort from developers. 	   
-Hence the biggest IT corporations conduct their own research in this area, designing specific architectural solutions for working with Big Data.
-
+Big Data architectures have to be targeted to each specific scenario.
+For instance, architecture, designed for processing video data from a web camera, differs significantly from one for handling server log files.
+Menthal, mentioned in Chapter 2, deals with data, that consists of a bulk of key/value pairs. 
 As a result, Big Data technology becomes an umbrella of various systems. 
 Data has to be collected, processed, transmitted, stored, protected from attacks, etc.
+
 The Figure~\ref{fig:big_data_flow} shows the general flow of data within the Big Data concept.
 Each of the presented steps involves a batch of technologies.
 For example, depending on data type and size, one can choose SQL (MySQL, Oracle, Teradata, etc.) or NoSQL (Cassandra, MongoDB, Apache HBase, etc.) solutions for storing Big Data.
 Similarly, depending on the application, Real Time processing (Storm, Spark Streaming, etc.) or Batch processing (Apache Hadoop, etc.) technologies are used. 
 Thereby, it is apparent that no one general solution exists for every Big Data problem.
+Further we describe the existing Big Data architectures in the context of Menthal needs.
 
 \begin{figure}
   \centering
@@ -194,7 +185,15 @@ Thereby, it is apparent that no one general solution exists for every Big Data p
   \label{fig:big_data_flow}
 \end{figure}
 
-As it follows from the previous paragraph, Big Data architectures have to be targeted to each specific scenario.
-For instance, architecture, designed for processing video data from a web camera, differs significantly from one for handling server log files.
-Menthal, mentioned in Chapter 2, deals with data, that consists of a bulk of key/value pairs. 
-In the following chapters we describe the existing Big Data architectures in the context of Menthal needs.
+\authorsection{Architectural Approaches}{SP}
+\mnote{Naive Approach}
+It is natural to start with a naive approach, using widely available and easy to use technologies.
+As outlined in Section [add section number], one could use a relational database, such as MySQL or PostgreSQL.
+In this case, one would create a Representational state transfer (REST) API for communication between client and the database.
+As a consequence of chosen RESTful communication, transfer of stateless messages via HTTP is used.
+This straigforward approach is easy to implement, however, at a certain point, it cannot anymore sustain a constantly growing load.
+The datatbase cannot cope anymore with the increased input flow, returning a timeout error.
+In this situation it is reasonable to use horizontal partitioning, also known as sharding.
+This technology allows to spread the write load between multiple database servers.
+However, with growing input flow, the maintaining of shards and auxiliary infrastructure becomes more and more complex, demanding too much effort from developers. 	   
+Hence the biggest IT corporations conduct their own research in this area, designing specific architectural solutions for working with Big Data.
