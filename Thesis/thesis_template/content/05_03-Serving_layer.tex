@@ -1,0 +1,11 @@
+\authorsection{Serving layer}{VI}
+
+Serving layer is a place where the batch layer stores batch views.
+When batch layer computes batch views, it loads them into the serving layer.
+Then serving layer indexes them for a fast access.
+Serving layer is represented by a specific distibuted database. 
+It can be swaped by new data, but it does not have ability to make random
+writes.
+That simplifies things extremely, because opportunity to make random writes
+brings most of complexity in databases.
+One example of database that can be used for serving layer is ElephantDB.
