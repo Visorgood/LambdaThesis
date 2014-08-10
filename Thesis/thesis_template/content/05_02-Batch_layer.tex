@@ -1,13 +1,54 @@
-\authorsection{Batch layer}{VI}
+\section{Batch layer}
 
 The batch layer has two responsibilities.
-It has to hold all data, that arrives from users or other outer sources.
-And it has to process that data to create batch views, useful for answering queries.
+It holds all data, that arrives from users or other outer sources.
+And it processes that data to create batch views, useful for fast query answering.
 
 \subsection{Data storage}
 
-The batch layer keeps data in the \textit{master dataset}\mnote{master dataset}.
-The master dataset is a main storage, where all data, that ever arrived to the system, resides.
+The batch layer stores all data in the master dataset.
+It places there only raw data.
+It does not allow to modify or delete stored records, what saves from much of storage complexity and from dangerous mistakes in programming code.
+This properties lead to a specific data model.
+
+To answer as much different queries as possible, the batch layer stores only \textit{raw data} \mnote{raw data}.
+We can derive other relevant data from it, but not vise versa.
+It is important, because we do not know in advance all queries we will want to answer in the feature.
+The more basic is the data, the more information we can possibly deduce from it.
+In this sense, unstructured data is always better than normalized.
+%In the website example we can consider event of a post addition as an instance of a raw data.
+
+The batch layer does not allow modification or deletion of records.
+It only allows to append new data.
+We call this property \textit{immutability}\mnote{immutability}.
+It gives two crucial advantages.
+
+Immutability drammatically simplifies complexity of the storage mechanisms.
+This is because maintainance of modifications in the distributed environment is not an easy task.
+To successfully update a record, the system must do it with all replications.
+It must provide locks and not allow simultaneous updates.
+It has to maintain versions of the same record for different users.
+Absence of all these and many other requirements saves us from much of complexity.
+The system is easier to understand, repair and improve.
+It is much more safe from programming mistakes and consequent errors.
+
+Another advantage of immutability is that mistakes in algorithms can not corrupt data anymore.
+We call this \textit{human fault-tolerance}\mnote{human fault-tolerance}.
+This is important property, because programmers always do mistakes.
+As a result, is is possible, that wrong code can incorrectly update or delete data.
+When data is immutable, programmers' mistakes can only write wrong data to the dataset.
+This can be later repaied by administrator, but all proper data is always safe.
+
+Immutability leads to completely different data model.
+Relational databases manipulate tuples of complex objects altogether.
+In contrast, the batch layer stores each attribute of a logical tuple separately.
+Each value has the timestamp of addition. 
+Such technique allows to have the whole history of logical updates of all attributes.
+The actual value is the one with the oldest timestamp.
+
+As a result, the Lambda architecture introduces the notion of the master dataset.
+The \textit{master dataset}\mnote{master dataset} is the main storage, where all data, that ever arrived to the system, resides.
+The batch layer is responsible for its storage and maintainance.
 If there is a fault of the master dataset - we can loose all data.
 And data is of the most importance in this context.
 Therefore, we must carefully design, set up and protect the master dataset.
@@ -17,72 +58,26 @@ The master dataset is logically a large list of records.
 When new piece of data arrives into the system, batch layer appends it to the master dataset.
 This is a simplified representation, but it is enough for the current discussion.
 
-The master dataset does not allow modification or deletion of records.
-It only allows to append new data.
-We call this property \textit{immutability}\mnote{immutability}.
-This property gives dataset two crucial advantages.
-
-Immutability drammatically simplifies complexity of the storage mechanisms.
-This is because maintainance of modifications in the distributed environment is not an easy task.
-To successfully update a record, the system must do it with all replications.
-It must provide locks, not to allow simultaneous updates.
-It has to maintain versions of the same record for different users.
-Absence of all these and many other requirements saves us from much of complexity.
-The system is easier to understand, repair and improve.
-It is much more safe from programming mistakes and consequent errors.
-
-Another advantage, that immutability of the master dataset gives, is that mistakes in algorithms can not corrupt data anymore.
-We call this \textit{human fault-tolerance}\mnote{human fault-tolerance}.
-This is important property, because programmers always do mistakes.
-As a result, is is possible, that wrong code can incorrectly update or delete data.
-When data is immutable, programmers' mistakes can only write wrong data to the dataset.
-This can be later repaied by administrator.
-All proper data is always safe.
-
-Immutability leads to completely different data model.
-Relational databases manipulate tuples of complex objects altogether.
-In contrast, the master dataset stores each attribute of a logical tuple separately.
-Each value has the timestamp of addition. 
-Such technique allows to have the whole history of logical updates of all attributes.
-The actual value is the one with the oldest timestamp.
-
-We store only \textit{raw data}\mnote{raw data} in the master dataset.
-It is impossible to derive it from any other data.
-Its benefit is that we can derive other relevant data from it, but vise versa is impossible.
-It is important, because we don't know in advance all queries we will want to answer.
-The more basic is the data, the more information we can possible deduce from it.
-In this sense, unstructured data is always better than normalized.
-In the website example we can consider event of a post addition as an instance of a raw data.
-
 \subsection{Computation of batch views}
 
-As a result of huge amounts of available data and its inherent rawness,
-answering particular query is often unreasonably expensive or even infeasible. 
-That is because query answer demands usually a piece of information, that is far
-away from what raw data in the system describes.
+Answering particular query is often unreasonably expensive or even infeasible.
+This is so, because amount of available data is huge, and because data is raw. 
+Moreover, query answer demands usually a piece of information, that is far away from what raw data describes.
 It requires often execution of complex algorthims on the whole dataset.
-In the BigData context that can mean hours of processing, while low-latency
-response is typically a condition.
+In the BigData context that can mean hours of processing, while low-latency response is typically a condition.
 
-To solve this issue one can create batch views.
-Batch view \mnote{batch view} is a specific data structure.
-It contains derived data, that is a result of execution of specific algorithms
-and aggregations on the whole dataset.
-It is used for answering particular query.
-Batch views are created in advance.
-They can be used then in the query-time providing useful information.
+To solve this issue the batch layer precomputes batch views in advance.
+Batch views contain derived data, that is a result of execution of specific algorithms and aggregations on the whole dataset.
+They help in answering particular queries.
+The batch layer creates batch views in advance, so that they are ready for low-latency response in the query time.
 
-Batch views are created in the infinite loop.
-After the process of creation is completed, it starts again.
-Processing all the data and creating batch views is high-latency operation.
+The batch layer computes batch views in the infinite loop.
+After completion of data processing, it starts from the beginning.
+Processing of all the data and creating batch views is a long operation.
 It can take hours and even days to be done.
 As a result batch views are always out-of-date.
 
-Computation of batch views is being repeated continuously from scratch.
-This is inherently distributed operation.
-That means that developer does not have to think about concurrency and threads.
-He only wrties simple one-threaded code, that is distributed then
-automatically in the cluster.
-MapReduce is a perfect example of a batch execution.
-Apache Hadoop is an example of framework that can be used for computations in
-the batch layer.
+Computation of batch views is inherently distributed operation.
+Developer does not have to think about multithreading issues.
+He only wrties simple one-threaded code, that is distributed then automatically in the cluster.
+MapReduce is a perfect example of a batch processing.
