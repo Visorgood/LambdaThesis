@@ -185,15 +185,45 @@ Further we describe the existing Big Data architectures in the context of Mentha
   \label{fig:big_data_flow}
 \end{figure}
 
-\authorsection{Architectural Approaches}{SP}
-\mnote{Naive Approach}
+\authorsection{Naive Approach}{SP}
+\mnote{PostgreSQL}
 It is natural to start with a naive approach, using widely available and easy to use technologies.
-As outlined in Section [add section number], one could use a relational database, such as MySQL or PostgreSQL.
-In this case, one would create a Representational state transfer (REST) API for communication between client and the database.
-As a consequence of chosen RESTful communication, transfer of stateless messages via HTTP is used.
+As a storage system, one could use a relational database, such as MySQL or PostgreSQL.
+PostgreSQL is an object-relational database management system.
+It is an open source project, that is quite popular among developers due to its high security standards, good performance and scalability.
+PostgreSQL was chosen as a database for Menthal application as a compromise between widespread but primitive MySQL and such large-scale solutions as Oracle or MongoDB.
+On the one hand, it supports sufficiently complicated queries and easily scales, comparing to simple MySQL database.
+On the other hand, it is not overload with redundant functional and does not require high maintenance affords as large-scale database management systems.
+
+\mnote{REST}
+Menthal uses a Representational state transfer (REST) API for communication between client and the database.
+In this context RESTful API means that all the required information is transferred as parameters inside of an HTTP request (GET or POST).
+The application uses stateless type of data exchange, that means that the server does not store a client state.
+It helps to decrease the load on the server side, however increasing the amount of exchange traffic.
 This straigforward approach is easy to implement, however, at a certain point, it cannot anymore sustain a constantly growing load.
 The datatbase cannot cope anymore with the increased input flow, returning a timeout error.
+
+\mnote{Database mirroring}
+Database mirroring avoids the database overload.
+It is a technique of keeping redundant copies of a database.
+It enhances data availability and allows to always have an accessible copy of a database on one of the machines.
+There is a special kind of mirroring called a hot standby, when every change is copied immediately to the mirrored instance.
+In this case, there is a guarantee that all the instances keep the identical data, however, it can lead to a high latency.
+If some data loss is permitted, a warm standby mode can be used, when the data is not fully synchronized across the database instances.
+It does not grant the same information consistency as a hot standby mode, but it shows better performance results.
+
+\mnote{Database caching}
+Database caching is another technique for improving architecture scalability. 
+In this case data is cached in high-performance store, e.g. in memory.
+..
+The drawback of both approaches is that they only improve reading, leaving the problem of large-scale writing unsolved. 
+
+\mnote{Sharding}
 In this situation it is reasonable to use horizontal partitioning, also known as sharding.
+Sharding helps to enhance write scalability.
+It denotes the process of partitioning of database tables by rows.
+Each partition (shard) can be settled on separate machine.
 This technology allows to spread the write load between multiple database servers.
+Also it reduces the index size, thereby improving performance.
 However, with growing input flow, the maintaining of shards and auxiliary infrastructure becomes more and more complex, demanding too much effort from developers. 	   
 Hence the biggest IT corporations conduct their own research in this area, designing specific architectural solutions for working with Big Data.

@@ -254,19 +254,22 @@ Its key feature of dividing the computation into Map and Reduce phases helps to 
 
 \authorsection{BigTable}{SP}
 [reference]
-Google works with large-scale data and thus it needs a distributed storage system to solve the problems of warehousing.
+Some Google projects deal with so large amounts of data, that common storage systems cannot sustain such a load.
+For instance, personalized search, that stores user browser history and handles search queries based on the stored information about user activity.
+It is necessary to warehouse each user's data.
+Taking into account the huge number of Google Search users, the amount of data to be stored is also tremendous. 
+
 The company introduces its own storage system for these purposes - a Bigtable.
+It is a sparse, distributed, persistent multidimensional sorted map. [reference]
+Bigtable uses three-dimensional mapping: row key, column key and timestamp are mapped to an array of bytes.
 It is created to store petabytes of data in a distributed way.
 As Google uses Bigtable in various projects, it puts different requirements on data size and latency of the storage system. 
- 
-A Bigtable is a sparse, distributed, persistent multidimensional sorted map. [reference]
-It uses three-dimensional mapping: row key, column key and timestamp are mapped to an array of bytes.
-The row key is represented by an arbitrary string with a maximum size of 64Kb.
-Read and write operations under one row key are atomic.
 
 \mnote{row keys}
+The row key is represented by an arbitrary string with a maximum size of 64Kb.
+Read and write operations under one row key are atomic.
 Bigtable stores row keys in lexicographic order and dynamically partitions each row range.
-One partition is called a tablet and it serves as a distribution and load balancing unit.
+One partition is called a tablet and serves as a distribution and load balancing unit.
 For instance, when storing web pages with an URL as a row key, it is optimal to arrange pages from the same domain in one tablet.
 In this case an URL like en.wikipedia.org/index.html is presented as org.wikipedia.en/index.html.
 
@@ -288,4 +291,74 @@ Several versions of data are ordered such as the most recent version can be acce
 Garbage collector processes the outdated data automatically using one of the two column family settings to detect the outdated versions.
 The first setting allows to keep only the last \textit{n} versions of data, while the second setting allows to keep data that was written in the last \textit{m} days.
 
-% more..
+\mnote{Sawzall}
+Bigtable uses a special language developed by Google to allow user to manipulate stored data.
+The language is called Sawzall.
+Scripts, written in this language, can execute on Bigtable server's address spaces.
+Using Sawzall scripts one can filter, transform and make various summarization on data.
+
+The major components of Bigtable are a master server, a number of tablet servers and a library linked into each client.
+It is possible to dynamically add or remove tablet servers according to given workload.
+The master assignes tablets to tablet servers, performs load-balancing, garbage collection.
+Furthermore, it is responsible for creation of tables and column families.
+Each tablet server controls a tablets set.
+When a client sends a read or write request to the tablet, this request is processed by the tablet server.
+Also the tablet server splits too large tablets.
+
+The internal details of master-slaves interaction are similar to those mentioned above in GFS and MapReduce subchapters.
+Analogously, the system does not transfer client data through the master and establishes a direct connection between clients and tablet servers.
+It prevents the high load of a single master node.
+
+A Bigtable cluster warehouses one or several tables.
+A table contains a number of tablets. 
+All the data that belongs to one row range is situated in one tablet.
+Primarily one table contains only one tablet.
+When the table becomes larger than a specified threshold, it automatically splits into several tablets.
+
+\mnote{METADATA table}
+The root tablet uses a special METADATA table to store the location of tablets.
+The root tablet is a first tablet in this table.
+However, it is never split in contrast to the rest of the tablets to keep the number of hierarchy levels constant.
+Figure~\ref{fig:bigtable_tablets_hierarchy} illustrates the tablets hierarchy.
+The METADATA table also stores logs of operations on each tablet.
+This data can be used for preformance analysis and debugging.  
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.9\textwidth]{images/bigtable_tablets_hierarchy}
+  \caption{Bigtable tablets hierarchy}
+  \label{fig:bigtable_tablets_hierarchy}
+\end{figure}
+
+\mnote{SSTable}
+Bigtable stores data in special file format called SSTable.
+Each SSTable consists of several blocks of a fixed size (64Kb by default). 
+To locate blocks it stores their indexes, that are loaded into memory on opening the SSTable.
+The blocks indexes considerably decrease the lookup time.
+First the binary search is performed on in-memory index to find the needed block.
+Than the appropriate block is read from disk.
+The whole SSTable can be loaded into memory if necessary to perform lookup and scan operations avoiding touching disk.
+
+A tablet can be recovered using a commit log.
+This log contains all the tablet updates.
+The most recent updates can be obtained from a memtable - a sorted buffer in memory.
+The set of SSTables stores the older updates. 
+A tablet server can read the METADATA table to detect the necessary SSTables for recovering.
+Than the tablet server applies all the updates in order to restore the crashed tablet. 
+  
+A tablet server checks the incoming read and write operations.
+The operation should be well-formed and the sender should be authorized to perform a mutation.
+First the server writes a valid mutation to the commit log.
+Then for write operation it inserts its content to memtable.
+When the size of the memtable goes beyond the given threshold, the system frozes it.
+It creates a new memtable and converts the frozen one into an SSTable. 
+Read operation is performed on a merged view of the memtable and corresponding SSTables.
+
+Periodically a merging compaction on SSTables and the memtable are used to create new SSTables out of old ones.
+A regular compaction merges the memtable and a few SSTables, keeping the deletion information and deleted data.
+A major compaction merges all SSTables into exactly one SSTable, cleaning deletion entries.
+Bigtable performes the compaction mechanism regularly to keep the system up-to-date.
+
+The variable number of tablets makes the system flexible and therefore easy to scale.
+The implementation features provide good performance and high availability.
+Bigtable is successfully used in many Google products, that proves the high quality of this storage system.

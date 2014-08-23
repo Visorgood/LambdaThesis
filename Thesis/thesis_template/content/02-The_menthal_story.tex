@@ -1,33 +1,42 @@
 \chapter{The Menthal Story}
 \label{chap:menthal_story}
+Such devices as smartphones became an integral part of modern life.
+People use it not only for communication, but for plenty of other purposes, like reading books, surfing in the Internet, playing games, etc.
+However, most of the users can not correctly estimate the time spent on their phone during the day.
+Besides, information about how people use their phones can be analysed from different sides.
+Psychological research, statistical calculations, medicine and healthcare projects, advertising - these are several examples of where such data can yield a profit.
+Menthal is an application that is designed specifically for these purposes.
+This chapter describes the main functionality and technical details of this application.
+
 Nowadays mobile/smartphone excessive usage becomes a critical problem.
-People constantly use the device, making calls, sending messages, surfing in the Internet or just playing.
+People constantly use these devices, making calls, sending messages, surfing in the Internet or just playing.
 More than a half of adult population of United States own a smartphone.
 People are distracted by their phones even on personal meetings, parties and dates.
-When a person leaves his phone at home, he feels nervious and irritated.
+When a person leaves his phone at home, quite often he feels nervous and irritated.
 Some people suffer from a cellphone vibration syndrome, when one feels as if a cellphone is vibrating but in fact it is not.
 Sometimes they unlock the phone and check messages or social network pages unconsciously, just to make sure that nothing new has happened. 
 
 The crucial problem is that people are not able to detect that they concentrate on their smartphones too much.
-Few of them can correctly specify the daily time expenditure on the device.
+Few of them can correctly estimate the daily usage period of the device.
 First, it is difficult to evaluate yourself, take a detached view on your behavior.
 For example, one can unlock his phone 45 times per day and use it for 2 minutes on average.
-However, in the end of the day it sums up to 1,5 hours, what can surprise the user.
-Second, even if a person can correctly estimate the wasted time, it is morally unpleasant to confirm these figures.
+However, in the end of the day it sums up to 1,5 hours.
+This fact can surprise the user, because his estimated frequency of interaction with a phone and usage time would be much smaller.
+Second, even if a person can correctly assess the wasted time, it is morally unpleasant to confirm these figures.
 For instance, one plays a game on his smartphone instead of working on important task that has to be accomplished.
 Finally, the task is not finished, the person realizes that the reason was that mobile game, but it is easier to say that there was not enough time to complete the task.  
 Thus, exterior assessment mechanism is needed to calculate how much time a user spend on his smartphone, what applications he uses and when.    
 
-At the same time, there is no proper study how do people use their phones.
+At the same time, there is no proper study how people use their phones.
 Currently most of the researches in the field of human-smartphone interaction involve direct interaction with a user group, by means of questionnaires and interviews.
 Recently special software applications for smartphones to keep track of user actions emerge.
-However, they still require the interaction with users, showing dialog boxes and asking questions.
-It introduses a certain bias into the results of the research, because a user gets distracted by this interference.
-Only an application that is invisible for users can help to make a complete and thoroughtful research.
+However, they still require the interaction with users, showing dialogue boxes and asking questions.
+It introduces a certain bias into the results of the research, because a user gets distracted by this interference.
+Only an application that is invisible for users can help to make a complete and thorough research.
 
 The results of human-smartphone study can be used in various fields.
-For example, France introduses a rule to switch off work phones after 18:00 and till 9:00, to protect employees from official duties outside office hours.
-To perform such introduction, it is important to investigate how do people of various professions use their work phone.
+For example, France introduces a rule to switch off work phones after 18:00 and till 9:00, to protect employees from official duties outside office hours.
+To perform such introduction, it is important to investigate how people of various professions use their work phone.
 This research can help to detect the cases when it is actually necessary to block the phones.
 In some cases maybe it is sufficient to block only particular functions, such as emails or text messages.
 
@@ -38,46 +47,120 @@ If a person wants to decrease the time spent on the smartphone, a special enhanc
 For example, the phone can warn user when he spends too much time using the device during the day.  
 
 As a result, there are two problems that have to be solved. 
-On the one hand, there is a need to provide user with his smartphone use information.
+On the one hand, there is a need to provide a user with his smartphone use information.
 On the other hand, it is necessary to supply researches with a tool that tracks smartphone usage.
-Menthal, an application for smartphones, combines these two features and provides solutions for both these problems. 
+Menthal, an application for smartphones, combines these two features and provides solutions for both of these problems. 
 
-Menthal is an application that gathers phone usage data and stores it on a server for further analysis, providing user with feedback.
-% client part + server part
+\authorsection{Menthal - conceptual meaning}{SP}
+Menthal is an application that gathers phone usage data and stores it on a server for further analysis, providing user with a feedback.
+Phone usage data includes the number of times user unlocks his phone, the number of performed calls and sent SMS, etc.
+The user receives a feedback about the smartphone usage statistics that is provided by the server.
+In this case Menthal uses the same concept as Google: it grants users a free service in return to data.
+This approach works well, and the high number of Menthal users (about 50 000 unique accounts) demonstrates it. 
 
-The Menthal story started from a psychological experiment on 60 participants.
-% -the key idea
-% -methods: questionaries, brain scan
-% -data from phone sensors
-% 
-This experiment developed into an independent smartphone application for mass usage. 
-% -it collects data, provides user with feedback and supplies psychologists with data
-% -it is settled on one machine with a PostgreSQL database
-% -it provides RESTful API and communicates via HTTP
-% -the data exchange is stateless
-% -the main problem is that it scales nicely for reads, but not for writes
-% 
+Prior to present Menthal application a pilot study was conducted. 
+It was a psychological experiment on 49 participants.
+During 5 weeks their telephone/SMS usage was measured by means of a mobile phone application.
+The personality dimensions were determined using questionnaire.
+The goal of this study was to detect a connection between smartphone usage patterns and personality traits.
+
+In contrast to other similar attempts, this work uses automatized approach for gathering information instead of self-report data.
+The application tracks tuples for calls of the format (anonymized number, start time, end time, in/out).
+SMS tuples have a form (anonymized number, length of the message, time sent for outgoing messages / time received, time read for incoming SMS).
+The application is not visible for the user, uploading data to the server automatically.
+Later collected data is analysed on the server in the context of personality traits.
+Among the result of the study one can observe a positive correlation between extraversion and the number and frequency of telephone calls.
+
+\authorsection{Menthal - technical details}{SP}
+This experiment develops into an independent smartphone application for mass usage. 
+It collects data, providing user with a feedback and supplying psychologists with information that can be analysed later on.
+Figure~\ref{fig:menthal_architecture} illustrates the Menthal architecture.
+The application includes a client and a server part, that interact with each other via HTTPS.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.9\textwidth]{images/Menthal_architecture}
+  \caption{Menthal architecture}
+  \label{fig:menthal_architecture}
+\end{figure}
+
+The client part consists of an Android application installed on a smartphone.
+It keeps track of all the user activity during the day, such as unlocking the phone, number of calls and SMS, running applications, etc.
+This data is structured as a key/value pairs, where the key is .. and the value is a particular event (e.g. ..).
+The information gathering process is hidden from users, the application runs in the background, automatically sending data to the server once per day.
+Menthal has a user interface to provide users with a feedback. 
+
+\mnote{Menthal GUI}
+The main screen shows a 'score' - the relative phone usage measurement.
+Using this value, one could check how intensively he uses his phone today comparing to previous days statistics.
+UI provides also additional functionality.
+It shows overall daily/weekly/monthly statistics about the phone usage such as most used application, number of calls or the number of times user unlocked the phone.
+After a short questionary it can display personality characteristics diagram, that includes five sides: extraversion, neuroticism, openness, conscientiousness, agreeableness.
+Furthermore a user can check the list of contacts with whom he communicates more often over a period of time.
+The next screen shows the daily time spenditure with the phone for the last 30 days.
+The application is able to keep track of user mood, periodically checking his current state of mind.
+Using smartphone's GPS receiver, Menthal can determine and show on map the user location.
+Moreover the application gives an opportunity to put a time limit on a particular application, so when the limit is exceeded the phone warns a user about that.
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics [width=.8\textwidth]{images/Menthal_GUI_mainscreen}
+  \caption{Start screen}
+  \label{fig:menthal_gui_mainscreen}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics [width=.8\textwidth]{images/Menthal_GUI_me}
+  \caption{Personal statistics}
+  \label{fig:menthal_gui_me}
+\end{minipage}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics [width=.8\textwidth]{images/Menthal_GUI_personality}
+  \caption{Personality characteristics}
+  \label{fig:menthal_gui_personality}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics [width=.8\textwidth]{images/Menthal_GUI_preferences}
+  \caption{Time limits preferences}
+  \label{fig:menthal_gui_preferences}
+\end{minipage}
+\end{figure}
+
+\mnote{information security}
+Menthal uses secure connection, encryption of sensitive data and authentication mechanism to guarantee information security.
+Communication between the client and the server goes through HTTPS.
+This protocol is designed to provide a secure communication over a computer network. 
+OAuth 1.0a protocol guarantees an authorization control.
+On the phone the data is stored in SQLCipher database.
+This database uses 256 bit AES encryption for storing information in a secure way.
+Moreover, Menthal hashes the sensitive data, such as the contact names or the phone numbers via SHA2. 
+
+% paragraph about sending patterns (Wifi, buffer) 
+ 
 The problem of scaling becomes urgent when Menthal is covered in mass media.
-% -newspapers (which?), interview on TV
-% -explosive increase of the number of users
-% -application is not able to write all incoming data into database, not to mention providing a feetback 
-% 
+The articles in newspapers and interview with a project leader lead to the explosive increase of the number of users.
+Menthal obtains around 50 000 unique users, that has a significant influence on the application performance.
+It becomes overflowed and is not able to write all incoming data into database, not to mention providing a feedback. 
+% run out of id-s on one of the machines?
 The architecture of the application is changed to meet the new requirements.
-% -mirrowed DB, caching - only improves reading, not writing
-% -sharding - makes things harder to implement and manage
-% -actually we deal with Big Data
-% 
-The most suitable architectural solution is taking an advantage of recently developed Lambda Architecture.
-% -key properties
-% -why is it suitable
-%  
-The data collected by Menthal can be used for various purposes.
-% -psychological research
-% -statistical calculations (what Apps are used most? how is it connected with user group?)
-% -services based on results on data analisys (offer applications to users)
-% -healthy person - depressed person - to find a desease at a proper time
 
-resulting data (how many users, how manys recorded. how large data, how many .. per day, how many in total)
-% -nowadays Menthal has 50 000 active users
-% -we receive 1Tb data every month
-% -Menthal is still under development
+% убрать этот абзац 
+The most suitable architectural solution is taking an advantage of recently developed Lambda Architecture.
+It is design specifically for handling large amounts of data.
+The detailed description of Lambda Architecture is presented in Chapter 5 of this work.
+Currently the process of moving Menthal to this architecture is conducted. 
+
+Menthal recently gained popularity among users.
+As it was mentioned almost 50 000 persons have this application installed on their phones.
+All of these devices periodically send collected information to the server, that sums up to a vast amount of data.
+Totally around 34Gb of information is received per day, that is almost 1Tb per month.
+% number of machines
+% stop with problem with Postgres
