@@ -215,7 +215,8 @@ It does not grant the same information consistency as a hot standby mode, but it
 \mnote{Database caching}
 Database caching is another technique for improving architecture scalability. 
 In this case data is cached in high-performance store, e.g. in memory.
-..
+The access to memory is faster than the reading from a file or a database or transfering data via HTTP.
+When the application often uses such external resources, database caching significantly increases performance. 
 The drawback of both approaches is that they only improve reading, leaving the problem of large-scale writing unsolved. 
 
 \mnote{Sharding}

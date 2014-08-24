@@ -292,10 +292,23 @@ Garbage collector processes the outdated data automatically using one of the two
 The first setting allows to keep only the last \textit{n} versions of data, while the second setting allows to keep data that was written in the last \textit{m} days.
 
 \mnote{Sawzall}
-Bigtable uses a special language developed by Google to allow user to manipulate stored data.
+Bigtable allows user to manipulate the stored data using a special language developed by Google.
 The language is called Sawzall.
 Scripts, written in this language, can execute on Bigtable server's address spaces.
 Using Sawzall scripts one can filter, transform and make various summarization on data.
+
+\mnote{Chubby}
+Chubby is a persistent distributed lock service for synchronizing access to shared system resources.
+The Chubby service replicates to five nodes, choosing one of them to be a master node.
+The service provides a namespace, that contains directories and files, and uses them as a lock.
+Chubby has a client library that can keep the cached Chubby files in memory.
+Every client sustains a session with Chubby service.
+The expired session loses all the locks.
+
+Bigtable uses Chubby for several purposes.
+First, Chubby guarantees to have at most one active master at a time.
+Second, it handles the appearance of new tablets and finilizes the dead ones.
+Third, it stores the schema of Bigtable and access control lists.
 
 The major components of Bigtable are a master server, a number of tablet servers and a library linked into each client.
 It is possible to dynamically add or remove tablet servers according to given workload.
