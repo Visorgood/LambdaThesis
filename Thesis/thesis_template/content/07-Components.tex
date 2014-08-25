@@ -42,6 +42,20 @@ Ephemeral nodes cannot have children nodes, they can only store data.
 ZooKeeper client establishes a session with a ZooKeeper server, passing heartbeat messages.
 When a client stopes to receive heartbeat messages, it reconnects to a defferent server, reestablishing the session.
 If the session is canceled, all its ephemeral nodes are automatically removed.
+ZooKeeper tree is presented in Figure~\ref{fig:zookeeper_tree} where the dark nodes are ephemeral.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.9\textwidth]{images/zookeeper_tree}
+  \caption{ZooKeeper tree sructure}
+  \label{fig:zookeeper_tree}
+\end{figure}
+
+ZooKeeper is designed for small data warehousing, such as configuration, status and location information.
+One node is usually not bigger than one kilobyte.
+Therefore it stores data tree image in memory, keeping in a persistent store only transaction logs and snapshots.
+In-memory storage limits the size of the database of ZooKeeper.
+However, it gives advantages of low latency and high performance. 
 
 The key feature of ZooKeeper is that it uses First In, First Out (FIFO) method for processing the messages.
 It means that all commands are performed in the order they are received.
@@ -72,6 +86,11 @@ It is called the slow read.
 Evidently, if all the clients use the slow read the system looses the advantage of scaling.
 Without force synchronisation ZooKeeper system scales for reads nicely. 
 However, in this case the client that reads from a replica can obtain the outdated information.
- 
+
+A client can watch a node.
+If it sets a watch, it gets notified when the node is changed.
+When the node sends this notification, it removes the watch.
+In the case of connection problems between the client and the ZooKeeper server, the client receives a local notification.
+
 
 \authorsection{Alternatives}{NO}
