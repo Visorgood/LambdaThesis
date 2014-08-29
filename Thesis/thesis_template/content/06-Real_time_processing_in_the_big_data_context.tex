@@ -1,10 +1,34 @@
-\chapter{Real time processing in the Big Data context [VI]}
+\chapter{Real time processing in the Big Data context [VI] [14 pages]}
 \label{chap:real_time_processing}
 
-\section{Something about Twitter}
+[1 page]
 
-\section{Bloom filter, other algorithms}
+Common paragraph
 
-\section{Kafka paper}
+Web-companies encounter nowdays necessity to process data streams in the real-time fashion.
+These streams produce often vast amount of data in a short period of time.
+There are plenty of examples: Google's Zeitgeist system that tracks trends in search queries (some more examples\ldots)
 
-\section{Speed Layer (for real time processing)}
+There are many algorithms for processing data streams.
+They divide to categories depending on what type of query do they answer.
+A few query types are: ``has an item already been observed?'', ``how many times has an item been observed?'', ``what is the number of unique items among observed?'', etc.
+
+How all this can be used in the speed layer
+
+\section{Examples from real life [5 pages]}
+
+\section{Stream processing algorithms [5 pages]}
+
+[1 page]
+
+Stream processing algorithms, or sketch algorithms, allow to treat huge amounts of data coming from the stream in an efficient way.
+They answer different types of queries, e.g. ``has particular item already been observed?'', ``how many times specific item has already arrived from the stream?'', ``what is the cardinality of the set of items so far came from the stream?'', etc.
+Stream processing algorithms use usually small amount of memory to maintain their data structures.
+At least in comparison with the amount of data that stream produces.
+
+\subsection{Bloom filter [1 page]}
+\subsection{Count-min sketch [1 page]}
+\subsection{HyperLogLog algorithm [1 page]}
+\subsection{Flajolet-Martin sketch [1 page]}
+
+\section{Speed Layer (for real time processing) [3 pages]}
