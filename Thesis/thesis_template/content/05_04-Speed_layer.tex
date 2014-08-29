@@ -7,69 +7,40 @@ Speed layer is much more complex than batch layer, because of its incremental na
 And it provides only approximated results.
 We discuss each layer in more details in particular chapters.
 
-Summarizing, to answer the query system uses both things: batch views, computed
-in the previous batch processing of the whole dataset, and real-time views,
-gathering information from data coming during current batch processing.
-Information from both types of views is then merged to provide answer to the
-particular query.
-Batch views provide information, that complete, but out-of-date for
-several hours.
-Real-time views contain information, gathered during current batch processing.
-
-To overcome this delay the Lambda architecture provides online processing.
-It maintains additional data structures, called real-time views\mnote{real-time
-view}.
-They store information, derived from data arriving during current batch
-processing.
+To overcome delay of batch processing the Lambda architecture uses online incremental processing of arriving data.
+It maintains additional data structures, called real-time views.
+They store information, derived from data arriving during current batch processing.
 Real-time views are normally different from batch views, and also more complex.
-That is because they must be updated and available continuously, as new data
-arrives.
+That is because they must be updated and available continuously, as new data arrives.
 This demands usage of such techniques like sketch algorithms.
 It is described in all details in the particular chapter.
-It worth to mention that real-time views contain often approximated information,
-because of requirements they must obey.
-But that is not a crucial problem, because they do not accumulate error for a
-too long time.
+It worth to mention that real-time views contain often approximated information, because of requirements they must obey.
+But that is not a crucial problem, because they do not accumulate error for a too long time.
 Real-time view exists only during current batch processing.
-When it is done, real-time views are dropped, and start to be created from the
-beginning.
+When it is done, real-time views are dropped, and start to be created from the beginning.
 
-The main purpose of the speed layer is the same as of batch part - to answer
-queries.
-As long as the batch layer computes views for several hours, speed layer is
-dedicated to cover this interval, providing low-latency answers.
-During the time of current batch processing, data coming to the system is stored
-to master dataset as well as added incrementally to the real-time views in
-speed layer.
+The main purpose of the speed layer is the same as of batch part - to answer queries.
+As long as the batch layer computes views for several hours, speed layer is dedicated to cover this interval, providing low-latency answers.
+During the time of current batch processing, data coming to the system is stored to master dataset as well as added incrementally to the real-time views in speed layer.
 
 This ability to update views on the fly makes speed layer much more complex.
 It involves usage of databases, that allow random writes.
-Algorithms, used to make online stream processing, are also usually more
-complex.
-Because of those issues, speed layer is more error prone, and takes more effort
-from developer.
-But real-time views are discarded every time, when batch layer completes
-processing of batch views.
-Such temporal nature of real-time views saves us from accumulation of
-error.
+Algorithms, used to make online stream processing, are also usually more complex.
+Because of those issues, speed layer is more error prone, and takes more effort from developer.
+But real-time views are discarded every time, when batch layer completes processing of batch views.
+Such temporal nature of real-time views saves us from accumulation of error.
 This property of the Lambda architecture is called \textit{complexity isolation}\mnote{complexity isolation}.
 
 \subsection{Computaition of real-time views}
-To compute real-time views, one could consider the same approach as for batch
-views, but use only new data for computations.
+To compute real-time views, one could consider the same approach as for batch views, but use only new data for computations.
 This would simulate batch processing on the much smaller scale.
-Nevertheless, if we want to achieve latency of miliseconds, such approach is
-not going to work.
-Batch processing even on the scale of several gigabytes is not possible to do in
-miliseconds.
+Nevertheless, if we want to achieve latency of miliseconds, such approach is not going to work.
+Batch processing even on the scale of several gigabytes is not possible to do in miliseconds.
 
 To solve this issue we have to use completely different approach.
-We do not consider the whole bunch of data, that has arrived during current
-batch processing, for creating real-time views.
-Instead, we incrementally update them with a small piece of data, everytime it
-arrives.
-This normally leads to only an approximated answers to the queries, provided by
-real-time views.
+We do not consider the whole bunch of data, that has arrived during current batch processing, for creating real-time views.
+Instead, we incrementally update them with a small piece of data, everytime it arrives.
+This normally leads to only an approximated answers to the queries, provided by real-time views.
 But this is again not a problem, because error does not accumulate for too long.
 
 \subsection{Storage of real-time views}

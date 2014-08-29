@@ -39,8 +39,8 @@ They store indices and aggregations of original data.
 There two approaches of preparing views.
 The first one is to do it in a batch mode considering all available data for computations.
 The second one is to construct views incrementally in the real-time with newly arrived data.
-In combination these two methods give us an opportunity to answer queries fast and accurate.
-Figure~\ref{fig:lambda_architecture} depicts general view of the Lambda architecture.
+Together these two methods give us an opportunity to answer queries fast and accurate.
+Figure~\ref{fig:lambda_architecture} depicts how the Lambda architecture combines batch and incremental processing to answer queries.
 
 The \textit{batch layer} \mnote{batch layer} of the Lambda architecture is responsible for batch processing.
 It takes the whole dataset and executes batch computations on it.
@@ -61,7 +61,7 @@ This paradighm is inherently distributed and scalable.
 
 After the batch layer has precomputed views, it places them into the \textit{serving layer}\mnote{serving layer}.
 The serving layer is responsible for storage of batch views.
-It also provides interface to get particular data records from them. 
+It also creates indices on those views and provides interfaces to get particular data records from them.
 
 Batch layer starts then computations again, considering now data, that has come during the last batch processing.
 This loop goes on infinitely.
