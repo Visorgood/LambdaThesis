@@ -15,6 +15,62 @@
 \authorsection{Real time processing systems}{SP}
 
 \subsection{Storm}
+Batch processing cannot meet all the demands for processing Big Data.
+Hadoop, the best known tool for batch processing, is helpless when it is needed to handle streaming data and obtain immediate result.
+Therefore new systems, designed for real-time processing, have appeared.
+One of such systems is an open source project named Storm.
+
+Storm is a complex event-processing (CEP) system.
+Complex event processing means gathering data from different sources, combining it and making conclusions from it.
+For example, such system keeps track of significant changes in traffic reports or stock market feeds and immediately responds to them. 
+
+Storm is implemented in a dialect of the Lisp language named Clojure.
+Clojure is a functional language like Lisp, but it also supports multithreaded programming.
+Clojure runs on the Java Virtual Machine, however applications within Storm can be written in Java, Scala, JRuby, Perl and PHP.
+Moreover, one can use a Structured Query Language adapter for streaming data directly into Storm topoloy.
+
+\mnote{Storm architecture}
+The data stream consists of an unbounded set of tuples.
+A tuple can contain both standard data types (integer, float, byte array) as well as user-defined types.
+Every stream has its own ID.
+The sources of streams called spouts. 
+
+The next important Storm primitive is bolt.
+Figure~\ref{fig:storm_architecture} shows the interaction between spouts and bolts.
+The stream of tuples originates from a spout and goes through a sequence of bolts.
+Every bolt performs a transformation on incoming data stream, like aggregating, filtering, or interaction with external parts such as databases.
+A bolt can receive information from several spouts and stream it to multiple bolts.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.9\textwidth]{images/storm_architecture}
+  \caption{Storm architecture}
+  \label{fig:storm_architecture}
+\end{figure}
+
+For example, MapReduce word counting example can be easily implemented with Storm.
+Such system counts how many times each word occures in a given input data.
+In the case of Storm one needs 
+1)a spout to generate text data, 
+2)one bolt to implement the Map function for word tokenisation and 
+3)one bolt to implement the Reduce function for aggregation the amounts of words occurences. 
+
+Storm allows to group the stream of tuples in different ways.
+For instance, shuffle grouping randomly distributes tuples to bolts such as each bolt receives approximately the same number of tuples.
+Field grouping partitions tuples according to contained fields.
+Also other grouping methods exist, including the custom grouping.
+
+The implementation charasteristics of Storm lead to high performance and fault tolerance.
+It uses ZeroMQ for passing messages between the tasks.
+Messages are automatically serialized and deserialized to Storm primitive types.
+The usage of this message queue helps to avoid intermediate queueing, thus improving performance.
+Furthermore, Storm guarantees the processing of every tuple.
+In the case of a fault during message processing, a tuple is replayed from the spout.
+There is also a fault detection mechanism on task level, when the failed task is quickly reasssigned to restart the processing.
+Storm has supervisors to manage the processes, that leads to efficient usage of resources.
+
+\mnote{Storm cluster}
+
 
 \subsection{Scala}
 
@@ -23,13 +79,13 @@
 \subsection{Spark}
 
 \subsection{ZooKeeper}
-When a distributed system becomes large and complicated, it needs a coorinator, that performs the system configuration management.
+Large distributed systems require a coordinator for system configuration management.
 As it was mentioned in Chapter 4, Google uses a Chubby service for this purpose.
 The main Chubby disadvantage is that for lock and unlock operations it is necessary to open and close the object consequently.
 This feature influences the performance, increasing the time needed for making a lock.
 Therefore Yahoo developes its own service named ZooKeeper that manages systems configuration and allows to efficiently lock the shared resources.
 
-ZooKeeper provides a namespace that looks similar to a standard file system.
+ZooKeeper namespace looks similar to a standard file system.
 It consists of interconnected nodes, each of them identified by a path.
 The path contains elements separated by a slash ('/').
 Like in a file system, every node except the root has a parent node.
