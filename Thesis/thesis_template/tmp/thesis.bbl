@@ -1,4 +1,17 @@
-\begin{thebibliography}{MW14}
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{CDG{\etalchar{+}}06}
+
+\bibitem[Bro]{BroderMitzenmacher}
+Mitzenmacher Broder.
+\newblock Network applications of bloom filters: A survey.
+
+\bibitem[CDG{\etalchar{+}}06]{Bigtable/Chang_Dean_Ghemawat}
+Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
+  Mike Burrows, Tushar Chandra, Andrew Fikes, and Robert~E. Gruber.
+\newblock {Bigtable: A Distributed Storage System for Structured Data}.
+\newblock In {\em Proceedings of the 7th USENIX Symposium on Operating Systems
+  Design and Implementation - Volume 7}, OSDI '06, pages 15--15, Berkeley, CA,
+  USA, 2006. USENIX Association.
 
 \bibitem[MW14]{MarzWarren201401}
 Nathan Marz and James Warren.
