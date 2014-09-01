@@ -1,9 +1,10 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
 \begin{thebibliography}{CDG{\etalchar{+}}06}
 
-\bibitem[Bro]{BroderMitzenmacher}
+\bibitem[Bro05]{BroderMitzenmacher2005}
 Mitzenmacher Broder.
 \newblock Network applications of bloom filters: A survey.
+\newblock 2005.
 
 \bibitem[CDG{\etalchar{+}}06]{Bigtable/Chang_Dean_Ghemawat}
 Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
@@ -12,6 +13,10 @@ Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
 \newblock In {\em Proceedings of the 7th USENIX Symposium on Operating Systems
   Design and Implementation - Volume 7}, OSDI '06, pages 15--15, Berkeley, CA,
   USA, 2006. USENIX Association.
+
+\bibitem[Cor]{Cormode}
+Cormode.
+\newblock Sketch techniques for approximate query processing.
 
 \bibitem[MW14]{MarzWarren201401}
 Nathan Marz and James Warren.
