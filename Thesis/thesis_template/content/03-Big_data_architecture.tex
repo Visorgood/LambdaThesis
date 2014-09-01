@@ -105,6 +105,37 @@ Sometimes high processing speed can even be indispensable to life, when using in
 Special systems monitor the state of a patient, immediately alerting caregivers in the case of dangerous anomaly occurrence. 
 
 \authorsection{Architectural Requirements}{SP}
+
+%System must provide information having gathered data from users and other sources.
+%Application of complex algorithms is often necessary.
+%Amount of data and rate of its arrival are heavy.
+%Those aspects makes system to preprocess indices and aggregations that provide useful information.
+%Batch processing is a good solution for that, nevertheless it has drawback - execution time is long.
+%Incrementall processing resolves this issue.
+%In combination these two approaches allow to design a system, that answers user queries with low latency as well as accurate.
+
+%The purpose of the system is to answer queries having data.
+%Let's consider an artificial example.
+%Suppose we have a website where people pose programming questions, and other answer them.
+%In this case the simplest query to the system is to return list of answers for a particular question post.
+%Another query is to find all posts containing given keyword.
+
+%One query is easy to answer, another requires application of complex algorithms.
+%It is pretty easy to get list of answers to the question post having its id.
+%You simply create hash-table that maps questions' ids to lists of answers' ids.
+%Search by keyword, or even phrase search, is much more complex.
+%To make it possibe we have to build specific inverted index, and this requires much more time to execute and to programm.
+%Let's further assume, that our system has to provide keyword search, using precomputed inverted index. 
+
+%Amount of data gathered with the time, as well as intense of arrival, can be huge.
+%Let's consider again our example website.
+%Assume that on average every second 5 questions and 20 answers appear.
+%Every post is about 100 words, each of about 8 unicode symbols.
+%The rate of incoming data is then $25*100*8*2=39$ KB per second.
+%It is about 3.2 GB per day.
+%This leads our system to be able to process such amount of data efficiently, as well as to rapidly reflect the state of inverted index with newly arrived posts.
+
+
 There are some requirements that are common for most of the Big Data architectures.
 Big Data systems deal with a large volumes of information, that constantly growth, therefore a system should be highly scalable.
 Scalability has a direct impact on performance, thus it is essential to maintain a system performance on a proper level.
@@ -180,7 +211,7 @@ Further we describe the existing Big Data architectures in the context of Mentha
 
 \begin{figure}
   \centering
-  \includegraphics [width=0.9\textwidth]{images/big_data_flow}
+  \includegraphics [width=0.8\textwidth]{images/big_data_flow}
   \caption{Big Data Flow}
   \label{fig:big_data_flow}
 \end{figure}
