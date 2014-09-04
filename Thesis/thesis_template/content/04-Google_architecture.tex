@@ -167,9 +167,9 @@ The MapReduce library groups these intermediate pairs together by the key and pa
 It passes them via iterator that allows to handle a large data set without keeping it in memory.
 The Reduce function merges the values with the same key, possibly decreasing a given set of values.
 One Reduce function invocation most of the time produces a single output value, or even none.
-A pseudo-code for a simple MapReduce task is illustrated below.
+A pseudo-code for a simple MapReduce task is illustrated in Listing~\ref{lis:simple_mapreduce_task}.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Simple MapReduce task, label=lis:simple_mapreduce_task]
 def map(key, value):
 	list = []
 	for x in value:

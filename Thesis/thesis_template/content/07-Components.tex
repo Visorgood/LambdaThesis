@@ -15,12 +15,13 @@
 \authorsection{Real time processing systems}{SP}
 
 \subsection{Storm}
-Batch processing cannot meet all the demands for processing Big Data.
+Batch processing is not applicable for real time computing.
 Hadoop, the best known tool for batch processing, is helpless when it is needed to handle streaming data and obtain immediate result.
+The main advantage of real time processing, the guaranteed time delay between a request and a result can be broken simply because the waiting time for the next batch is too long.
 Therefore new systems, designed for real-time processing, have appeared.
-One of such systems is an open source project named Storm.
+One of such systems is an open source project named \textit{Storm}.
 
-Storm is a complex event-processing (CEP) system.
+Storm is a \textit{complex event-processing} (CEP) system.
 Complex event processing means gathering data from different sources, combining it and making conclusions from it.
 For example, such system keeps track of significant changes in traffic reports or stock market feeds and immediately responds to them. 
 
@@ -30,26 +31,26 @@ Clojure runs on the Java Virtual Machine, however applications within Storm can 
 Moreover, one can use a Structured Query Language adapter for streaming data directly into Storm topoloy.
 
 \mnote{Storm architecture}
-The Storm cluster has a master node called Nimbus and worker nodes.
+The Storm cluster has a master node called \textit{Nimbus} and \textit{worker} nodes.
 Nimbus assignes tasks for workers and monitors failures.
-There is a deamon called Supervisor on every worker node.
+There is a deamon called \textit{Supervisor} on every worker node.
 The supervisor is responsible for starting and stopping worker processes assigned by Nimbus.
 ZooKeeper coordinates the interaction between Nimbus and Supervisors.
 It stores the state of all the nodes, making the system stable to failures.
 If any of the nodes is killed, ZooKeeper immediately restarts it, enhancing Storm cluster stability.
 ZooKeeper is described in more details later in this chapter.
 
-The basic concept of Storm is a topology.
+The basic concept of Storm is a \textit{topology}.
 It is a graph of computation, that shows how data should be processed and passed between the nodes.
 One can implement a topology in any programming language, because topology definition is a Thrift structure.
 Thrift is a framework that allows to develop cross-language services.	
 
-The data stream consists of an unbounded set of tuples.
+The data stream consists of an unbounded set of \textit{tuples}.
 A tuple can contain both standard data types (integer, float, byte array) as well as user-defined types.
 Every stream has its own ID.
-The sources of streams called spouts. 
+The sources of streams called \textit{spouts}. 
 
-The next important Storm primitive is bolt.
+The next important Storm primitive is \textit{bolt}.
 Figure~\ref{fig:storm_architecture} shows the interaction between spouts and bolts.
 The stream of tuples originates from a spout and goes through a sequence of bolts.
 Every bolt performs a transformation on incoming data stream, like aggregating, filtering, or interaction with external parts such as databases.
@@ -65,18 +66,18 @@ A bolt can receive information from several spouts and stream it to multiple bol
 For example, MapReduce word counting example can be easily implemented with Storm.
 Such system counts how many times each word occures in a given input data.
 In the case of Storm one needs 
-1)a spout to generate text data, 
-2)one bolt to implement the Map function for word tokenisation and 
-3)one bolt to implement the Reduce function for aggregation the amounts of words occurences. 
+(1) a spout to generate text data, 
+(2) one bolt to implement the Map function for word tokenisation and 
+(3) one bolt to implement the Reduce function for aggregation the amounts of words occurences. 
 
 Storm allows to group the stream of tuples in different ways.
 For instance, shuffle grouping randomly distributes tuples to bolts such as each bolt receives approximately the same number of tuples.
 Field grouping partitions tuples according to contained fields.
 Also other grouping methods exist, including the custom grouping.
 
-The following code represents a simple topology.
+The Listing~\ref{lis:simple_storm_topology} represents a simple topology.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Simple Storm topology, label=lis:simple_storm_topology]
 java TopologyBuilder builder = new TopologyBuilder();
 builder.setSpout("myspout", new TestSpout(), 10);
 builder.setBolt("mybolt1", new TestBolt(), 3) .shuffleGrouping("myspout");
@@ -193,32 +194,52 @@ The order is specified by a unique ZooKeeper Transaction id, that is assigned to
 ZooKeeper supports idempotent operations.
 If a node should be updated, the system makes a note about the update and keeps an old and a new version of this node.
 This allows client to receive the same message several times, being aware of when it can be applied.
-Therefore all the write operations are performed sequentially in one thread on the master node.
-However, the read request can be handled by a node's replica.
-Moreover, the client also supports the total ordering of the messages.
+Therefore all the write operations are performed sequentially in one thread and only on the master node.
+On the contrary, read requests do not necessarily need the master node, they can be handled by a node's replica.
+
+The client also supports the total ordering of the messages.
 Hence if the client sends a write request and then a read request, the write operation is performed first.
 Even if usually read operation does not need a lock, ZooKeeper strictly follows the order.
 It allows to implement predictable asynchronous systems that work with ZooKeeper.
-
-The server part of ZooKeeper consists of one Leader and several Followers.
-It uses two-phase commit protocol for processing updates.
-During the first phase, the Leader attempts to prepare Followers to perform the steps needed to commit or abort a transaction.
-This phase is also called voting phase, because the Leader receives the votes from the nodes, containing 'Yes' or 'No' reply.
-In this case 'Yes' means commit and 'No' - abort.
-During the second stage, the Leader performes a commit only if two of three Followers replyes 'Yes'.
-Afterwards it notifies all the Followers about the result.
-
-It can happened that one of the followers still has an outdated information when it receives the read request.
-To avoid this problem, it is possible to make a force synchronisation with the master.
-It is called the slow read.
-Evidently, if all the clients use the slow read the system looses the advantage of scaling.
-Without force synchronisation ZooKeeper system scales for reads nicely. 
-However, in this case the client that reads from a replica can obtain the outdated information.
 
 A client can watch a node.
 If it sets a watch, it gets notified when the node is changed.
 When the node sends this notification, it removes the watch.
 In the case of connection problems between the client and the ZooKeeper server, the client receives a local notification.
+
+ZooKeeper guarantees reliability using replication.
+Its database is replicated to several nodes, one of them is a \textit{Leader} and the others are \textit{Followers}.
+\textit{ZooKeeper Atomic Broadcast} (Zab) algorithm is used for managing the communication between the leader and the followers.
+It synchronizes the replicas, broadcasts updates and recovers the valid state in the case of nodes crash.
+
+Zab includes four phases: (1) Leader election, (2) Discovery, (3) Synchronization and (4) Broadcast.
+
+1. On the first stage ZooKeeper uses any election algorithm to choose a leader.
+After termination every node stores its vote locally in volatile memory.
+When a node \textit{n} votes for a node \textit{n'}, \textit{n'} becomes a \textit{prospective leader} for \textit{n}.
+
+2. On the second stage the nodes inform the prospective leader about the most recent transactions they accepted.
+Thus the prospective leader knows the latest sequence af accepted transactions and can establish a new epoch.
+From thit moment the previous leaders cannot perform any commits.
+In the case of connection problems between a follower and a leader, the follower goes back to the stage (1) of this algorithm.
+
+3. The leader is aware of the latests transactions history and during this stage synchronizes this information with its replicas.
+This phase is also called voting phase, because it receives the votes from the nodes.
+The leader performes a commit only if it receives acknowledgements from two of three followers.
+At this moment the leader changes its state from \textit{prospective} to \textit{established}.
+
+4. The nodes persist in this stage until a crash.
+Every write request from a ZooKeeper client is broadcasted among the nodes.
+New followers can join, receiving the transaction history from the leader.
+The leader and its followers use periodic heartbeat messages for early failure detection.
+If any of the nodes does nor receive a heartbeat message within a timeout, it shifts its state to \textit{election} and goes back to the first stage.
+
+It can happened that one of the followers still has an outdated information when it receives the read request.
+To avoid this problem, it is possible to make a force synchronisation with the master.
+It is called the \textit{slow read}.
+Evidently, if all the clients use the slow read the system looses the advantage of scaling.
+Without force synchronisation ZooKeeper system scales for reads nicely. 
+However, in this case the client that reads from a replica can obtain the outdated information.
 
 
 \authorsection{Alternatives}{NO}
