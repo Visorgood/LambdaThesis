@@ -1,8 +1,16 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
 \begin{thebibliography}{CDG{\etalchar{+}}06}
 
-\bibitem[Bro05]{BroderMitzenmacher2005}
-Mitzenmacher Broder.
+\bibitem[And12]{BitcoinFoundation2012}
+Gavin Andersen.
+\newblock Core development status report 1.
+\newblock
+  \url{https://bitcoinfoundation.org/2012/11/core-development-status-report-1/},
+  November 2012.
+\newblock Accessed 06.09.2014.
+
+\bibitem[BM05]{BroderMitzenmacher2005}
+Andrei Broder and Michael Mitzenmacher.
 \newblock Network applications of bloom filters: A survey.
 \newblock 2005.
 
@@ -15,7 +23,7 @@ Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
   USA, 2006. USENIX Association.
 
 \bibitem[Cor]{Cormode}
-Cormode.
+Graham Cormode.
 \newblock Sketch techniques for approximate query processing.
 
 \bibitem[MW14]{MarzWarren201401}
@@ -23,5 +31,12 @@ Nathan Marz and James Warren.
 \newblock {\em Big Data. Principles and best practices of scalable reltime data
   systems}.
 \newblock Manning Publication Co., 1 edition, 2014.
+
+\bibitem[TTS{\etalchar{+}}14]{Toshniwal2014}
+Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.
+  Patel, Sanjeev Kulkarni, Jason Jackson, Krishna Gade, Maosong Fu, Jake
+  Donham, Nikunj Bhagat, Sailesh Mittal, and Dmitriy Ryaboy.
+\newblock Storm @twitter.
+\newblock 2014.
 
 \end{thebibliography}

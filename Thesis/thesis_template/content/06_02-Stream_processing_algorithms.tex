@@ -70,8 +70,8 @@ $$
 
 Bloom filter is a great algorithm, that finds many examples of use.
 Early UNIX spell-checkers used the Bloom filter to check spelling fast, prestoring the whole dictionary in the filter \cite{BroderMitzenmacher2005}.
-The Bloom filter allows to store all unsuitable passwords, that users are not permitted to choose \cite{BroderMitzenmacher}.
-Bitcoin uses the Bloom filter to speed up wallet synchronization (cite to online documentation!!!).
+The Bloom filter allows to store all unsuitable passwords, that users are not permitted to choose \cite{BroderMitzenmacher2005}.
+Bitcoin uses the Bloom filter to speed up wallet synchronization \cite{BitcoinFoundation2012}.
 Google BigTable and Cassandra systems use the Bloom filter to reduce the number of hard disk lookups \cite{Bigtable/Chang_Dean_Ghemawat}.
 
 \subsection{Count-min sketch}
@@ -119,6 +119,18 @@ $$
 
 \subsection{Flajolet-Martin sketch}
 
+The Flajolet-Martin sketch answers the query ``how many distinct items have been observed in the stream?''.
+It is very space-efficient, because it requires not more than $32$ bytes of memory in any imaginable case.
+Nevertheless, it has a drawback, that it begins to show accurate estimation only when the number of items is big enough.
 
+Internally the Flajolet-Martin sketch is a bitset.
 
 \subsection{HyperLogLog algorithm}
+
+
+
+
+
+
+
+
