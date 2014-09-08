@@ -32,6 +32,29 @@ Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
 Graham Cormode.
 \newblock Sketch techniques for approximate query processing.
 
+\bibitem[Fou14a]{HDFSArchitecture}
+Apache~Software Foundation.
+\newblock Hdfs architecture.
+\newblock
+  \url{http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html},
+  August 2014.
+\newblock Accessed 08.09.2014.
+
+\bibitem[Fou14b]{HDFSUsersGuide}
+Apache~Software Foundation.
+\newblock Hdfs users guide.
+\newblock
+  \url{http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html},
+  June 2014.
+\newblock Accessed 08.09.2014.
+
+\bibitem[LYBB14]{JVM}
+Tim Lindholm, Frank Yellin, Gilad Bracha, and Alex Buckley.
+\newblock The java® virtual machine specification. java se 8 edition.
+\newblock \url{http://docs.oracle.com/javase/specs/jvms/se8/html/index.html},
+  March 2014.
+\newblock Accessed 09.09.2014.
+
 \bibitem[MW14]{MarzWarren201401}
 Nathan Marz and James Warren.
 \newblock {\em Big Data. Principles and best practices of scalable reltime data
