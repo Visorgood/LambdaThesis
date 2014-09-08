@@ -6,15 +6,15 @@
 
 % storage/persistent streeming/real time processing scala(or additional technologies/surrounding)
 
-\authorsection{Storage systems}{SP}
+\section{Storage systems}
 
-\subsection{HDFS}
+\input{content/07-Components(HDFS)}
 
 \subsection{Redys}
 
-\authorsection{Real time processing systems}{SP}
+\section{Real time processing systems}
 
-\subsection{Storm}
+\subsection{Storm [SP]}
 Batch processing is not applicable for real time computing.
 Hadoop, the best known tool for batch processing, is helpless when it is needed to handle streaming data and obtain immediate result.
 The main advantage of real time processing, the guaranteed time delay between a request and a result can be broken simply because the waiting time for the next batch is too long.
@@ -143,7 +143,7 @@ Therefore, when the 'ack val' is equal to zero, it means that the tree is comple
 \subsection{Spark}
 
 
-\authorsection{Surrounding technologies}{SP}
+\section{Surrounding technologies}
 
 \subsection{Avro + parquet}
 
@@ -151,7 +151,7 @@ Therefore, when the 'ack val' is equal to zero, it means that the tree is comple
 
 \subsection{Kafka}
 
-\subsection{ZooKeeper}
+\subsection{ZooKeeper [SP]}
 Large distributed systems require a coordinator for system configuration management.
 As it was mentioned in Chapter 4, Google uses a Chubby service for this purpose.
 The main Chubby disadvantage is that for lock and unlock operations it is necessary to open and close the object consequently.
@@ -242,5 +242,5 @@ Without force synchronisation ZooKeeper system scales for reads nicely.
 However, in this case the client that reads from a replica can obtain the outdated information.
 
 
-\authorsection{Alternatives}{NO}
+\section{Alternatives}
 cassandra?

@@ -1,12 +1,12 @@
 \chapter{Real time processing in the Big Data context [VI]}
 \label{chap:real_time_processing}
 
-Many information systems today require fast or even instant response to a new data.
-When new peace of data arrives into the system from a user, outer sensor, or any other source, system must reflect the change of state quickly. 
-The batch processing, that we described in the Chapter~\ref{chap:google_architecture}, can not fulfil this requirement, because it takes usually long time to execute.
+Many information systems today require fast or even instant response to a coming data.
+When new peace of data arrives into the system from a user, outer sensor, or any other source, system must reflect change of its state quickly. 
+The batch processing, that we describe in the Chapter~\ref{chap:google_architecture}, can not fulfil this requirement, because it takes usually long time to execute.
 The real time processing allows to do that.
 
-Necessity of response to a new data fast is especially applicable to the Web world.
+Necessity of response to a coming data fast is especially applicable to the Web world.
 Companies like Google, Twitter, LinkedIn, Facebook, etc. process not just much of data, but also often need to do it quickly.
 This, in fact, brings to a simultaneous use of both types of processing in one system.
 
@@ -14,12 +14,12 @@ We already described the batch processing and the MapReduce paradigm as its appl
 It has two considerable advantages.
 First of all, it is very efficient.
 It fetches batches of data, and process them at once, what is always faster, than taking records arbitrarily one by one.
-Another advantage is that it allows to execute any function we have in mind, as long as all data is at the disposal.
+Another advantage is that it allows to execute on data any function we have in mind, as long as all data is at the disposal.
 When we have data coming from the stream record by record, this is not possible.
 In that case we have to create alternative methods to apply the same algorithms.
 Usually they become approximated, and accuracy is a matter of tradeoff.
 
-To define the real time processing, we need firstly to explain what is real time.
+To define the real time processing, we need first to explain what is the real time.
 There is no such thing in physics as real time, because any event takes time to happen.
 But human understands, and even feels, that one event takes long time, but another is happening ``instanlty''.
 As a result, we define real time as an interval of time that short enough in the current context.
@@ -34,6 +34,8 @@ Another example is an alarm system at the nuclear powerplant.
 It must monitor the state of the whole plant, and process all data, coming from many temperature sensors, to report about danger case as fast as possible.
 Here real time is miliseconds.
 
+Execution of the real time processing using standard methods and algorithms is not possible.
+We do not have all data at the disposal, what is always much simpler, than to process data in pieces.
 There are many specific algorithms for the real time data processing.
 They usually differ quite much from batch algorithms, because of the nature of input they consider.
 They divide to different categories depending on what type of query do they answer.

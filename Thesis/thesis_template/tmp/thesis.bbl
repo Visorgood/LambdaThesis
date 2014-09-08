@@ -14,6 +14,12 @@ Andrei Broder and Michael Mitzenmacher.
 \newblock Network applications of bloom filters: A survey.
 \newblock 2005.
 
+\bibitem[BROL13]{Boykin2013}
+Oscar Boykin, Sam Ritchie, Ian O'Connell, and Jimmy Lin.
+\newblock Summingbird: A framework for integrating batch and online mapreduce
+  computations.
+\newblock 2013.
+
 \bibitem[CDG{\etalchar{+}}06]{Bigtable/Chang_Dean_Ghemawat}
 Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
   Mike Burrows, Tushar Chandra, Andrew Fikes, and Robert~E. Gruber.
