@@ -28,24 +28,23 @@ Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
   Design and Implementation - Volume 7}, OSDI '06, pages 15--15, Berkeley, CA,
   USA, 2006. USENIX Association.
 
+\bibitem[CKR{\etalchar{+}}]{HDFSArchitecture2}
+Robert Chansler, Hairong Kuang, Sanjay Radia, Konstantin Shvachko, and Suresh
+  Srinivas.
+\newblock The hadoop distributed file system.
+\newblock \url{http://www.aosabook.org/en/hdfs.html}.
+\newblock Accessed 09.09.2014.
+
 \bibitem[Cor]{Cormode}
 Graham Cormode.
 \newblock Sketch techniques for approximate query processing.
 
-\bibitem[Fou14a]{HDFSArchitecture}
+\bibitem[Fou14]{HDFSArchitecture1}
 Apache~Software Foundation.
 \newblock Hdfs architecture.
 \newblock
   \url{http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html},
   August 2014.
-\newblock Accessed 08.09.2014.
-
-\bibitem[Fou14b]{HDFSUsersGuide}
-Apache~Software Foundation.
-\newblock Hdfs users guide.
-\newblock
-  \url{http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsUserGuide.html},
-  June 2014.
 \newblock Accessed 08.09.2014.
 
 \bibitem[LYBB14]{JVM}
