@@ -1,6 +1,6 @@
 \subsection{HDFS [VI]}
 
-The Hadoop Distributed File System (HDFS) \cite{HDFSArchitecture1} \cite{HDFSArchitecture2} is a distributed data storage that provides high throughput data access, fault-tolerance, ability to hold huge datasets consisting of large files.
+The Hadoop Distributed File System (HDFS) \cite{HDFSArchitecture1} \cite{HDFSArchitecture2} is a distributed data storage that provides high throughput data access, fault-tolerance, ability to hold big datasets consisting of large files.
 The Apache Software Foundation has developed HDFS originally for its web search engine - the Apache Nutch.
 Today it is a widely-used distributed file system, that is an infrastructure for such distributed computational frameworks as Hadoop, Storm, etc.
 HDFS allows to use cheap commodity hardware, because it does not require much computational or storage power for one particular node.
@@ -9,21 +9,16 @@ HDFS supports standard hierarchical file organisation with directories and files
 
 \subsubsection{Use cases and requirements}
 
-HDFS is designed for usage in the BigData world.
-Applications, that use it, require high throughput data access.
-They need to write and read files of gigabytes and terabytes in size fast.
-HDFS is suitable for batch processing, and that is why low-latency is not a goal property.
+HDFS provides high throughput data access, because it is designed for usage in the BigData world.
+Applications, that use HDFS, require fast writing and reading of files of gigabytes and terabytes in size.
+HDFS is suitable for the batch processing, and it is important to say, that low-latency is not a goal property.
+It allows to operate with the large number of files.
 
-Disk failures, and machine failures in general, happen more often, than we could think.
-This is actually a normal case when we consider cluster of hundreds and even thousends of nodes.
-The probability of a failure is complex and difficult to compute.
-Google has made deep research on this topic, and has found out that ...... \cite{Pinheiro2007}.
-This statistic shows that there are always machines in the large cluster, that are out of service.
-Because of that, fault-tolerance, detecting of failed machines and recovering from unconsistent state of the file system are inherent properties of HDFS.
-
-HDFS allows applications, that work with it, to operate with the large number of large files.
-Files can be of gigabytes and terabytes in size, and there can be millions of files.
-HDFS architecture lets to have high overall bandwidth working with them.
+Fault-tolerance, detecting of failed machines, and recovering from unconsistent state of the file system are inherent properties of HDFS.
+This is a key property, because disk failures, and machine failures in general, happen more often, than we could think.
+When we consider a cluster of hundreds and even thousends of nodes, this is actually a normal case.
+Google has made a deep research on this topic, and has found out that $8\%$ of hard drives fail in two years \cite{Pinheiro2007}.
+This statistic shows that it is reasonably expected that in the large cluster there are always machines that are out of service.
 
 HDFS has a simple file storage model.
 It holds every file in a coherent way, so that it can be only written, and not changed any more.
@@ -88,6 +83,7 @@ Replication factor also can be changed for already existing files.
 
 Cluster consists of the number of racks.
 Rack is a group of nodes, that reside usually near to each other physically.
+This helps to avoid redundant network usage, and to make replication algorithms more efficient.
 
 The current replicas placement policy for the most common replication factor of 3 is as follows.
 Put the first replica onto the DataNode in the rack, local for accessing client.
@@ -106,7 +102,7 @@ Another condition to make re-replication is increase by the client of the replic
 When the piece of data arrives to the client, it can be corrupted during transfer in the network or because of a IO failures.
 To provide integrity of data, HDFS has a checksum mechanism.
 When a block of file is written, its checksum is also written to the file system.
-Then, when client reads a block, it also receives checksum and able to match file.
+Then, when client reads a block, it also receives checksum and able to match block.
 
 HDFS manages balance in the cluster.
 If there are DataNodes that has free space below set threshold, file system moves part of data from that nodes to others, that have more free space.
@@ -115,6 +111,3 @@ This is done automatically, and does not allow to accumulate data in the part of
 There is a staging mechanism in HDFS, that helps to avoid network congestion.
 Client, that writes data to the file system, does it in portions.
 It accumulates the whole block in the local cash file, and only then makes flush to the DataNode.
-
-\subsubsection{Alternative. Google File System}
-
