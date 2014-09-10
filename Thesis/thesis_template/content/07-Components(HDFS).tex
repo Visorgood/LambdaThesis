@@ -1,7 +1,7 @@
 \subsection{HDFS [VI]}
 
 The Hadoop Distributed File System (HDFS) \cite{HDFSArchitecture1} \cite{HDFSArchitecture2} is a distributed data storage that provides high throughput data access, fault-tolerance, ability to hold huge datasets consisting of large files.
-The Apache Software Foundation has developed HDFS originally for its web search engine system - the Apache Nutch.
+The Apache Software Foundation has developed HDFS originally for its web search engine - the Apache Nutch.
 Today it is a widely-used distributed file system, that is an infrastructure for such distributed computational frameworks as Hadoop, Storm, etc.
 HDFS allows to use cheap commodity hardware, because it does not require much computational or storage power for one particular node.
 It is written in Java, hence, any platform with JVM \cite{JVM} can run HDFS's software.
@@ -16,13 +16,14 @@ HDFS is suitable for batch processing, and that is why low-latency is not a goal
 
 Disk failures, and machine failures in general, happen more often, than we could think.
 This is actually a normal case when we consider cluster of hundreds and even thousends of nodes.
-The probability of a failure is complex and difficult to compute, but it is high enough, so that there are always machines in the large cluster, that are out of service.
-This can happen also for the small number of nodes.
-Because of that, the fault-tolerance, detecting of failed machines and recovering from unconsistent state of the file system is an inherent part of HDFS.
+The probability of a failure is complex and difficult to compute.
+Google has made deep research on this topic, and has found out that ...... \cite{Pinheiro2007}.
+This statistic shows that there are always machines in the large cluster, that are out of service.
+Because of that, fault-tolerance, detecting of failed machines and recovering from unconsistent state of the file system are inherent properties of HDFS.
 
 HDFS allows applications, that work with it, to operate with the large number of large files.
 Files can be of gigabytes and terabytes in size, and there can be millions of files.
-HDFS architecture lets to have high overall bandwidth working with such files.
+HDFS architecture lets to have high overall bandwidth working with them.
 
 HDFS has a simple file storage model.
 It holds every file in a coherent way, so that it can be only written, and not changed any more.
@@ -114,3 +115,6 @@ This is done automatically, and does not allow to accumulate data in the part of
 There is a staging mechanism in HDFS, that helps to avoid network congestion.
 Client, that writes data to the file system, does it in portions.
 It accumulates the whole block in the local cash file, and only then makes flush to the DataNode.
+
+\subsubsection{Alternative. Google File System}
+

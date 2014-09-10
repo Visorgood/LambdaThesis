@@ -60,6 +60,11 @@ Nathan Marz and James Warren.
   systems}.
 \newblock Manning Publication Co., 1 edition, 2014.
 
+\bibitem[PWB07]{Pinheiro2007}
+Eduardo Pinheiro, Wolf-Dietrich Weber, and Luiz~Andre Barroso.
+\newblock Failure trends in a large disk drive population.
+\newblock 2007.
+
 \bibitem[TTS{\etalchar{+}}14]{Toshniwal2014}
 Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.
   Patel, Sanjeev Kulkarni, Jason Jackson, Krishna Gade, Maosong Fu, Jake
