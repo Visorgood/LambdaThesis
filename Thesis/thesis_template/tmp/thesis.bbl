@@ -72,6 +72,17 @@ Eduardo Pinheiro, Wolf-Dietrich Weber, and Luiz~Andre Barroso.
 \newblock Failure trends in a large disk drive population.
 \newblock 2007.
 
+\bibitem[Seg12]{Seguin2012}
+Karl Seguin.
+\newblock {\em The Little Redis Book}.
+\newblock 2012.
+
+\bibitem[SN]{Redis}
+Salvatore Sanfilippo and Pieter Noordhuis.
+\newblock Redis online documentation.
+\newblock \url{http://redis.io/documentation}.
+\newblock Accessed 11.09.2014.
+
 \bibitem[TTS{\etalchar{+}}14]{Toshniwal2014}
 Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.
   Patel, Sanjeev Kulkarni, Jason Jackson, Krishna Gade, Maosong Fu, Jake
