@@ -39,6 +39,13 @@ Robert Chansler, Hairong Kuang, Sanjay Radia, Konstantin Shvachko, and Suresh
 Graham Cormode.
 \newblock Sketch techniques for approximate query processing.
 
+\bibitem[Fou]{Spark}
+Apache~Software Foundation.
+\newblock Spark streaming programming guide.
+\newblock
+  \url{https://spark.apache.org/docs/latest/streaming-programming-guide.html}.
+\newblock Accessed 11.09.2014.
+
 \bibitem[Fou14]{HDFSArchitecture1}
 Apache~Software Foundation.
 \newblock Hdfs architecture.
@@ -71,5 +78,17 @@ Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.
   Donham, Nikunj Bhagat, Sailesh Mittal, and Dmitriy Ryaboy.
 \newblock Storm @twitter.
 \newblock 2014.
+
+\bibitem[ZCF{\etalchar{+}}10]{Zaharia2010}
+Matei Zaharia, Mosharaf Chowdhury, Michael~J. Franklin, Scott Shenker, and Ion
+  Stoica.
+\newblock Spark: Cluster computing with working sets.
+\newblock 2010.
+
+\bibitem[ZDL{\etalchar{+}}13]{Zaharia2013}
+Matei Zaharia, Tathagata Das, Haoyuan Li, Timothy Hunter, Scott Shenker, and
+  Ion Stoica.
+\newblock Discretized streams: Fault-tolerant streaming computation at scale.
+\newblock 2013.
 
 \end{thebibliography}
