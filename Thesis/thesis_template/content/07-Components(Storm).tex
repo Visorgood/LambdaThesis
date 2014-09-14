@@ -1,5 +1,3 @@
-\subsection{Storm [SP]}
-
 Batch processing is not applicable for real time computing.
 Hadoop, the best known tool for batch processing, is helpless when it is needed to handle streaming data and obtain immediate result.
 The main advantage of real time processing, the guaranteed time delay between a request and a result can be broken simply because the waiting time for the next batch is too long.
@@ -123,4 +121,4 @@ An acker task stores a map: on the one side it has a spout tuple id and on the o
 One of the values is a task id the spout tuple originates from, and the other is an 'ack val', the 64 bit number.
 The 'ack val' represents the state of the tuple tree without storing it in memory.
 This number is a result of XOR operation on all created and acked tuple ids of the tree.
-Therefore, when the 'ack val' is equal to zero, it means that the tree is completed.
+Therefore, when the 'ack val' is equal to zero, it means that the tree is completed.  
