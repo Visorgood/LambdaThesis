@@ -1,25 +1,64 @@
 \subsection{Redis [VI]}
 
 Redis is an open source key-value in-memory data storage \cite{Seguin2012} \cite{Redis}.
-It affords blazingly fast and simple tool for maintaining data inside of both single application and cluster.
+It affords blazingly fast and simple tool for maintaining data inside of a single application or a cluster.
 Redis is very easy to deploy, learn and use.
-It provides 5 data types, e.g. string, list, set, ordered set and hash, that are useful for different tasks, and give a powerful tool in combination.
+It provides 5 data structures, e.g. string, list, set, ordered set and hash, that are useful for different tasks, and give a powerful tool in combination.
 
 \subsubsection{Basics}
 
-Representation
+Redis is a key-value store, that allows to hold all data of your application.
+Redis lets to create many databases and switch between them.
+For one database it maintains one global map of keys to values.
+Although Redis is in-memory database system, it swaps data continuously to disk to provide persistance in case of application's failure.
+This is also important in a distributed environment to have global data available between applications.
 
-Commands, keys and values
+Record in Redis is a key-value pair.
+The key is always a string.
+It does not contain data, that your application manipulates, but it identifies piece of data, that you want to store.
+The value can be of different types, but in any case it is a meaningful peace of data, that you store in the database.
 
-Query data
+Redis provides many useful and at the same time simple commands to work with data.
+The two simplest commands are $SET$ and $GET$, that let to store a key-value pair into database, and to get value by key, respectively.
+This is an example of how you can use these commands:
+\begin{verbatim}
+> SET server:name "SERVER1"
+OK
+> GET server:name
+"SERVER1"
+\end{verbatim}
+There many commands to work with data structures, that Redis provides.
 
-Speed
+Redis allows to query only values by keys.
+You cannot find a key, this is a crucial difference with classical relational databases.
+And if you do not know a key, you can not find a value.
+There is a command $keys$, that returns all keys, stored in the database, but it is strongly advised not to use it in production application, because it does a linear scan through all the keys, what can be very slow.
+Another point is that operation of receiving a value by a key works in constant time, basically instantly.
+This makes Redis blayingly fast and useful, because grow of the database does not affect its performance.
 
-\subsubsection{Data types}
+Redis stores the database to disk every minute if at least 1000 keys has been changed.
+It makes less swaps, if you change less number of keys.
+It does swap completely as a snapshot.
+There is an alternative way to set Redis to make appending swaps.
 
-String
+\subsubsection{Data structures}
 
-List
+The basic data structure in Redis is a \textit{String}.
+Keys are always strings.
+Values can be of any type, but String is the most popular, because it represents atomic piece of data.
+As a String you can store not just something simple like name of a user or his password, but also complex objects like JSON object, for example:
+\begin{verbatim}
+> SET users:user001 '{"firstname": "john", "lastname": "smith"}'
+\end{verbatim}
+Redis provides standard commands to work with strings, e.g. $STRLEN$, $GETRANGE$, $APPEND$, etc.
+If you store numeric value as a string, you can work with it as with integer.
+Redis has several useful commands for this case, e.g. $INCR$, $INCRBY$, $DECR$, $DECRBY$, $SETBIT$, $GETBIT$.
+
+The first complex data structure is a \textit{List}.
+List is simply an array of values identified by a key.
+There are specific commands to work with lists, e.g. $LPUSH$, $RPUSH$, $LRANGE$, $LLEN$, $LPOP$, $RPOP$, etc.
+The values of the list can by anything, not only strings.
+This gives powerful tool to store complex combined data.
 
 Set
 
