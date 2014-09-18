@@ -49,22 +49,63 @@ Values can be of any type, but String is the most popular, because it represents
 As a String you can store not just something simple like name of a user or his password, but also complex objects like JSON object, for example:
 \begin{verbatim}
 > SET users:user001 '{"firstname": "john", "lastname": "smith"}'
+OK
 \end{verbatim}
 Redis provides standard commands to work with strings, e.g. $STRLEN$, $GETRANGE$, $APPEND$, etc.
 If you store numeric value as a string, you can work with it as with integer.
 Redis has several useful commands for this case, e.g. $INCR$, $INCRBY$, $DECR$, $DECRBY$, $SETBIT$, $GETBIT$.
 
-The first complex data structure is a \textit{List}.
+The first complex data structure is \textit{List}.
 List is simply an array of values identified by a key.
 There are specific commands to work with lists, e.g. $LPUSH$, $RPUSH$, $LRANGE$, $LLEN$, $LPOP$, $RPOP$, etc.
 The values of the list can by anything, not only strings.
 This gives powerful tool to store complex combined data.
+\begin{verbatim}
+> LPUSH users john mike jack
+(integer) 3
+> LRANGE users 0 -1
+1) "jack"
+2) "mike"
+3) "john"
+\end{verbatim}
 
-Set
+The next data structure is \textit{Set}.
+Set is an unordered array of distinct values.
+There are many useful operations with sets in Redis, e.g. $SADD$, $SISMEMBER$, $SINTER$, $SINTERSTORE$, etc.
+Sets are implemented internally as a hash-table, hence, they provide constant lookup.
+\begin{verbatim}
+> SADD friends:john mike paul jack tania
+(integer) 4
+> SISMEMBER friends:john paul
+(integer) 1 
+\end{verbatim}
 
-Sorted set
+\textit{Sorted set} is a extension of a regular Set, that provides order for its elements.
+To order values, it uses so called scores.
+Each value has then a score, when you put it into Sorted set.
+You can then lookup all values in the specified range of the score, or obtain all values in the sorted order.
+Main commands for working with Sorted set are $ZADD$, $ZCOUNT$, $ZRANK$, $ZREVRANK$, etc.
+In case you need some array sorted by integers, Sorted set is a perfect data structure to do that.
+\begin{verbatim}
+> ZADD friends:john 70 mike 95 paul 92 jack 75 tania 1 dave
+(integer) 5
+> ZCOUNT friends:john 90 100
+(integer) 2
+\end{verbatim}
 
-Hash
+\textit{Hash} is the last data structure given in Redis.
+Hash is essentially a hash-table, that maps strings to any objects.
+It works also in constant time.
+There are different commands to work with Hash, e.g. $HSET$, $GHET$, $HMSET$, $HMGET$, $HGETALL$, $HKEYS$, $HDEL$, etc.
+Hashes give simple useful tool to store objects in an object-oriented way.
+For example, instead of storing information about user as an JSON object, or as another strin representation, you can do it using Hash.
+You then put every field of a user as a separate key-value pair.
+\begin{verbatim}
+> HSET users:john id 375
+(integer) 1
+> HGET users:john id
+"375"
+\end{verbatim}
 
 \subsubsection{Features}
 
