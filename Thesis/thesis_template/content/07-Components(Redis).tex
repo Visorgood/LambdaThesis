@@ -109,19 +109,58 @@ You then put every field of a user as a separate key-value pair.
 
 \subsubsection{Features}
 
-Transactions
+Redis allows to use transactions to make several operations atomic.
+Basically, any operation that Redis does, is essentially atomic, because Redis is single-threaded server.
+If you execute any single command, no other command can start execution before your is in progress.
+But sometimes it is useful or even necessary to do several opearations in line as one atomic command.
+For that case Redis provides transactions.
+\begin{verbatim}
+MULTI
+...
+EXEC
+\end{verbatim}
+This is how you use transactions in Redis.
+All commands between $MULTI$ and $EXEC$ is one atomic operation.
 
-Expiration
+Redis allows you to make expiration time for a key, or set an expiration point in time for a key using Unix timestamp.
+This can be done using commands $EXPIRE$ and $EXPIREAT$.
+\begin{verbatim}
+EXPIRE user001 20
+EXPIREAT user001 1457243611
+\end{verbatim}
+It does not important, what data structure key identifies.
+When a key expires, it does not exist in Redis anymore.
+To check expiration time for a key there is a command $TTL$.
+To remove expiration from a key, you can use command $PERSIST$.
 
-Publication and Subscriptions
+There is a mechanism of subscribtion and publication in Redis.
+You can subscribe to a channel using command $SUBSCRIBE$.
+When somebody publish something to this channel using command $PUBLISH$, you receive this messages where you subscribed for them.
+This tool allows to notify different nodes in the system, that connect to Redis database, about events.
 
-Monitor and Slow Log
+Redis has a very useful command $SORT$, that allows to sort lists, sets and sorted sets by their values.
+When you apply this command to a collection, it returns elements in a sorted order.
+There are different parameters, to say this command how you want to execute sorting.
+This is a simple example of how you can use $SORT$ command:
+\begin{verbatim}
+> RPUSH simple_array 3 12 7 1 4 8 2 9
+(integer) 8
+> SORT simple_array
+1) "1"
+2) "2"
+3) "3"
+4) "4"
+5) "7"
+6) "8"
+7) "9"
+8) "12"
+\end{verbatim}
 
-Sorting
-
-Scanning
-
-Scripts
+Redis allows to use Lua scripts.
+Lua is a scripting language.
+You can write a script, store it, and then use directly from Redis.
+This provides useful feature, that gives an opportunity to write your own commands, that contain several operations, logically united in one meaningful operatin.
+Such defined procedure executes in atomic way, what is another advantage.
 
 \subsubsection{Administration}
 
