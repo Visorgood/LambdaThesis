@@ -27,14 +27,14 @@ OK
 > GET server:name
 "SERVER1"
 \end{verbatim}
-There many commands to work with data structures, that Redis provides.
+There are many commands to work with data structures, that Redis provides.
 
 Redis allows to query only values by keys.
 You cannot find a key, this is a crucial difference with classical relational databases.
 And if you do not know a key, you can not find a value.
 There is a command $keys$, that returns all keys, stored in the database, but it is strongly advised not to use it in production application, because it does a linear scan through all the keys, what can be very slow.
 Another point is that operation of receiving a value by a key works in constant time, basically instantly.
-This makes Redis blayingly fast and useful, because grow of the database does not affect its performance.
+This makes Redis blazingly fast and useful, because grow of the database does not affect its performance.
 
 Redis stores the database to disk every minute if at least 1000 keys has been changed.
 It makes less swaps, if you change less number of keys.
@@ -81,11 +81,11 @@ Sets are implemented internally as a hash-table, hence, they provide constant lo
 \end{verbatim}
 
 \textit{Sorted set} is a extension of a regular Set, that provides order for its elements.
-To order values, it uses so called scores.
+To order values, it uses scores.
 Each value has then a score, when you put it into Sorted set.
 You can then lookup all values in the specified range of the score, or obtain all values in the sorted order.
 Main commands for working with Sorted set are $ZADD$, $ZCOUNT$, $ZRANK$, $ZREVRANK$, etc.
-In case you need some array sorted by integers, Sorted set is a perfect data structure to do that.
+In case you need array sorted by integers, Sorted set is a perfect data structure to do that.
 \begin{verbatim}
 > ZADD friends:john 70 mike 95 paul 92 jack 75 tania 1 dave
 (integer) 5
@@ -98,13 +98,22 @@ Hash is essentially a hash-table, that maps strings to any objects.
 It works also in constant time.
 There are different commands to work with Hash, e.g. $HSET$, $GHET$, $HMSET$, $HMGET$, $HGETALL$, $HKEYS$, $HDEL$, etc.
 Hashes give simple useful tool to store objects in an object-oriented way.
-For example, instead of storing information about user as an JSON object, or as another strin representation, you can do it using Hash.
+For example, instead of storing information about user as a JSON object, or as another string representation, you can do it using Hash.
 You then put every field of a user as a separate key-value pair.
 \begin{verbatim}
 > HSET users:john id 375
 (integer) 1
-> HGET users:john id
-"375"
+> HSET users:john name "john"
+(integer) 1
+> HSET users:john lastname "smith"
+(integer) 1
+> HGETALL users:john
+1) "id"
+2) "375"
+3) "name"
+4) "john"
+5) "lastname"
+6) "smith"
 \end{verbatim}
 
 \subsubsection{Features}
@@ -135,7 +144,7 @@ To remove expiration from a key, you can use command $PERSIST$.
 
 There is a mechanism of subscribtion and publication in Redis.
 You can subscribe to a channel using command $SUBSCRIBE$.
-When somebody publish something to this channel using command $PUBLISH$, you receive this messages where you subscribed for them.
+When somebody publishes something to this channel using command $PUBLISH$, you receive this message where you subscribed for it.
 This tool allows to notify different nodes in the system, that connect to Redis database, about events.
 
 Redis has a very useful command $SORT$, that allows to sort lists, sets and sorted sets by their values.
@@ -159,8 +168,5 @@ This is a simple example of how you can use $SORT$ command:
 Redis allows to use Lua scripts.
 Lua is a scripting language.
 You can write a script, store it, and then use directly from Redis.
-This provides useful feature, that gives an opportunity to write your own commands, that contain several operations, logically united in one meaningful operatin.
+This provides useful feature, that gives an opportunity to write your own commands, that contain several operations, logically united in one meaningful operation.
 Such defined procedure executes in atomic way, what is another advantage.
-
-\subsubsection{Administration}
-
