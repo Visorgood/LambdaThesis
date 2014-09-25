@@ -381,5 +381,73 @@ Bigtable is successfully used in many Google products, that proves the high qual
 %Melnik - Dremel
 %Akidau - MillWheel
 
-Facebook architecture
-http://stackoverflow.com/questions/3533948/facebook-architecture
+\authorsection{Facebook architecture}{SP}
+
+Facebook is another representative company that is strongly connected with Big Data storing and processing.
+The main difference is that Facebook applications often require real time data processing, providing a user with immediate feedback.
+On the contrary, for most Google applications batch processing is sufficient to make necessary computations.
+
+% add intro about HDFS, Hive, etc.
+
+Facebook widely uses such technologies for distributed data warehousing and computation as HDFS, Hive and Scribe. 
+While HDFS is an exterior module, Hive and Scribe were initially developed at Facebook and only later became open-source under the Apache Software Foundation.
+
+\mnote{Hive}
+Hive is a framework designed for storing data.
+Facebook uses it for making queries and perform data analysis.
+Hive provides SQL-loke interface 
+
+
+
+% Scribe
+
+\mnote{Facebook architecture}
+Figure~\ref{fig:facebook_data_flow} demonstrates the data flow in Facebook architecture.
+Data originates from two sources: web servers and federated MySQL instances.
+Web servers generate log data, that consists of variuos events, e.g. a user clicked a link or 'liked' a photo.
+The federated MySQL contains the descripting data, such as the time of posting the link and the place where it was done.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.8\textwidth]{images/facebook_data_flow}
+  \caption{Data flow in Facebook}
+  \label{fig:facebook_data_flow}
+\end{figure}
+
+Data flow goes from web servers to Scribe-Hadoop clusters.
+Such cluster is actually a Hadoop cluster with a running Scribe server on the top of it.
+The main function of Scribe is to aggregate the input data and write it into HDFS.
+This data is transferred uncompressed [Data Warehousing and Analytics Infrastructure at Facebook] that can be a bottleneck for the whole system.
+Facebook alleviates the problem by putting Scribe-Hadoop close to web servers, decreasing the network transfer load.
+Periodically Scribe-Hadoop clusters send compressed data (mostly as HDFS files) to Hive-Hadoop clusters.
+It is loaded to Hive and becomes available for other modules.
+
+Scrape processes load data from federated MySQL to Hive-Hadoop cluster.
+They get a dump of needed data from database, compress it and move it to the cluster.
+This process should be resilient and avoid putting extra load on the databases.
+The former is accomplished by using the previous days data when the database is not reachable at the moment.
+To meet the latter requirement, scrape process runs on a MySQL database replica.
+
+There are two types of Hive-Hadoop clusters - a production cluster and an adhoc one.
+The purpose of the production cluster is to execute high prioriy tasks with strict deadlines.
+On the contrary, the ad hoc cluster processes batch jobs with low priority and makes ad hoc analysis.
+These tasks are separated, because it can be dangerous to run ad hoc user query on a production cluster.
+
+When the data is needed for both clusters, it is replicated from the production to the adhoc cluster.
+It is done in this order, because the data should be available earlier for critical jobs on the production server.
+Moreover, the production server is more reliable.
+During the replication process the data is transferred in a raw form accompaned by the respective metadata.
+
+The stored data can be either transformed or queried by users.
+Most of the time Hive-Hadoop clusters keep the data for future analysis.
+However, in some cases the federal MySQL tier gets the data back.
+This data can be uploaded on the Facebook site and participate in the further interaction with Facebook users. 
+
+
+
+
+
+% 1. Flow of data (Data Warehousing and Analytics Infrastructure at Facebook)
+% 2. HDFS enhancement + HBase + Hive + Scribe (Data Warehousing and Analytics Infrastructure at Facebook) + (Apache Hadoop Goes Realtime at Facebook)
+% 3. Haystack (https://www.facebook.com/note.php?note_id=76191543919) + (Finding a needle in Haystack: Facebook’s photo storage)
+% 4. jemalloc (https://www.facebook.com/notes/facebook-engineering/scalable-memory-allocation-using-jemalloc/480222803919)
