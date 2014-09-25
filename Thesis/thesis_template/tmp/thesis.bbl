@@ -39,7 +39,13 @@ Robert Chansler, Hairong Kuang, Sanjay Radia, Konstantin Shvachko, and Suresh
 Graham Cormode.
 \newblock Sketch techniques for approximate query processing.
 
-\bibitem[Fou]{Spark}
+\bibitem[Foua]{Spark1}
+Apache~Software Foundation.
+\newblock Spark programming guide.
+\newblock \url{https://spark.apache.org/docs/latest/programming-guide.html}.
+\newblock Accessed 23.09.2014.
+
+\bibitem[Foub]{Spark2}
 Apache~Software Foundation.
 \newblock Spark streaming programming guide.
 \newblock

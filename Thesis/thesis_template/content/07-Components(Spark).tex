@@ -1,19 +1,68 @@
 \subsection{Spark [VI]}
 
-Intro
-
-\cite{Zaharia2010}
-\cite{Zaharia2013}
-\cite{Spark1}
-\cite{Spark2}
+Spark is a framework for distributed data processing \cite{Zaharia2010} \cite{Zaharia2013} \cite{Spark1} \cite{Spark2}.
+It provides a tool to work with large datasets and streams of data, and to make complex queries on this data.
+Spark has several abstractions for representation of data and streams.
+The first one - Resilient Distributed Dataset (RDD) - is an object, distributed in the cluster, that contains data to process.
+Another one is a Shared Variable - variable, that can be used among the cluster as a counter or lookup table.
+One more abstraction is a Discretized Stream (DStream) - representation of a data stream also in a distributed fashion.
 
 \subsubsection{Data model}
 
-Initializing Spark
-Resilient Distributed Datasets (RDDs) (from a file, parallelizing a Scala collection, transforming an existing RDD, changing the persistence of an existing RDD)
-parallel operations (reduce, collect, foreach)
-Shared Variables (Broadcast variables, Accumulators)
-Deploying to a Cluster
+To initialize Spark you first create a SparkContext object, that is responsible for a connection of your program to Spark.
+It allows to specify properties of your application, and also options of how Spark should run, for example in local mode or on the cluster.
+SparkContext gives an access to different parameters and properties of execution environment.
+
+\textit{Resilient Distributed Datasets}\mnote{Resilient Distributed Datasets} (RDDs) is a main abstraction in Spark, that represents dataset in a distributed fashion.
+RDD is essentially a readonly collection of elements.
+It is fault-tolerant, so that if one partiotion is lost, the whole collection can be recovered.
+RDD does not need to exist physically on the cluster nodes.
+Instead, it is a lazy object, that can lay in a robust data storage, and be computed on the fly, when computations require particular pieces of data.
+
+There are two methods how to obtain an RDD object: parallelizing exisiting collection in the driver program, and using external dataset.
+Existing collection is any collection of data, e.g. array, list, set, etc., that you in fact have in the program.
+When you create an RDD object in this way, elements of a collection are copied to a distributed dataset, that you can use than in parallel.
+You can specify the number of slices, that is the number of tasks, each machine in the cluster will then execute for this collection.
+External dataset is an external file.
+It can reside in the local file system, and in the distributed file system like HDFS.
+The simple example of what you can do with the external text file, is to count the sum of lines' lengths using functions $map$ and $reduce$ of an RDD object. 
+Additionally, you can obtain RDD by transforming another RDD, or by changing persistance of an existing RDD, but this methods are derived in some sense.
+
+RDD supports two types of operations: \textit{transformations} \mnote{transformation} and \textit{actions}\mnote{action}.
+Trnsformation creates a new RDD object from existing one.
+An example is a $map$ function, that processes each element of an RDD object using specified function, and returns a new RDD object as a result.
+Action executes computations on an RDD object, and returns a value.
+$Reduce$ is an example of action.
+It aggregates all elements giving in the RDD object and return the resulting value.
+
+Transformation in Spark is a lazy operation, in the sense that it is computed only when action operation requires its result to produce output.
+This makes execution more efficient when there is a chain of transformations before final action, because your application does not receive then intermediate RDD objects, but only final resulting value, that is usually much smaller.
+Nevertheless, there are cases, when you want to compute different actions on the same transformation.
+Then it is meaningful to have RDD object of this transformation computed once, and to have a handle to it in your program.
+For this case there is a method $persist$, that allows to materialize RDD object.
+This is also possible to persist RDD object on disk.
+
+Next we present a simple program, that counts the sum length of all lines in a text file:
+\begin{verbatim}
+JavaRDD<String> lines = sc.textFile("data.txt");
+JavaRDD<Integer> lineLengths = lines.map(s -> s.length());
+int totalLength = lineLengths.reduce((a, b) -> a + b);
+\end{verbatim}
+Example is taken from \cite{Spark1}.
+Here we create an RDD object from external file, set $map$ function to count length of the line, and set $reduce$ function to sum up lengths of lines.
+Execution starts only when $reduce$ function is called, because, as we discussed, transformations are lazy in Spark.
+
+Normally, when you pass arguments to any function, that executes on the nodes of the cluster, they are simply copied and there is no feedback to the driver program.
+Sometimes it is useful to have global variable or lookup table, that all nodes can access.
+Spark supports the notion of \textit{shared variable}\mnote{shared variable}.
+There are two types of shared variables: \textit{broadcast variables} \mnote{broadcast variable} and \textit{accumulators}\mnote{accumulator}.
+Broadcast variable represents readonly value or dataset, that is useful for all nodes as a lookup table or global predefined value.
+It is copied to every node using method $broadcast$ of $SparkContext$.
+There are efficient algorithms in Spark to make this transfer fast.
+Accumulator is distributed counter, that allows all nodes to add up to the global numeric variable.
+It can be created using method $accumulator$ of $SparkContext$.
+No node can read this value or do anything else than incrementation, what makes its implementation easy and fast.
+Only driver program is able to read accumulator's value.
 
 \subsubsection{Streaming model}
 
