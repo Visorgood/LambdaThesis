@@ -80,32 +80,59 @@ It allows to adjust environment for processing, set properties like local or clu
 One important propery is the batch interval.
 It defines the time of gathering data from the input stream, before creating DStream and sending it to the Spark engine.
 
-\textit{Discretized Stream}\mnote{Discretized Stream} or DStreams is the main abstraction in Spark Streaming.
+\textit{Discretized Stream} \mnote{Discretized Stream (DStream)} or DStream is the main abstraction in Spark Streaming.
 DStream can be the input stream, as well as intermediate stream, generated after processing of input stream of data.
-It is essentially a chain of RDD objects, and provide a stream of data, that is to process by Spark.
+It is essentially a chain of RDD objects, and provides a stream of data, that is to process by Spark.
 Each RDD represents batch of data in the period of time, that is specified in the $SparkStreamingContext$.
-Figure~ depicts simple DStream.
+Figure~\ref{fig:SimpleDStream} depicts simple DStream.
 
-
+\begin{figure}[H]
+  \centering
+  \includegraphics [width=1.0\textwidth]{images/SimpleDStream}
+  \caption{Representation of a simple DStream.}
+  \label{fig:SimpleDStream}
+\end{figure}
 
 Every operation you want to apply to DStream is applyed to every RDD object in the stream.
-This implyes, that transformation on the DStream produces new DStream.
+This implies, that transformation on the DStream produces new DStream.
 All these transformation are executed by Spark Engine in a standard batch fashion.
-Figure~ depicts how it looks like.
+Figure~\ref{fig:DStreamWithTransformation} depicts how it works.
 
-Input DStreams
-Basic Sources
-Advanced Sources
+\begin{figure}[H]
+  \centering
+  \includegraphics [width=1.0\textwidth]{images/DStreamWithTransformation}
+  \caption{Transformation of a DStream to a new DStream.}
+  \label{fig:DStreamWithTransformation}
+\end{figure}
 
-Transformations on DStreams
-UpdateStateByKey Operation
-Transform Operation
-Window Operations
+\textit{Input DStream} is a stream of raw data coming to Spark from the outer source.
+Sources can be of two types: basic sources and advanced sources.
+Basic sources are sources, that available using standard streaming context API, e.g. files or sockets.
+Advanced sources are available using specific libraries, for example Kafka message queue server.
+There is a notion of $Receiver$, that is an object that receives data from the stream, put into Spark's memory, so that it is available for input DStream, associated with this Receiver.
+Every DStream is responsible only for one input data stream.
+You can create many DStreams for different input streams to receive data from different data sources in parallel.
+Receiver is executing as a long running task, hence it occupies one core of the processor.
+This implies, that there should be more cores then receivers in the system.
 
-Output Operations on DStreams
+Transformations on DStreams (UpdateStateByKey Operation, Transform Operation, Window Operations) ???
 
-Caching / Persistence, Checkpointing, Deploying Applications, Monitoring Applications ???
+Spark streaming has a number of output operations on DStreams, that used to push transformed data to outer systems.
+This can be files or databases.
+Output operations actually start execution, as $actions$ of Spark engine do.
+Examples of output operations are $print$, $saveAsObjectFiles$, $saveAsTextFiles$, $saveAsHadoopFiles$, $foreachRDD$.
 
-Performance Tuning ???
+DStream allows to persist it in the memory, when multiple computations of the same DStream are required.
+Method $persist$ of DStream object does that.
+Its execution specifies that every RDD of the DStream will be persisted in the memory, as it is done for RDD in Spark engine.
+For data, arriving from network, the persistence level is so, that all data is replicated to two nodes to provide fault-tolerance.
 
-Fault-tolerance Properties ???
+There is a mechanism of checkpointing in Spark streaming.
+It allows to make snapshots of intermediate data to HDFS.
+It makes computation throughput less, if set not properly.
+So it must be carefully tuned.
+
+Fault-tolerance of Spark streaming is based on the fault-tolerance on Spark engine.
+RDDs are basic elements of a DStream, what lets Spark streaming to rely on their robustness.
+As long as all data locates on HDFS, if data node fails, all lost data can be recovered.
+For data coming from network input stream, as we already mentioned, it is always replicated to two nodes.
