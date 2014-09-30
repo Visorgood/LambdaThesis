@@ -39,6 +39,13 @@ Robert Chansler, Hairong Kuang, Sanjay Radia, Konstantin Shvachko, and Suresh
 Graham Cormode.
 \newblock Sketch techniques for approximate query processing.
 
+\bibitem[Dat]{Cassandra}
+DataStax.
+\newblock Apache cassandra 2.0 online documentation.
+\newblock
+  \url{http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html}.
+\newblock Accessed 29.09.2014.
+
 \bibitem[Foua]{Spark1}
 Apache~Software Foundation.
 \newblock Spark programming guide.
@@ -51,6 +58,12 @@ Apache~Software Foundation.
 \newblock
   \url{https://spark.apache.org/docs/latest/streaming-programming-guide.html}.
 \newblock Accessed 11.09.2014.
+
+\bibitem[Fouc]{Thrift}
+Apache~Software Foundation.
+\newblock Thrift online documentation.
+\newblock \url{http://thrift.apache.org/docs/}.
+\newblock Accessed 29.09.2014.
 
 \bibitem[Fou14]{HDFSArchitecture1}
 Apache~Software Foundation.
@@ -78,6 +91,11 @@ Eduardo Pinheiro, Wolf-Dietrich Weber, and Luiz~Andre Barroso.
 \newblock Failure trends in a large disk drive population.
 \newblock 2007.
 
+\bibitem[SAK07]{Slee2007}
+Mark Slee, Aditya Agarwal, and Marc Kwiatkowski.
+\newblock Thrift: Scalable cross-language services implementation.
+\newblock 2007.
+
 \bibitem[Seg12]{Seguin2012}
 Karl Seguin.
 \newblock {\em The Little Redis Book}.
@@ -88,6 +106,12 @@ Salvatore Sanfilippo and Pieter Noordhuis.
 \newblock Redis online documentation.
 \newblock \url{http://redis.io/documentation}.
 \newblock Accessed 11.09.2014.
+
+\bibitem[Sof]{RabbitMQ}
+Pivotal Software.
+\newblock Rabbitmq online documentation.
+\newblock \url{http://www.rabbitmq.com/documentation.html}.
+\newblock Accessed 29.09.2014.
 
 \bibitem[TTS{\etalchar{+}}14]{Toshniwal2014}
 Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.

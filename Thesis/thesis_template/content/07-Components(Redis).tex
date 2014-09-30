@@ -1,106 +1,137 @@
 \subsection{Redis [VI]}
 
 Redis is an open source key-value in-memory data storage \cite{Seguin2012} \cite{Redis}.
-It affords blazingly fast and simple tool for maintaining data inside of a single application or a cluster.
-Redis is very easy to deploy, learn and use.
-It provides 5 data structures, e.g. string, list, set, ordered set and hash, that are useful for different tasks, and give a powerful tool in combination.
+It maintains data handled by a single application or by a cluster.
+Redis is easy to deploy, learn and use.
+It provides 5 data types, e.g. string, list, set, ordered set and hash, that are useful for different tasks, and give a powerful tool in combination.
 
-\subsubsection{Basics}
+%\subsubsection{Basics}
 
-Redis is a key-value store, that allows to hold all data of your application.
-Redis lets to create many databases and switch between them.
-For one database it maintains one global map of keys to values.
-Although Redis is in-memory database system, it swaps data continuously to disk to provide persistance in case of application's failure.
-This is also important in a distributed environment to have global data available between applications.
-
-Record in Redis is a key-value pair.
+Redis allows to create many different databases and switch between them.
+Within one database Redis maintains a global map of keys to values.
 The key is always a string.
-It does not contain data, that your application manipulates, but it identifies piece of data, that you want to store.
-The value can be of different types, but in any case it is a meaningful peace of data, that you store in the database.
+It identifies piece of data, and does not represent data itself.
 
-Redis provides many useful and at the same time simple commands to work with data.
-The two simplest commands are $SET$ and $GET$, that let to store a key-value pair into database, and to get value by key, respectively.
-This is an example of how you can use these commands:
-\begin{verbatim}
+Redis provides many useful and simple commands to work with data.
+The two simplest commands are \lstinline{SET} and \lstinline{GET}, that let to store a key-value pair into database, and to get value by key, respectively.
+Listing~\ref{listing:RedisSetGet} shows an example of how to use these commands.
+In this example the key is \lstinline{server:name} and the value is \lstinline{"SERVER1"}.
+
+\begin{lstlisting}[float=h, caption=Example of usage of commands SET and GET., label=listing:RedisSetGet]
 > SET server:name "SERVER1"
 OK
 > GET server:name
 "SERVER1"
-\end{verbatim}
-There are many commands to work with data structures, that Redis provides.
+\end{lstlisting}
 
 Redis allows to query only values by keys.
-You cannot find a key, this is a crucial difference with classical relational databases.
-And if you do not know a key, you can not find a value.
-There is a command $keys$, that returns all keys, stored in the database, but it is strongly advised not to use it in production application, because it does a linear scan through all the keys, what can be very slow.
-Another point is that operation of receiving a value by a key works in constant time, basically instantly.
-This makes Redis blazingly fast and useful, because grow of the database does not affect its performance.
+It is impossible to find a key, this is a crucial difference with classical relational databases.
+And if the key is unknown, there is no way to find a value.
+There is one exception, a command \lstinline{KEYS}, that returns all keys, stored in the database.
+But it is strongly advised not to use it in production release, because it does a linear scan through all the keys, what can be very slow.
+This command is rather for administrative issues.
+Another point is that operation of receiving a value by a key works in a constant time, basically instantly.
+This makes Redis in fact fast and useful, because grow of the database does not affect its performance.
 
-Redis stores the database to disk every minute if at least 1000 keys has been changed.
-It makes less swaps, if you change less number of keys.
+Although Redis is an in-memory database system, it swaps data continuously to disk to provide persistance in case of application's failure.
+Redis stores the database to disk every minute if at least 1000 keys have been changed.
+It makes less swaps, if less keys have been changed.
 It does swap completely as a snapshot.
-There is an alternative way to set Redis to make appending swaps.
+There is though an alternative way to set Redis to make appending swaps.
 
-\subsubsection{Data structures}
+%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+%Replications (can be written)
+%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-The basic data structure in Redis is a \textit{String}.
+%\subsubsection{Data types}
+
+The basic data type in Redis is \textit{String}.
 Keys are always strings.
 Values can be of any type, but String is the most popular, because it represents atomic piece of data.
-As a String you can store not just something simple like name of a user or his password, but also complex objects like JSON object, for example:
-\begin{verbatim}
-> SET users:user001 '{"firstname": "john", "lastname": "smith"}'
-OK
-\end{verbatim}
-Redis provides standard commands to work with strings, e.g. $STRLEN$, $GETRANGE$, $APPEND$, etc.
-If you store numeric value as a string, you can work with it as with integer.
-Redis has several useful commands for this case, e.g. $INCR$, $INCRBY$, $DECR$, $DECRBY$, $SETBIT$, $GETBIT$.
+As a String it is possible to store not just something simple like name of a user or text data, but also complex objects like JSON object.
+On the Listing~\ref{listing:RedisSETComplexValue} is an example of such action.
 
-The first complex data structure is \textit{List}.
+\begin{lstlisting}[float=h, caption=Usage of SET command with complex value., label=listing:RedisSETComplexValue]
+> SET users:user001 '{"firstname":"john", "lastname":"smith"}'
+OK
+> GET users:user001
+"{\"firstname\":\"john\", \"lastname\":\"smith\"}"
+\end{lstlisting}
+
+Redis provides standard commands to work with strings, e.g. \lstinline{STRLEN}, \lstinline{GETRANGE}, \lstinline{APPEND}, etc.
+Storing a numeric value as a string, it is possible to work with it as with integer.
+Redis has several useful commands for this case, e.g. \lstinline{INCR}, \lstinline{INCRBY}, \lstinline{DECR}, \lstinline{DECRBY}, \lstinline{SETBIT}, \lstinline{GETBIT}.
+On the Listing~\ref{listing:RedisIntegerValue} is an example of working with value as with integer.
+
+\begin{lstlisting}[float=h, caption=Working with value as with integer., label=listing:RedisIntegerValue]
+> SET x 1
+OK
+> INCR x
+(integer) 2
+> INCRBY x 5
+(integer) 7
+> DECR x
+(integer) 6
+> DECRBY x 3
+(integer) 3
+> GET x
+"3"
+\end{lstlisting}
+
+The first complex data type in Redis is \textit{List}.
 List is simply an array of values identified by a key.
-There are specific commands to work with lists, e.g. $LPUSH$, $RPUSH$, $LRANGE$, $LLEN$, $LPOP$, $RPOP$, etc.
-The values of the list can by anything, not only strings.
+There are specific commands to work with lists, e.g. \lstinline{LPUSH}, \lstinline{RPUSH}, \lstinline{LRANGE}, \lstinline{LLEN}, \lstinline{LPOP}, \lstinline{RPOP}, etc.
+Values of the list can be anything, not only strings.
 This gives powerful tool to store complex combined data.
-\begin{verbatim}
+Listing~\ref{listing:RedisListCommands} shows basic usage of Lists.
+
+\begin{lstlisting}[float=h, caption=Usage of List data type commands., label=listing:RedisListCommands]
 > LPUSH users john mike jack
 (integer) 3
 > LRANGE users 0 -1
 1) "jack"
 2) "mike"
 3) "john"
-\end{verbatim}
+\end{lstlisting}
 
-The next data structure is \textit{Set}.
+The next data type is \textit{Set}.
 Set is an unordered array of distinct values.
-There are many useful operations with sets in Redis, e.g. $SADD$, $SISMEMBER$, $SINTER$, $SINTERSTORE$, etc.
-Sets are implemented internally as a hash-table, hence, they provide constant lookup.
-\begin{verbatim}
+There are many useful operations to work with sets in Redis, e.g. \lstinline{SADD}, \lstinline{SISMEMBER}, \lstinline{SINTER}, \lstinline{SINTERSTORE}, etc.
+Set is implemented internally as a hash-table, hence, it provides constant lookup.
+Listing~\ref{listing:RedisSetCommands} shows basic usage of Sets.
+
+\begin{lstlisting}[float=h, caption=Usage of Set data type commands., label=listing:RedisSetCommands]
 > SADD friends:john mike paul jack tania
 (integer) 4
 > SISMEMBER friends:john paul
 (integer) 1 
-\end{verbatim}
+\end{lstlisting}
 
-\textit{Sorted set} is a extension of a regular Set, that provides order for its elements.
+\textit{Sorted set} is an extension of a regular Set, that provides order for its elements.
 To order values, it uses scores.
-Each value has then a score, when you put it into Sorted set.
-You can then lookup all values in the specified range of the score, or obtain all values in the sorted order.
-Main commands for working with Sorted set are $ZADD$, $ZCOUNT$, $ZRANK$, $ZREVRANK$, etc.
-In case you need array sorted by integers, Sorted set is a perfect data structure to do that.
-\begin{verbatim}
+Each value has then a score, that must be set together with inserted value.
+It is possible then to lookup all values in the specific range of the score, or obtain all values in the sorted order.
+Main commands for working with Sorted sets are \lstinline{ZADD}, \lstinline{ZCOUNT}, \lstinline{ZRANK}, \lstinline{ZREVRANK}, etc.
+In case when it is needed to get array sorted by integers, Sorted set is a perfect data structure to do that.
+Listing~\ref{listing:RedisSortedSetCommands} shows basic usage of Sorted sets.
+
+\begin{lstlisting}[float=h, caption=Usage of Sorted set data type commands., label=listing:RedisSortedSetCommands]
 > ZADD friends:john 70 mike 95 paul 92 jack 75 tania 1 dave
 (integer) 5
 > ZCOUNT friends:john 90 100
 (integer) 2
-\end{verbatim}
+\end{lstlisting}
 
-\textit{Hash} is the last data structure given in Redis.
+\textit{Hash} is the last data type given in Redis.
 Hash is essentially a hash-table, that maps strings to any objects.
 It works also in constant time.
-There are different commands to work with Hash, e.g. $HSET$, $GHET$, $HMSET$, $HMGET$, $HGETALL$, $HKEYS$, $HDEL$, etc.
+There are different commands to work with Hashes, e.g. \lstinline{HSET}, \lstinline{GHET}, \lstinline{HMSET}, \lstinline{HMGET}, \lstinline{HGETALL}, \lstinline{HKEYS}, \lstinline{HDEL}, etc.
 Hashes give simple useful tool to store objects in an object-oriented way.
-For example, instead of storing information about user as a JSON object, or as another string representation, you can do it using Hash.
-You then put every field of a user as a separate key-value pair.
-\begin{verbatim}
+For example, instead of storing information about user as a JSON object, or as another string representation, it can be done using Hash.
+Every field of a user is then put as a separate key-value pair.
+Listing~\ref{listing:RedisHashCommands} shows basic usage of Hashes.
+
+\begin{lstlisting}[float=h, caption=Usage of Hash data type commands., label=listing:RedisHashCommands]
 > HSET users:john id 375
 (integer) 1
 > HSET users:john name "john"
@@ -114,44 +145,52 @@ You then put every field of a user as a separate key-value pair.
 4) "john"
 5) "lastname"
 6) "smith"
-\end{verbatim}
+\end{lstlisting}
 
-\subsubsection{Features}
+%\subsubsection{Features}
 
 Redis allows to use transactions to make several operations atomic.
-Basically, any operation that Redis does, is essentially atomic, because Redis is single-threaded server.
-If you execute any single command, no other command can start execution before your is in progress.
-But sometimes it is useful or even necessary to do several opearations in line as one atomic command.
+Basically, any single operation that Redis does, is atomic, because Redis is single-threaded server.
+On execution of any single command, no other command can start execution before the first one is in progress.
+But sometimes it is useful or even necessary to do several operations in line as one atomic command.
 For that case Redis provides transactions.
-\begin{verbatim}
+Listing~\ref{listing:RedisMultiExec} shows usage of transactions.
+All commands between \lstinline{MULTI} and \lstinline{EXEC} is one the atomic operation.
+
+\begin{lstlisting}[float=h, caption=Usage of commands MULTI and EXEC., label=listing:RedisMultiExec]
 MULTI
 ...
 EXEC
-\end{verbatim}
-This is how you use transactions in Redis.
-All commands between $MULTI$ and $EXEC$ is one atomic operation.
+\end{lstlisting}
 
-Redis allows you to make expiration time for a key, or set an expiration point in time for a key using Unix timestamp.
-This can be done using commands $EXPIRE$ and $EXPIREAT$.
-\begin{verbatim}
-EXPIRE user001 20
-EXPIREAT user001 1457243611
-\end{verbatim}
-It does not important, what data structure key identifies.
+Redis allows to set expiration time for a key, or set an expiration point in time using Unix timestamp.
+This can be done using commands \lstinline{EXPIRE} and \lstinline{EXPIREAT}.
+It does not important, what data structure a key identifies.
 When a key expires, it does not exist in Redis anymore.
-To check expiration time for a key there is a command $TTL$.
-To remove expiration from a key, you can use command $PERSIST$.
+To check expiration time for a key there is a command \lstinline{TTL}.
+To remove expiration from a key, command \lstinline{PERSIST} exists.
+Listing~\ref{listing:RedisExpire} shows usage of commands for setting expiration time.
+
+\begin{lstlisting}[float=h, caption=Usage of commands EXPIRE and EXPIREAT., label=listing:RedisExpire]
+> SET user001 "john smith"
+OK
+> EXPIRE user001 60
+(integer) 1
+> EXPIREAT user001 14572436115
+(integer) 1
+\end{lstlisting}
 
 There is a mechanism of subscribtion and publication in Redis.
-You can subscribe to a channel using command $SUBSCRIBE$.
-When somebody publishes something to this channel using command $PUBLISH$, you receive this message where you subscribed for it.
+To subscribe to a channel, command \lstinline{SUBSCRIBE} exists.
+When somebody publishes something to this channel using command \lstinline{PUBLISH}, subscribers receive this message.
 This tool allows to notify different nodes in the system, that connect to Redis database, about events.
 
-Redis has a very useful command $SORT$, that allows to sort lists, sets and sorted sets by their values.
-When you apply this command to a collection, it returns elements in a sorted order.
-There are different parameters, to say this command how you want to execute sorting.
-This is a simple example of how you can use $SORT$ command:
-\begin{verbatim}
+Redis has a useful command \lstinline{SORT}, that allows to sort lists, sets and sorted sets by their values.
+Applied to a collection, this command returns elements in a sorted order.
+There are different parameters to inform this command how to execute sorting.
+Listing~\ref{listing:RedisSort} shows a simple example of how to use command \lstinline{SORT}.
+
+\begin{lstlisting}[float=h, caption=Usage of SORT command., label=listing:RedisSort]
 > RPUSH simple_array 3 12 7 1 4 8 2 9
 (integer) 8
 > SORT simple_array
@@ -163,10 +202,9 @@ This is a simple example of how you can use $SORT$ command:
 6) "8"
 7) "9"
 8) "12"
-\end{verbatim}
+\end{lstlisting}
 
 Redis allows to use Lua scripts.
-Lua is a scripting language.
-You can write a script, store it, and then use directly from Redis.
-This provides useful feature, that gives an opportunity to write your own commands, that contain several operations, logically united in one meaningful operation.
+It is possible to write a script, to store it, and then to use directly as any Redis command.
+This feature gives an opportunity to write own commands, that contain several actions, logically united in one meaningful operation.
 Such defined procedure executes in atomic way, what is another advantage.
