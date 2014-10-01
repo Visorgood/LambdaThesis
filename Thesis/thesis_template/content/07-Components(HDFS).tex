@@ -1,13 +1,13 @@
 \subsection{HDFS [VI]}
 
-The Hadoop Distributed File System (HDFS) \cite{HDFSArchitecture1} \cite{HDFSArchitecture2} is a distributed data storage that provides high throughput data access, fault-tolerance, ability to hold big datasets consisting of large files.
+The Hadoop Distributed File System (HDFS) is a distributed data storage that provides high throughput data access, fault-tolerance, ability to hold big datasets consisting of large files \cite{HDFSArchitecture1} \cite{HDFSArchitecture2}.
 The Apache Software Foundation has developed HDFS originally for its web search engine - the Apache Nutch.
 Today it is a widely-used distributed file system, that is an infrastructure for such distributed computational frameworks as Hadoop, Storm, etc.
 HDFS allows to use cheap commodity hardware, because it does not require much computational or storage power for one particular node.
 It is written in Java, hence, any platform with JVM \cite{JVM} can run HDFS's software.
 HDFS supports standard hierarchical file organisation with directories and files.
 
-\subsubsection{Use cases and requirements}
+%\subsubsection{Use cases and requirements}
 
 HDFS provides high throughput data access, because it is designed for usage in the BigData world.
 Applications, that use HDFS, require fast writing and reading of files of gigabytes and terabytes in size.
@@ -17,7 +17,7 @@ It allows to operate with the large number of files.
 Fault-tolerance, detecting of failed machines, and recovering from unconsistent state of the file system are inherent properties of HDFS.
 This is a key property, because disk failures, and machine failures in general, happen more often, than we could think.
 When we consider a cluster of hundreds and even thousends of nodes, this is actually a normal case.
-Google has made a deep research on this topic, and has found out that $8\%$ of hard drives fail in two years \cite{Pinheiro2007}.
+Google has made a deep research on this topic, and has found out that 8\% of hard drives fail in two years \cite{Pinheiro2007}.
 This statistic shows that it is reasonably expected that in the large cluster there are always machines that are out of service.
 
 HDFS has a simple file storage model.
@@ -32,7 +32,7 @@ When the data is of a very high volume it is important aspect to consider.
 HDFS is written in Java, what allows to run it on practically all platforms and any hardware.
 The only requirement for a machine to use it in the HDFS-cluster is that it has running JVM.
 
-\subsubsection{General structure}
+%\subsubsection{General structure}
 
 HDFS consists of two main elements: NameNode and DataNode.
 These are applications that run on JVM.
@@ -67,14 +67,14 @@ When Client reads, it asks NameNode for the list of replicas of the first block,
 Then the same for the next block and so on.
 You can see the overall structure of HDFS and the way of its functioning on the Figure~\ref{fig:HDFS}.
 
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.8\textwidth]{images/HDFS}
   \caption{Overall structure of HDFS.}
   \label{fig:HDFS}
 \end{figure}
 
-\subsubsection{Replications}
+%\subsubsection{Replications}
 
 HDFS stores large files reliably, so that failures of particular machines can lead to an unrecoverable lost of a part of a file with a very small probability.
 It also provides high throughput, placing blocks of files onto different DataNodes, to give parallel access of many clients to many files in the cluster.
@@ -91,7 +91,7 @@ Put the second replica in the same rack, but onto the other DataNode.
 Put the third replica onto the DataNode in another rack.
 This approach gives both high fault-tolerance and near to optimal access rate.
 
-\subsubsection{Robustness}
+%\subsubsection{Robustness}
 
 One of the main goals of HDFS is to provide fault-tolerance from hardware failures.
 For this sake, each DataNode sends periodically a Heartbeat signal to the NameNode, to notify about its state.
