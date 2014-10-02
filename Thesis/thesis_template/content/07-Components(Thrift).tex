@@ -1,4 +1,134 @@
 \subsection{Thrift [VI]}
 
-Description of Thrift \cite{Slee2007} \cite{Thrift}.
+Thrift is a framework for communication between different languages \cite{Slee2007} \cite{Thrift}.
+It extracts parts of languages, that require the most usage in the interprocess interaction.
+Thrift provides all basic data types, that are common for most of languages.
+It separates data representation, transportation, and processing of input and output streams from each other.
+Thrift has code generation tools, that produce code for all supported languages having once written definition of communication in Thrift.
 
+Thrift has been developed at Facebook, as a result of a demand in a simple, high-performance bridge between different languages.
+Solutions that were present before were too slow and clumsy, or just too limited in data types and communication needs.
+Facebook had several requirements to Thrift, that it fulfilled in the implementation.
+The first one is the common data type system, that saves programmer from using specific Trift data type or from writing specific serialization.
+The second is transport mechanism, that separates data exchange from other layers of the program.
+Next is a protocol, that defines how data is serialized to be transported.
+Versioning, that allows to alter data structures or add arguments to functions without interrupting functioning of the system.
+Processing of data streams, that is responsible for managamenet of raw data, coming from the input stream, or going to the output stream. 
+
+Thrift has a \textit{type} \mnote{Types} system, that allows programmer to code in native data types of the language, he uses.
+It also saves him from writing any kind of serialization of his data structures or classes for transportation.
+The Thrift IDL (Interface Definition Language) allows to describe in a file all data structures, that are to use in the interaction with another programm, in a clear and compact way.
+Thrift's type system contains only common types, that exist in almost any programming language.
+The base types are: \lstinline{bool}, \lstinline{byte}, \lstinline{i16}, \lstinline{i32}, \lstinline{i64}, \lstinline{double}, \lstinline{string}.
+All integer types, namely \lstinline{i16}, \lstinline{i32}, \lstinline{i64}, are signed integers.
+There is no unsigned integers in Thrift, because Facebook's developers decided, that there is no much use of these types, they are always converted to signed integers in arithmetic operations, and also there are languages, that does not have them at all.
+
+Thrift supports four complex structures to define: structs, containers, exceptions and services.
+\textit{Struct} corresponds basically to a class in any object-oriented language.
+It allows to define indexed fields with default values.
+In general, notation of structs is similar to a C struct definition.
+\textit{Containers} correspond to commonly used containers in all languages, namely \lstinline{list<type>}, \lstinline{set<type>}, and \lstinline{map<type1, type2>}.
+For example, in Java their mappings are \lstinline{ArrayList}, \lstinline{HashSet} and \lstinline{HashMap}, correspondingly.
+The type of a container's element can be any supported type of Thrift, including structs and other containers.
+\textit{Exceptions} are essentially the same as structs, but they derive base exception class in each particular language.
+\textit{Sevices} correspond to interfaces or abstract classes (pure virtual class in C++) in programming languages.
+Listing~\ref{listing:ThriftStructures} shows examples of notations of these Thrift's components.
+Listings are taken from \cite{Slee2007} and modified.
+
+\begin{lstlisting}[float=h, caption=Notation of Thrift's data structures., label=listing:ThriftStructures]
+struct Example
+{
+	1:i32 number=10,
+	2:i64 bigNumber,
+	3:double decimals,
+	4:string name="thrifty",
+	5:list<i32> listOfVals,
+	6:map<string, list<i32>> combinedMap
+}
+service StringCache
+{
+	void set(1:i32 key, 2:string value),
+	string get(1:i32 key) throws (1:KeyNotFound knf),
+	void delete(1:i32 key)
+}
+\end{lstlisting}
+
+\textit{Transport} \mnote{Transport} layer in Thrift is responsible for managing data transportation issues.
+It does not specify exact transport protocol or method, rather it provides common interface.
+For example it can define a communication using network socket, or writing to a file or database.
+Basically transport requires only to know how to read write data, and does not need to know the source and the destination.
+The main methods of the transport interface are: \lstinline{open}, \lstinline{close}, \lstinline{isOpen}, \lstinline{read}, \lstinline{write}, \lstinline{flush}.
+There are several implementations of Thrift's transport interface, namely \lstinline{TSocket} for TCP/IP communication, \lstinline{TFileTransport} for writing to the file, \lstinline{TMemoryBuffer} that allows to read and write directly to memory allocated for the process.
+
+\textit{Protocol} \mnote{Protocol} layer in Thrift separates data representation and transportation.
+It provides specific structure of messaging, but it need not to be aware about how data is encoded, as XML, ASCII or binary format.
+Data only must to support a set of operations defined by a protocol's interface.
+
+Interface of Thrift's protocol contains two types of methods: for messaging and for encoding particular types of data and structures.
+It has many methods, several examples are: \lstinline{writeMessageBegin(name, type, seq)}, \lstinline{writeMessageEnd()}, \lstinline{writeStructBegin(name)}, \lstinline{writeStructEnd()}, \lstinline{writeFieldBegin(name, type, id)}, \lstinline{writeFieldEnd()}, \lstinline{writeBool(bool)}, \lstinline{writeI32(i32)}, \lstinline{writeDouble(double)}, \lstinline{writeString(string)}.
+There are similar reading methods, that we omit here for conciseness.
+Basically, every writing function has it reading pair.
+Thrift supports streaming writing of data, that allows to write and read data simultaneously.
+For this sake each field of a structure contains its type identifier, what allows to write/send the value as an atomic element to the stream.
+Facebook has implemented for its needs an efficient binary format, that is in use in many of its backend services.
+
+Thrift has a \textit{versioning} \mnote{Versioning} model, that allows to change and improve data structures and interfaces, and read old data without special additional adjustments.
+To provide this feature, Thrift uses identifiers for fields and methods' arguments.
+Each field in the structure has then a field, that is uniq.
+On deserialization, generated code recognizes old fields and simply omit them.
+For the case, when there is no expected field, Thrift provides each structure with a so called \lstinline{isset} object.
+It specifies for each field whether it is present in the structure.
+Reading the structure, it is always explicitly to check \lstinline{isset} for a particular field to read.
+Protocol and transport interfaces of Thrift also support versioning, so that developer can change them to fit better his needs.
+Listing~\ref{listing:ThriftIsset} shows an example of \lstinline{isset} structure.
+
+\begin{lstlisting}[float=h, caption=Example of isset structure., label=listing:ThriftIsset]
+class Example
+{
+	public:
+		Example() :	number(10),	bigNumber(0), decimals(0) {}
+		int32_t number;
+		int64_t bigNumber;
+		double decimals;
+		struct __isset
+		{
+			__isset() :	number(false), bigNumber(false), decimals(false) {}
+			bool number;
+			bool bigNumber;
+			bool decimals;
+		} __isset;
+...
+}
+\end{lstlisting}
+
+%Case Analysis
+%Protocol/Transport Versioning
+
+Thrift provides \textit{RPC} \mnote{RPC} using interface \lstinline{TProcessor}.
+The ides is to divide complex systems into many simple communicating elements, that works with inputs and outputs.
+In most case it is only one input and one output that are to handle.
+On the Listing~\ref{listing:ThriftTProcessor} is an interface of the \lstinline{TProcessor}.
+
+\begin{lstlisting}[float=h, caption=Thrift's TProcessor interface., label=listing:ThriftTProcessor]
+interface TProcessor
+{
+	bool process(TProtocol in, TProtocol out)
+		throws TException
+}
+\end{lstlisting}
+
+%Generated Code
+%TServer The Thrift core library has already implemented the \lstinline{TServer} abstraction.
+
+Thrift's \textit{implementation} \mnote{Implementation details} supports many commonly used programming languages, e.g. Java, C++, Python, PHP, Ruby, etc.
+Facebook deploys servers mostly using C++, Java and Python.
+Apache web server uses Thrift to provide transparent communication between backend and frontend using \lstinline{THttpClient}.
+Names of RPC methods in Thrift are sent as strings, what is though more bandwidth consuming, but ease implementation and matching of versions of interface definitions.
+
+% more details about implementation
+
+Facebook implemented many services using Thrift \mnote{Facebook Thrift Services}.
+Facebook Search service uses Thrift for realization of the underlying protocol and transport layer.
+Also Facebook Search service comprises components written on different languages.
+Web-part implemented using PHP, search engine using fast C++, statistical and testing components using Python.
+All these components need to communicate in a fast, robust and simple way, and Thrift fulfils these properies.
