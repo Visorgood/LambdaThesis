@@ -1,6 +1,6 @@
 \subsection{Thrift [VI]}
 
-Thrift is a framework for communication between different languages \cite{Slee2007} \cite{Thrift}.
+Thrift is a framework for communication between different languages \cite{Slee2007, Thrift}.
 It extracts parts of languages, that require the most usage in the interprocess interaction.
 Thrift provides all basic data types, that are common for most of languages.
 It separates data representation, transportation, and processing of input and output streams from each other.
@@ -20,8 +20,10 @@ It also saves him from writing any kind of serialization of his data structures 
 The Thrift IDL (Interface Definition Language) allows to describe in a file all data structures, that are to use in the interaction with another programm, in a clear and compact way.
 Thrift's type system contains only common types, that exist in almost any programming language.
 The base types are: \lstinline{bool}, \lstinline{byte}, \lstinline{i16}, \lstinline{i32}, \lstinline{i64}, \lstinline{double}, \lstinline{string}.
-All integer types, namely \lstinline{i16}, \lstinline{i32}, \lstinline{i64}, are signed integers.
-There is no unsigned integers in Thrift, because Facebook's developers decided, that there is no much use of these types, they are always converted to signed integers in arithmetic operations, and also there are languages, that does not have them at all.
+All integer types are signed integers.
+Facebook's developers decided, that there is no much use of unsigned integer.
+They are always converted to signed integers in arithmetic operations.
+Also there are languages, that do not support them at all.
 
 Thrift supports four complex structures to define: structs, containers, exceptions and services.
 \textit{Struct} corresponds basically to a class in any object-oriented language.

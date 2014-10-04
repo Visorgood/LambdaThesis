@@ -1,9 +1,10 @@
 \subsection{Redis [VI]}
 
-Redis is an open source key-value in-memory data storage \cite{Seguin2012} \cite{Redis}.
+Redis is an in-memory storage, that keeps data in a key-value fashion \cite{Seguin2012, Redis}.
 It maintains data handled by a single application or by a cluster.
 Redis is easy to deploy, learn and use.
 It provides 5 data types, e.g. string, list, set, ordered set and hash, that are useful for different tasks, and give a powerful tool in combination.
+Redis is an open source database system.
 
 %\subsubsection{Basics}
 
@@ -24,9 +25,8 @@ OK
 "SERVER1"
 \end{lstlisting}
 
-Redis allows to query only values by keys.
-It is impossible to find a key, this is a crucial difference with classical relational databases.
-And if the key is unknown, there is no way to find a value.
+Redis allows to query values only by keys.
+This is opposite to relational databases, where it is possible to search everything stored.
 There is one exception, a command \lstinline{KEYS}, that returns all keys, stored in the database.
 But it is strongly advised not to use it in production release, because it does a linear scan through all the keys, what can be very slow.
 This command is rather for administrative issues.

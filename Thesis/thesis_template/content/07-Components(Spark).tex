@@ -1,6 +1,6 @@
 \subsection{Spark [VI]}
 
-Spark is a framework for distributed processing of data \cite{Zaharia2010} \cite{Zaharia2013} \cite{Spark1} \cite{Spark2}.
+Spark is a framework for distributed processing of data \cite{Zaharia2010, Zaharia2013, Spark1, Spark2}.
 It works with large datasets and streams of data, and lets to make complex queries on this data.
 It consists of two parts: Spark engine that allows to process data in a batch fashion, and Spark streaming that extends Spark engine to handle fast coming streaming data.
 Spark is simple, efficient and fault-tolerant.
@@ -12,6 +12,7 @@ Using them it is easy to write simple, short and robust code, that implements co
 The first one - Resilient Distributed Dataset (RDD) - an object, distributed in the cluster, that contains data to process.
 Another one is a Shared Variable - variable, that can be used among the cluster as a counter or a lookup table.
 The last abstraction is a Discretized Stream (DStream) - representation of a data stream in a distributed fashion based on RDD objects.
+RDDs and shared variables provide basic batch processing framework, whereas DStreams, based on RDDs, allow to process streaming data.
 
 %\subsubsection{Data model and batch processing}
 
@@ -39,13 +40,15 @@ The simple example of processing data from the external text file in Spark, is t
 Additionally, it is possible to obtain RDD by transforming another RDD, or by changing persistance of an existing RDD, but this methods are derived in some sense.
 
 RDD supports two types of operations: transformations and actions.
-\textit{Trnsformation} \mnote{transformation} creates a new RDD object from existing one.
+\textit{Transformation} \mnote{transformation} creates a new RDD object from existing one.
+This is useful in many algorithms, because it allows to apply several functions to a dataset one after another.
 Examples of transformation are \lstinline{map}, \lstinline{flatMap}, \lstinline{filter}, \lstinline{groupByKey}, \lstinline{reduceByKey}.
 For instance, a method \lstinline{map} processes each element of an RDD object using specified function, and returns a new RDD object as a result.
 \textit{Action} \mnote{action} executes computations on an RDD object, and returns a value.
+Action produces normally a result of the whole algorithm.
 Examples of actions are \lstinline{reduce}, \lstinline{collect}, \lstinline{count}, \lstinline{countByKey}.
 Method \lstinline{reduce} is a basic example of an action.
-It aggregates all elements giving in the RDD object and return the resulting value.
+It applies specified function to aggregate all elements giving in the RDD object, and returns the resulting value.
 
 Transformation in Spark is a lazy operation, in the sense that it is computed only when action operation requires its result to produce output.
 This makes execution more efficient when there is a chain of transformations before final action, because the application does not receive then intermediate RDD objects, but only final resulting value, that is usually much smaller.
@@ -62,7 +65,7 @@ To initialize Spark it is first to create a \lstinline{SparkContext} object, tha
 It allows to specify properties of the application, and also options of how Spark should run, for example in local mode or on the cluster.
 \lstinline{SparkContext} gives an access to different parameters and properties of execution environment.
 
-\begin{lstlisting}[float=h, caption=Example of RDD usage., label=listing:RDDExampleCode, language=Java]
+\begin{lstlisting}[float=h, caption=Counting the total length of all lines in the file using Spark's RDD object., label=listing:RDDExampleCode, language=Java]
 SparkConf conf =
 		new SparkConf().setAppName(appName).setMaster(master);
 JavaSparkContext sc = new JavaSparkContext(conf);
@@ -143,8 +146,7 @@ It allows to adjust environment for processing, set properties like local or clu
 One important property is the batch interval.
 It defines the time of gathering data from the input stream, before creating RDD object and sending it to the Spark engine.
 
-% must check this example
-\begin{lstlisting}[float=h, caption=Example of DStream usage., label=listing:DStreamExampleCode, language=Java]
+\begin{lstlisting}[float=h, caption={Counting the frequencies of words in the text lines, coming from the TCP socket.}, label=listing:DStreamExampleCode, language=Java]
 SparkConf conf = new SparkConf()
 		.setMaster("local[2]").setAppName("NetworkWordCount");
 JavaStreamingContext jssc =
@@ -167,12 +169,12 @@ Example is taken from \cite{Spark2}.
 This code counts frequencies of words coming in a text data from the TCP socket.
 First we create \lstinline{SparkStreamingContext} object, and specify it to work in a local mode using two execution threads.
 We set a duration of gathering data from the input stream to 1 second.
-In the line 3 we create DStream responsible for an input stream associated with TCP socket.
+In the Line 3 we create DStream responsible for an input stream associated with TCP socket.
 Then we apply two transformations and one action.
 Transformations are \lstinline{map}-functions, so that the first one splits lines to words, and the second transforms words to pairs of the form \lstinline{(word, 1)}.
 Action is a \lstinline{reduce} operation that sums up occurances of the same word.
 Execution starts only when we call \lstinline{start} method of \lstinline{SparkStreamingContext}.
-In the 7th line we print out partial results of the processing.
+In the Line 7 we print out partial results of the processing.
 Instead, we can push results to a database or to a file, what is usually a case.
 
 Spark streaming has a number of output operations on DStreams, that used to push transformed data to outer systems.
@@ -185,7 +187,8 @@ Method \lstinline{persist} of DStream object does that.
 Its execution specifies that every RDD of the DStream will be persisted in the memory, as it is done for RDD in Spark engine.
 For data, arriving from network, the persistence level is so, that all data is replicated to two nodes to provide fault-tolerance.
 
-There is a mechanism of checkpointing in Spark streaming.
-It allows to make snapshots of intermediate data to HDFS.
-It makes computation throughput less, if set not properly.
-So it must be carefully tuned.
+There is a mechanism of checkpointing in Spark streaming, that allows to make snapshots of intermediate data to HDFS.
+It is useful in case of \textit{stateful operations} that are executed on multiple batches of data.
+They maintain and accumulate metadata, that can be cleaned with checkpoint.
+If set not properly, checkpointing makes computation throughput less.
+It is advised to set it 5 - 10 times of sliding time.
