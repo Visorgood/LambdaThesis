@@ -17,7 +17,7 @@ The time of retaining a message is configurable.
 The message is kept for a particular period of time, when it is available for consumption.
 Then it is removed to free up space.
 
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.5\textwidth]{images/kafka_structure}
   \caption{Kafka structure}
@@ -63,7 +63,7 @@ When a Kafka cluster has \textit{n}+1 replicas, it can sustain \textit{n} failur
 
 % названия картинок или все с большой группы везде или нет
 %[reference: http://kafka.apache.org/documentation.html]
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.5\textwidth]{images/kafka_topic_structure}
   \caption{Kafka topic structure}
@@ -168,7 +168,7 @@ Moreover, even offsets for removed records are still valid log positions.
 In this case Kafka returns the next highest existing value.
 For instance, in our case requests with offsets 14, 15, 16 and 17 all return data starting from 17.
 
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.5\textwidth]{images/kafka_log_structure}
   \caption{Kafka log structure}
@@ -186,7 +186,7 @@ first, it guarantees the messages ordering even after compaction.
 Second, the message offset is immutable and serves as a position of the record in the log.
 Third, a read operation returns at least the final version for each value associated with a key.
 
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.6\textwidth]{images/log_compaction_process}
   \caption{Kafka log structure}

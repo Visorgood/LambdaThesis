@@ -1,6 +1,9 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
 \begin{thebibliography}{CDG{\etalchar{+}}06}
 
+\bibitem[AMQ11]{AMQP2011}
+Amqp specification v1.0 final, October 2011.
+
 \bibitem[And12]{BitcoinFoundation2012}
 Gavin Andersen.
 \newblock Core development status report 1.
