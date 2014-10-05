@@ -387,20 +387,6 @@ Facebook is another representative company that is strongly connected with Big D
 The main difference is that Facebook applications often require real time data processing, providing a user with immediate feedback.
 On the contrary, for most Google applications batch processing is sufficient to make necessary computations.
 
-% add intro about HDFS, Hive, etc.
-
-Facebook widely uses such technologies for distributed data warehousing and computation as HDFS, Hive and Scribe. 
-While HDFS is an exterior module, Hive and Scribe were initially developed at Facebook and only later became open-source under the Apache Software Foundation.
-
-\mnote{Hive}
-Hive is a framework designed for storing data.
-Facebook uses it for making queries and perform data analysis.
-Hive provides SQL-loke interface 
-
-
-
-% Scribe
-
 \mnote{Facebook architecture}
 Figure~\ref{fig:facebook_data_flow} demonstrates the data flow in Facebook architecture.
 Data originates from two sources: web servers and federated MySQL instances.
@@ -409,7 +395,7 @@ The federated MySQL contains the descripting data, such as the time of posting t
 
 \begin{figure}
   \centering
-  \includegraphics [width=0.8\textwidth]{images/facebook_data_flow}
+  \includegraphics [width=0.9\textwidth]{images/facebook_data_flow}
   \caption{Data flow in Facebook}
   \label{fig:facebook_data_flow}
 \end{figure}
@@ -442,6 +428,311 @@ The stored data can be either transformed or queried by users.
 Most of the time Hive-Hadoop clusters keep the data for future analysis.
 However, in some cases the federal MySQL tier gets the data back.
 This data can be uploaded on the Facebook site and participate in the further interaction with Facebook users. 
+
+The amount of data stored on a Hive-Hadoop server is huge.
+That is why Facebook compresses it using gzip.
+Moreover, a special row columnar compression is used to store data in Hive.
+Also Facebook uses erasure codes to provide fault tolerance and at the same time decrease the amount of data copies stored on different machines.
+Erasure coding is a technique when the messages of length \textit{n} are transformed into the longer messages of length \textit{m}.
+This expanded data is spread across several locations.
+Later on it is possible to recover the original message using only a subset of \textit{m} symbols.
+
+Facebook widely uses such technologies for distributed data warehousing and computation as HDFS, Hive and Scribe. 
+While HDFS is an exterior module, Hive and Scribe were initially developed at Facebook and only later became open-source under the Apache Software Foundation.
+HDFS is described in detail in Chapter 7 (Components), Hive and Scribe are presented in the following sections.
+
+\mnote{Hive}
+Hive is a framework designed for storing data.
+Facebook uses it to query and analyze data.
+Hive provides an SQL-like interface for accessing the data from Hadoop.
+This makes the process of development easier comparing with a direct interaction with Hadoop via map-reduce.
+
+Figure~\ref{fig:hive} presents the Hive structure.
+Hive has a \textit{Metastore} that stores mappings between Hive and Hadoop.
+The \textit{Driver} communicates with the Metastore and uses the obtained information for converting Hive query language (HiveQL) expressions into map-reduce jobs.
+Hive provides various types of interfaces for interaction: web based Graphiclal User Interface (GUI), a command line, Open Database Connectivity (ODBC), Java Database Connectivity (JDBC).
+The latter two communicate with the Driver using Thrift server, that represents a communication protocol for performing remote procedure calls in numerous programming languages.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.9\textwidth]{images/Hive}
+  \caption{Hive structure}
+  \label{fig:hive}
+\end{figure}
+
+The Driver applies several types of optimization during the compilation process.
+First, it uses file pruning and filtering to reduce the amount of data that should go to map-reduce jobs.
+Then it uses column pruning to exclude columns that are not needed for the query.
+Also the Driver uses such aggregations as 'group by' or 'join' for optimization.
+Join techniques vary in the effect they have on the way of processing data.
+For instance, reordering join allows to stream large tables to a reduce task avoiding helding it in memory.
+
+Hive is a flexible framework and can be customized for the user needs.
+A user can define functions, table functions or scripts written in HiveQL.
+Moreover, it is possible to define custom types and data formats.
+
+\mnote{Scribe}
+Scribe is a distributed logging system designed for logging huge amounts of data. %[https://github.com/facebookarchive/scribe/wiki]
+It can be spread to thousands of nodes.
+At the same time it guarantees fail tolerance in the case of network or node crashes.
+
+There are two types of servers in Scribe: general servers and central servers.
+They are connected by a directed graph.%[https://www.facebook.com/note.php?note_id=32008268919]
+In this graph each node knows only the next node and is not aware about the others.
+This makes the communication easier, because it saves the sender from the necessity to know the network topology.
+
+The servers interact via messages.
+The data model of Scribe is simple, without timestamping, message ordering, logging levels, etc.
+A message in Scribe consists of two strings: a category and a message itself.
+A category reflects the message topic.
+It is implied that the messages in one category have the same destination.
+Categories allows to move a data store without changing a client code.
+For this purpose Scribe uses the server configuration settings.
+Moreover, the server can be configured to put into the file path a category name.
+The message string contains the information that should be logged.
+
+Scribe provides fault tolerance in the case of a network or machine failure as follows.
+The servers send messages to the central server/servers.
+Central servers, in their turn, write messages to the final destination, such as Network File System (NFS) or distributed filesystem.
+When the server cannot send a message to the central server because of the network problems or the central server crash, it stores this message locally.
+With random time intervals it tries to reestablish the lost connection.
+To prevent the central server overload when it recovers after the failure, it can reply with the TRY LATER message.
+In this case the receiver must wait several minutes before the next attempt.
+The central server follows the same logic when it cannot connect to the distributed filesystem or NFS. 
+
+However, there are some scenarios that can lead to the data loss.
+For example, when the server or the central server is not available from the client side.
+Or in the case of the central server crash it loses the information that was not written on disk and was kept in memory at that moment.
+Or when the local disk capacity is exceeded while the central server is not available.
+
+Scribe is based on Thrift, a software stack designed for code generation for RPC in multi-language environment.
+It allows to use different languages like PHP, C++, Java or python for working with it.
+The detailed discussion about Thrift is presented in Chapter 7 (Components). 
+Thrift reach functionality solves many hard problems connected with logging, extending Scribe capabilities.
+
+Scribe configuration files specify which store should be a destination for a particular directory.
+There are various types of stores.
+Some of them consists of other stores, like a batch store, that is build of a number of file stores.
+The configuration file has a section for every store along with a global section.
+Such setting as the maximum message number per second or the listening port are stored in the global section.
+All the store sections contains information about a type and a category.
+The number of categories is not limited as well as the number of stores for one category.
+Also the store section can include specific settings that are needed for a particular store type, like maximum size of a file or its location.
+
+\mnote{Databee}
+Facebook uses Databee for managing job dependencies.
+Databee is a framework written in python.
+Its aim is to make the interaction process between parts of the system easier.
+For example, it transmitts data from one part of the system to another, transforms data and allows to run queries on it.
+Also Databee creates monitoring information, that contains such details as job latency or job completion time.
+It allows to specify dependency on some data set.
+Thus it is possible to run a job at the time when a needed data set becomes available.
+
+As Facebook supports both ad hoc and periodic batch jobs, it needs a proper mechanism for sharing resources.
+Periodic jobs, in contrast to ad hoc ones, have strict deadlines.
+At the same time, it can happen that a long running periodic batch job blocks a short ad hoc query, holding the resources.
+For the purpose of the proper sharing Facebook introduces Hadoop Fair Share Scheduler.
+It divides users into pools and each of these pools are provided by the same quota of resources.
+This scheduler limits the amount of concurrent jobs running in one pool.
+The periodic batch jobs have their own pools.
+It is guaranteed that even in the case of high load these pools are provided at least a minimum quota of resources.
+Hadoop Fair Share Scheduler keeps track of the CPU and memory consumption by every node in a cluster.
+The scheduler is able to kill a job that consumes memory more than allowed threshold.
+
+\mnote{HDFS in Facebook}
+[Apache Hadoop Goes Realtime at Facebook]
+In matters of warehousing Facebook relies on HDFS.
+This file system provides a reliable, extensible and highly available store.
+However, for use cases, specific for Facebook, it has a significant disadvantage.
+It is designed for batch processing, while Facebook needs a system that can handle data in real time.
+Therefore a number of enhancements were introduced to make HDFS more suitable for the existent requirements.
+
+HDFS has a node called NameNode, that serves as a master node for the cluster.
+To prevent NameNode being a single point of failure, HDFS uses a BackupNode.
+In the case of failure the schema works as follows.
+First, a NameNode reads a metadata file, recreating a file system image.
+Second, a NameNode waits for the replies from DataNodes, that should report about their location.
+The presence of the BackupNode helps to avoid the first step.
+The BackupNode stores the copy of the file system image.
+Nevertheless, the second step is still necessary and takes considerable time to complete.
+
+To make the cold-start process fast, Facebook introduces an AvatarNode.
+There are two AvatarNodes in a cluster.
+One of them is an Active AvatarNode, that represents a wrapper around a NameNode.
+The second one is a hot-standby copy of the former.
+
+Figure~\ref{fig:facebook_avatarnode}  illustrates how two AvatarNodes interact with each other.
+The Active AvatarNode stores a filesystem image and a transaction log in a Network file system (NFS).
+Simultaneously the Standby node reads this information and applies all the transactions.
+DataNodes send the location information to both Active and Standby node.
+Thus the Standby node can replace the Active one at any moment.
+Facebook also modified the transactions form, enriching it with id, data length and a checksum.
+This helps to avoid reading a partial transaction by the Standby AvatarNode.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.7\textwidth]{images/facebook_avatarnode}
+  \caption{AvatarNodes interaction}
+  \label{fig:facebook_avatarnode}
+\end{figure}
+
+Facebook has improved an RPC mechanism.
+As the company controls the huge number of machines, it should be able to cope with a situation when different clusters have different Hadoop version installed.
+Therefore the implementation of RPC was changed.
+It became possible to detect the Hadoop version automatically and use the appropriate protocol for communication.
+Also Facebook added a possibility to specify an RPC timeout.
+Originally, Hadoop was designed in such a way that the client is waiting for the reply from an RPC server infinitely.
+However this is inadmissible for real time applications.
+
+HDFS was extended by \textit{recoverLease} API, that significantly decreases the lease revokation time.
+Before this enhancement HDFS used a soft lease mechanism.
+In this case, when the clien cannot read the file, it continues read tries until success or until the soft lease expires (that was one minute by default).
+Due to the \textit{recoverLease} it becomes possible to revoke a lease immediately.
+A \textit{recoverLease} request is received by the NameNode.
+At that moment it becomes a holder of the file and starts to recover the lease.
+When it is done, the NameNode replies with 'recovery complete' message.
+Then the client can start reading from the file.
+
+\mnote{HBase}
+Facebook uses HBase as a database. 
+HBase is a distributed database that is built on a basis of BigTable and runs on top of HDFS.%[http://hbase.apache.org/book/architecture.html]
+HBase can be called as one of the implementations of BigTable, therefore it has an identical structure.
+
+Facebook optimizes the database for its own needs.
+For example, to improve write performance, the following steps are applied.
+First, data is stored into a commit log.
+Then it goes to Memstore, an in-memory cache.
+Memstore gathers data until it reaches a limit and then write it as an HFile to HDFS.
+HFile is a file format for HBase, that contains a sorted set of key-value pairs.
+With every flush operation a new HFile is created.
+Thus these files should be merged periodically for better read performance.
+This process is called files compaction.
+
+\mnote{Haystack}
+Haystack is another technology used by Facebook to solve problems of large-scale data.
+It is an object storage system designed for working with billions of files.%[Finding a needle in Haystack: Facebook’s photo storage]
+Facebook uses it for photo warehousing.
+
+Photo storing differs from other storage system applications.
+The storage system writes a photo only once and never modifies.
+Also photos are read quite often.
+Photos do not need most of the metadata information usually stored by a file system for each file.
+Moreover, Facebook requires a fast way to find and read a photo.
+
+Haystack is specifically designed to meet all the Facebook requirements.
+Figure~\ref{fig:haystack_architecture} shows the Haystack architecture.
+The main three parts of Haystack are Haystack Directory, Haystack Store and Haystack Cache.
+The Store contains photos and associated metadata.
+The Store is devided into logical volumes, each of them combines several physical volumes.
+The Directory is responsible for mapping between logical and physical volumes.
+The Cache is a content delivery network (CDN), that provides access for most frequently asked photos.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=0.5\textwidth]{images/haystack_architecture}
+  \caption{Haystack architecture}
+  \label{fig:haystack_architecture}
+\end{figure}
+
+The typical scenario of a user-Haystack interaction can be described as follows.
+
+1. The user visits a page that contains some photos.
+
+2. The web server receives a request from the browser and asks the Directory for the photo URL.
+The URL has the following structure: http://[CDN]/[Cache]/[Machine id]/[Logical volume, Photo id] %[Finding a needle in Haystack: Facebook’s photo storage]
+
+3. The browser communicates with the CDN specified in the URL. 
+In some scenarios the browser communicates directly with the Cache, passing over the CDN.
+
+4. The CDN searches for the photo locally, using the Logical volume and Photo id information.
+
+5. If the photo is not found, the CDN transfers the request to the Cache.
+
+6. The Cache performs the same actions and if the photo is still not found, it asks the Store machine.
+
+When the user uploads a photo:
+
+1. The web server askes the Directory for the logical volume where the photo can be written.
+
+2. Then the server assignes an id to this photo.
+
+3. Finally it saves the photo on every physical volume assiciated with the given logical module. 
+ 
+\mnote{Haystack Directory}
+The Directory has four main applications in Haystack.
+First, as it was mentioned, the Directory manages a mapping between logical and physical volumes.
+Second, it performs the load balancing.
+The Directory controls the write and read load among logical and physical volumes correspondingly.
+Third, it determines read-only logical volumes.
+A logical volume becomes read-only, for example, when it does not have free memory for storing new photos.
+Forth, the Directory specifies which component (CDN or Cache) should be used by the browser.    
+
+\mnote{Haystack Cache}
+The Cache is a distributed hash table.
+Haystack uses a photo id as a key to obtain the needed photo.
+The Cache stores the photo only when it receives a request directly from a browser, not from the CDN.
+Also it is necessary that the photo is located on a write-enabled machine.
+
+\mnote{Haystack Store}
+Every Store machine contains several physical volumes.
+One such volume can be considered as a very large file, containing millions of photos.
+This is done to decrease the amount of metadata stored for each file.
+To obtain the photo, the Store needs a logical volume id and the file offset.
+The Store keeps in memory the mapping between the photo id and its offset, size and other metadata information.
+This allows to make the process of photo retrieving fast.
+
+A physical volume consists of a sequence of needles, where one needle is associated with one photo.
+Each needle contains: a Header with information for recovery, a Cookie to prevent brute force lookups, a Key and an Alternative key, Flags showing deletion status, a Size, the Data itself, a Footer also used for recovery, a Checksum and a Padding.
+The Key is represented by the photo id and the alterative key by its type.
+The type in this case denotes the size - each photo on upload is scaled to four different sizes.
+The cookie is a number randomly assigned by the Directory.
+It is added to the photo URL and prevents attacks for guessing the URL.
+
+There are three actions that the Store can perform with a photo.
+First, the photo can be written.
+A Cache machine sends a request to Store machines, containing a key, an alternative key, a logical volume id, a cookie and the data to be stored.
+Every store machine saves the data and updates mapping that are stored in memory.
+The Store supports only append operation, so the data once written cannot be modified.
+Thus when a new version of a photo should be stored, the Store adds an updated niddle that has the same key and alternative key.
+Different versions are distinguished by different offsets in a file.
+
+Second, the Store allows to read photos.
+A Cache machine sends the same data as with writing, except the data to be stored.
+The store searches for the necessary metadata in memory.
+The Store finds the necessary file and seeks for the specified offset in it.
+It reads the appropriate needle.
+Finally some verifications like cookie check or data integrity are performed. 
+
+Third, a photo can be deleted.
+When the photo is deleted, the Store sets two flags: one for in-memory mapping and one for the volume file.
+If the Store receives a request for a deleted photo, and the in-memory flag is set to 'deleted', the Store returns an error.
+Deleted needles still occupy the space on disk, so it is released using the file compaction.
+
+Haystack uses an \textit{index file} for optimizing the time of Store machines reboot.
+The problem is that every machine has to restore its in-memory mappings.
+Instead of inspecting all its physical volumes on reboot, a Store machine reads the index file.
+The index file has the similar structure to physical volume files.
+It contains a set of records, where one record corresponds to one needle.
+It is important that the ordering of records should be the same as the ordering of needles.
+The index file has the following fields: Key and Alternate key, Flags, Offset and Size.
+
+When a photo is written into the Store, the index file is updated asynchronously.
+When a user deletes a photo, the index file is not changed at all.
+This is done to improve the performance.
+However, it brings some problems: (1) it is possible to have a needle without a related index record, (2) index file has no information about deleted photos.
+The needle that has no record in index file is called an \textit{orphan}.
+The Store machine gets rid of orphans during the reboot process: for each orphan needle it creates a record in the index file.
+To solve the second problem, the Store checks the deleted flag on receiving a read request.
+
+Haystack uses a background task called \textit{pitchfork} to recover from failures.
+This task is responsible for checking the state of all the Store machines peroidically.
+It should check the connection, volume files availability and the ability to read data.
+If the tests are failed, all the logical volumes of this machine are marked as read-only.
+Then such machines are manually examined to find the reason of failure.    
+
+ 
+
+
 
 
 
