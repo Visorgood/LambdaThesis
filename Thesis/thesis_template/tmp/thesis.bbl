@@ -120,6 +120,11 @@ Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.
 \newblock Storm @twitter.
 \newblock 2014.
 
+\bibitem[VW12]{AlvaroWilliams2012}
+Alvaro Videla and Jason~J.W. Williams.
+\newblock {\em RabbitMQ in Action. Distributed messaging for everyone}.
+\newblock 2012.
+
 \bibitem[ZCF{\etalchar{+}}10]{Zaharia2010}
 Matei Zaharia, Mosharaf Chowdhury, Michael~J. Franklin, Scott Shenker, and Ion
   Stoica.
