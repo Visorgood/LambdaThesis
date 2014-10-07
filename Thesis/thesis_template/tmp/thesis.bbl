@@ -47,7 +47,7 @@ DataStax.
 \newblock Apache cassandra 2.0 online documentation.
 \newblock
   \url{http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html}.
-\newblock Accessed 29.09.2014.
+\newblock Accessed 07.10.2014.
 
 \bibitem[Foua]{Spark1}
 Apache~Software Foundation.
@@ -114,7 +114,7 @@ Salvatore Sanfilippo and Pieter Noordhuis.
 Pivotal Software.
 \newblock Rabbitmq online documentation.
 \newblock \url{http://www.rabbitmq.com/documentation.html}.
-\newblock Accessed 29.09.2014.
+\newblock Accessed 06.10.2014.
 
 \bibitem[TTS{\etalchar{+}}14]{Toshniwal2014}
 Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.

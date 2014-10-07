@@ -68,7 +68,7 @@ Consequently, all Nest thermostats in United States generate around 2.17Pb of da
 The ability to process large amounts of information is the main benefit of Big Data analytics, since with its vast volume it is possible to construct better models.
 
 \mnote{Batch Processing}
-There are two fundamentally different ways of processing the Big Data, namely Batch and Real Time data processing.
+There are two fundamentally different ways of processing the Big Data, namely Batch and Real-Time data processing.
 In the first case, data is handled in batches, i.e. process collects the data until the batch size is obtained, and only after this the process can perform the necessary actions on a batch as a whole.
 This gives several advantages.
 Batch processing can be done in the appropriate time, when the computing resources are less busy.
@@ -88,18 +88,18 @@ This means that in our simple example the second option is preferable, because i
 The same principle also works in general case, i.e. combining multiple operations in one batch can significantly enhance performance.
 However, Batch processing has one significant drawback: the results are always obtained with an arbitrary time delay.
 
-\mnote{Real Time Processing}
-Real time processing handles data at the moment of arrival. 
+\mnote{Real-Time Processing}
+Real-time processing handles data at the moment of arrival. 
 The advantage of the latter is that the results are ready almost immediately, which can be an essential requirement in such areas as medicine or security threat prediction. 
 In spite of the fact that a certain delay is nevertheless exists, its duration is predetermine and is guaranteed to have a specified value.
-That differentiates real time processing from batch processing.
+That differentiates real-time processing from batch processing.
 This fixed delay length varies depending on the application.
-In some cases 10 minutes to perform all the computations is still considered to be a real time processing.
+In some cases 10 minutes to perform all the computations is still considered to be a real-time processing.
 However, in other cases, more than 1 second delay is unacceptable.
-Real time processing makes the information always available and up-to-date.
+Real-time processing makes the information always available and up-to-date.
 
-These significant advantages results in rising popularity of real time processing, despite the fact that it requires greater effort to design and maintain.
-Real time processing can help to improve traffic in metropolitan areas, offering various travel alternatives for a vehicle, basing on analysis of incoming data about the situation on the roads.
+These significant advantages results in rising popularity of real-time processing, despite the fact that it requires greater effort to design and maintain.
+Real-time processing can help to improve traffic in metropolitan areas, offering various travel alternatives for a vehicle, basing on analysis of incoming data about the situation on the roads.
 Rapidity of data processing can be necessary in other cases as well.
 Sometimes high processing speed can even be indispensable to life, when using in medicine, for example.
 Special systems monitor the state of a patient, immediately alerting caregivers in the case of dangerous anomaly occurrence. 
@@ -205,7 +205,7 @@ Data has to be collected, processed, transmitted, stored, protected from attacks
 The Figure~\ref{fig:big_data_flow} shows the general flow of data within the Big Data concept.
 Each of the presented steps involves a batch of technologies.
 For example, depending on data type and size, one can choose SQL (MySQL, Oracle, Teradata, etc.) or NoSQL (Cassandra, MongoDB, Apache HBase, etc.) solutions for storing Big Data.
-Similarly, depending on the application, Real Time processing (Storm, Spark Streaming, etc.) or Batch processing (Apache Hadoop, etc.) technologies are used. 
+Similarly, depending on the application, Real-Time processing (Storm, Spark Streaming, etc.) or Batch processing (Apache Hadoop, etc.) technologies are used. 
 Thereby, it is apparent that no one general solution exists for every Big Data problem.
 Further we describe the existing Big Data architectures in the context of Menthal needs.
 
