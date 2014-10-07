@@ -21,17 +21,17 @@ Figure~\ref{fig:RabbitMQGeneralStructure} shows general structure of RabbitMQ se
   \label{fig:RabbitMQGeneralStructure}
 \end{figure}
 
-Clients that send messages are called \textit{producers} \mnote{Producer}.
+Client that sends messages is called \textit{producer}\mnote{Producer}.
 Producer creates a message and sends (publishes) it to a broker.
 Message consists of two parts: label and data.
 Data can be anything, e.g. text, JSON object, JPG file, etc.
 Label provides information about who should receive the message.
-When producer sends a message, it does not wait for a confirmation, that supposed receivers of that message, specified by the label, have got it.
+When producer sends a message, it does not wait for a confirmation from supposed receivers.
 Such strategy is called fire-and-forget.
 Broker acknowledges only the fact, that it has received the message properly.
-It provides no information to a sender about further live of the message. 
+It does not provide information to a sender about further life of the message. 
 
-Clients that receive messages are called \textit{consumers} \mnote{Consumer}.
+Client that receives messages is called \textit{consumer}\mnote{Consumer}.
 Consumer subscribes to a specific \textit{queue} (we discuss queues in details below).
 Broker transmits messages, coming to this queue, to all subscribed consumers.
 There is no way to know who was a publisher of a message using label.
@@ -78,7 +78,7 @@ Another propery is auto-deletion, that says to a server, that queue must be dele
 \textit{Exchange} \mnote{Exchange} is a component of RabbitMQ broker server that completes the whole picture.
 Exchange is a place to where producer sends a message.
 It is then redirected using specific rules to a particular queue.
-Those rules are called \textit{routing keys} \mnote{Routing keys}.
+Those rules are called \textit{routing keys}\mnote{Routing keys}.
 It is said, that queue is bounded to an exchange by a routing key.
 Each message that producer sends to a broker, has a routing key in its label.
 Broker server tries then to match it with its bindings, to put the message in a proper queue.
