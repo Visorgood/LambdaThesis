@@ -76,6 +76,18 @@ Apache~Software Foundation.
   August 2014.
 \newblock Accessed 08.09.2014.
 
+\bibitem[Hew11]{Hewitt2011}
+Eben Hewitt.
+\newblock {\em Cassandra - The Definitive Guide}.
+\newblock 2011.
+
+\bibitem[LM]{Avinash2014}
+Avinash Lakshman and Prashant Malik.
+\newblock Cassandra - a decentralized structured storage system.
+\newblock
+  \url{http://www.datastax.com/documentation/articles/cassandra/cassandrathenandnow.html}.
+\newblock Accessed 08.10.2014.
+
 \bibitem[LYBB14]{JVM}
 Tim Lindholm, Frank Yellin, Gilad Bracha, and Alex Buckley.
 \newblock The java® virtual machine specification. java se 8 edition.

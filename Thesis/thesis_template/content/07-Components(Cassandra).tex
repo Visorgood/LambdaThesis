@@ -1,9 +1,34 @@
 \subsection{Cassandra [VI]}
 
-Cassandra is a distributed database system \cite{Cassandra}.
-
-General architecture
-
-Main concepts
+Cassandra is a distributed storage system \cite{Cassandra, Avinash2014, Hewitt2011}.
+It is efficient and reliable.
+It keeps data on many commodity machines without having master node.
+This leads to
 
 CQL
+
+General architecture
+Cluster
+Data center
+Commit log
+Table
+SSTable
+
+Internode communications (gossip)
+Failure detection and recovery
+
+Data distribution and replication
+Consistent hashing
+Virtual nodes
+Data replication
+
+Partitioners
+Murmur3Partitioner
+RandomPartitioner
+ByteOrderedPartitioner
+
+Snitches
+Dynamic snitching
+SimpleSnitch
+
+Client requests
