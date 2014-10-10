@@ -1,34 +1,104 @@
 \subsection{Cassandra [VI]}
 
 Cassandra is a distributed storage system \cite{Cassandra, Avinash2014, Hewitt2011}.
-It is efficient and reliable.
+It is efficient and reliable, what is achieved via multinode topology and replication of data.
 It keeps data on many commodity machines without having master node.
-This leads to
+This leads to a purely distributed approach, where there is no a single point of a failure.
+Cassandra is highly scalable, as long as any number of nodes can be added to the cluster at any time.
+It provides CQL language, that allows to write and query data in an SQL-style manner.
 
-CQL
+Cassandra's architecture is purely distributed.
+It consists of a set of nodes, and all of them are equal in the sense of functionality.
+Each node stores the part of data, what allows to extend capacity of the storage, basically, to any size.
+Nodes exchange meta-information about the cluster's structure once per second.
+Every node maintains a \textit{commit log} of writes.
+Then it saves all written data to an in-memory data structure called \textit{memtable}, that functions as a cash.
+When memtable is full, node flushes it to an SSTable file, partitioning and replicating data among the cluster.
+Cassandra allows to connect to any node in the cluster, that works then as a coordinator.
+It routs then requests of the client to nodes, that have rquested data.
 
-General architecture
-Cluster
-Data center
-Commit log
-Table
-SSTable
+\mnote{Main structures}
+There are 5 main structures in Cassandra, that need to be defined.
+\textit{Cluster} is a set of nodes that store the data.
+\textit{Data center} is a subset of cluster's nodes, that are grouped together.
+They have a common configuration to achieve optimal replication and segregation properties.
+Data still can be copied to several data centers, if replication factor is high.
+\textit{Commit log} is a local storage on each node, where data is stored for durability, before being distributed across the cluster.
+\textit{Table} is a logical place, where data is stored.
+It is, essentially, a set of columns, that can be accessed by rows.
+Each row has a primary key and a value, represented by a particular set of columns, that need not be the same for every row in the table.
+\textit{SSTable} (sorted string table) is a file, where node periodically writes data, gathered to a memtable.
+It is immutable, append-only, and exists for every Cassandra's table.
 
-Internode communications (gossip)
-Failure detection and recovery
+\mnote{Communication between nodes}
+For communication between nodes Cassandra has a protocol called \textit{gossip}.
+It allows to discover information about other nodes in the cluster, and to share information about state of the node.
+According to gossip protocol every node communicate with three other nodes every second, exchanging meta-information about state, data, and other nodes.
+Such network learns fast about its topology and state.
 
-Data distribution and replication
-Consistent hashing
-Virtual nodes
-Data replication
+\mnote{Detection of failures and recovery}
+Cassandra analyses state of nodes using gossip information to check whether node is up or down.
+It tries whenever possible not to send any requests to nodes, that are out of service by any reason.
+Particular node tries to understand, which other nodes are down directly, by communicaitng with them, as well as indirectly, receiving information about them from directly communicated nodes.
+Node can fail due to many different reasons, e.g. hardware failures, software crashes, or network outgages.
+Cassandra does not remove the node from topology as soon as it seems to be down.
+Instead, nodes try to re-establish communication with failed node.
+It can be smart, because, for example, a network outgage can be recovered fast.
+As long as node detected to be failed, other nodes start to replicate data bypassing it.
+Administrator has to run a repairing tool, after node is up, to make it again consistent with the cluster.
 
-Partitioners
-Murmur3Partitioner
-RandomPartitioner
-ByteOrderedPartitioner
+\mnote{Data distribution}
+Data distribution and replication are inherent properties of Cassandra.
+Data is stored in tables, that consist of rows.
+Row is an atomic peace of data in Cassandra.
+It has a primary key, that defines its location in the cluster.
+There are four aspects, that determine distribution and replication: virtual nodes, partitioners, replication strategies and snitches.
+We discuss them shortly in details.
 
-Snitches
-Dynamic snitching
-SimpleSnitch
+\mnote{Consistent hashing}
+First, let us describe consistent hashing.
+It divides possible values of partition keys into ranges.
+Partition key is any column name of a row.
+This allows to set for each node a subset of partition key values, that will be stored in this node.
+Consistent hashing has an advantage, that it minimizes reorganization needs, when nodes are removed or added.
+For a particular partition key, consistent hashing produces for each node an interval of hash-values.
+Then for a new row, it is stored on the node, so that hash-value of a key maps to the interval assigned to this node.
 
-Client requests
+%Virtual nodes
+
+\mnote{Data replication}
+When new row is added, Cassandra replicates it across the cluster.
+Copies of the row are called replicas.
+Each replica is equal to others, and there is no any master or primary replica.
+The number of replicas is called a \textit{replication factor}.
+It defines on how many nodes replicas of a row will reside.
+There are two strategies of a replication mechanism.
+The first one is a \lstinline{SimpleStrategy}, that supposes to use only one data center for replication.
+Another one is a \lstinline{NetworkTopologyStrategy}, that is used in most cases, and allows to replicate data across the whole cluster.
+
+\mnote{Partitioners}
+Now let us describe what is \textit{Partitioner}.
+Partitioner defines how data is distributed across the cluster.
+It computes a token from a partition key of a row.
+This token is then used to choose nodes, where replicas of a row must be saved.
+There are three partitioners in Cassandra: \lstinline{Murmur3Partitioner}, \lstinline{RandomPartitioner} and \lstinline{ByteOrderedPartitioner}.
+\lstinline{Murmur3Partitioner} distributes data uniformly in the cluster using \lstinline{MurmurHash} hash function.
+\lstinline{RandomPartitioner} distributed data uniformly using \lstinline{MD5} hash function.
+\lstinline{ByteOrderedPartitioner} distributes data in a lexical order by key bytes.
+
+\mnote{Snitches}
+Snitches define mapping of nodes to data centers and racks.
+Using snitches Cassandra understands how to route requests.
+They provide topology information and allow to execute replications properly.
+Snitch monitors historical information about efficieny of reading from different replicas of a row, and uses this information to choose the best one for a request.
+
+When a client connects to Cassandra, it is able to communicate with any node. 
+Requests are then redirected by a connected node to the one, that has a particular data to be returned to a client or to be written.
+Connected node is called \textit{coordinator}.
+Coordinator is, essentially, a proxy between a client and Cassandra store.
+
+\mnote{CQL}
+Cassandra has a query language \textit{CQL} (Cassandra query language).
+It is an interface to communicate with Cassandra, to read and write data.
+It is an SQL-style language, that allows to query data from Cassandra with different conditions.
+As SQL it is based on a table representation of data.
