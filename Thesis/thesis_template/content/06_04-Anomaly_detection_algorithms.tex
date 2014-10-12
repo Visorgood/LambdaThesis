@@ -1,0 +1,75 @@
+\section{Anomaly detection algorithms}
+
+% [Anomaly Detection : A Survey]
+\textit{Anomaly} is the data that does not correspond to any expected data patterns.
+The presence of anomalies in a data flow can be a sign that something has happened with a source of data.
+For example, anomalies are caused by a malicious software that changes the system behavior. 
+Anomalies in data, collected from medical sensors, can indicate the drastic changes in a patient state of health.
+Moreover, an anomaly in sensor data can be a forerunner of a catastrophe, like flood or even a nuclear power plant crash.
+Therefore, it is necessary to use an anomaly detection mechanism to prevent undesirable situations.
+
+It is important to distinguish between \textit{anomaly}, \textit{noise} and \textit{novel data}.
+Noise is a deviation from normal patterns, that is not interesting for analysis.
+Ideally all the noise should be removed before analyzing the information.
+Novel data appears when the pattern changes.
+This data arrives continuously and leads to creation a new pattern that is later included into the normal model.  
+
+Anomaly detection process is accompanied by the following difficulties.
+Usually it is difficult or event not possible to name all the patterns that correspond to the normal behavior.
+The boundary between normal and anomalous data can be uncertain.
+The behavior that is considered to be normal can change in the course of time.
+It is necessary to get rid of noice, that can look like anomalies in some cases.
+The degree of deviation from the normal behavior can be different in different situations.
+Sometimes anomaly differs from the expected pattern slightly, while in other case the difference can be huge.
+Finally, the malicious software often tries to imitate the normal behavior to obstruct its detection. 
+
+Anomalies can be divided into three categories.
+The simplest one is a \textit{point anomaly}.
+It is an individual instance that differs from all other instances in a given data flow.
+Most of the time anomaly detection works with this category of anomalies.
+The second one is a \textit{contextual anomaly}.
+In this case the instance is analysed taking into account its neighboring instances.
+It means that if such data instance occures without a particular context, it is not considered to be an anomaly.
+The third category is a \textit{collective anomaly}.
+It appears only when the data instances in a data set are related to each other.
+For example, a collective anomaly is an appearance of the same data instance in a row, while usually they should be separated by other instances.
+
+Different approaches of anomaly detection exist.
+They are grouped into three types: supervised, semi-supervised and unsupervised approaches.
+For using a supervised mode, one needs two labeled sets: the normal data and anomalous data.
+If a system receives an unlabeled instance, it compares this instance to existing classes and makes a prediction to which class it belongs to.
+The problem with supervised approach is that usually the anomalous data set is much smaller than the normal one.
+Moreover, as anomaly occures accidentally, it is not possible in some cases to have representative lables for this class of instances.
+ 
+The semi-supervised anomaly detection is almost the same as the supervised, with the exception that it has lables only for the normal instances.
+In this case the received data is compared to existing normal pattern and the conclusion is made whether this instance is an anomaly or not.
+Theoretically it is possible to use such technique vice versa, having the lables only for anomalous data.
+However, often it is hard to predict all the anomalies that can occure in a given system.
+
+The unsupervised approach does not need a predetermined data classes.
+This technique is based on the assumption that anomalies occure rarely, comparing to the normal data instances.
+Because this approach does not use a training set, it is the most popular anomaly detection mechanism.
+This assumption makes possible to adapt a semi-supervised way to an unsupervised one.
+For this purpose all the available data os labeled as a normal class.
+
+
+
+
+- detect intrusion(внедрение)
+
+
+
+maybe into practical part of our Thesis:
+
+- we download programs from official/unofficial stores and we click 'agree' to all the access permissions the application ask us to provide
+ 
+- virus signs:
+a lot of sms/mms to many or to all of your contacts (to spread a malware) 
+sms/calls to specific destinations (when you got extra charged)
+fast battery discharging
+it making worse device performance 
+
+
+ 
+
+
