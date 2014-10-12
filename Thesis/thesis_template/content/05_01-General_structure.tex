@@ -30,34 +30,34 @@
 %This leads our system to be able to process such amount of data efficiently, as well as to rapidly reflect the state of inverted index with newly arrived posts.
 
 Amount of data and complexity of algorithms demand to make computations, useful for fast answering queries, in advance.
-The Lambda architecture precomputes specific data structures, that provide data, prepared as much as possible to directly answer specific queries.
-We call these data structures \textit{views}\mnote{view}.
-They store indices and aggregations of original data.
+The Lambda architecture precomputes specific data structures, that provide data, prepared for answering to particular queries.
+These data structures are called \textit{views}\mnote{view}.
+They store indices and aggregations of the original data.
 %In our example we consider inverted index as a view.
 %In a query time it provides efficient search of all posts with particular keyword.
 
-There two approaches of preparing views.
+There are two approaches of preparing views.
 The first one is to do it in a batch mode considering all available data for computations.
-The second one is to construct views incrementally in the real-time with newly arrived data.
-Together these two methods give us an opportunity to answer queries fast and accurate.
+The second one is to construct views incrementally in the real time with newly arrived data.
+Together these two methods give an opportunity to answer queries fast and accurate.
 Figure~\ref{fig:lambda_architecture} depicts how the Lambda architecture combines batch and incremental processing to answer queries.
 
-The \textit{batch layer} \mnote{batch layer} of the Lambda architecture is responsible for batch processing.
+\begin{figure}[h]
+  \centering
+  \includegraphics [width=1.0\textwidth]{images/LambdaArchitecture}
+  \caption{General structure of the Lambda architecture. Batch and serving layer are responsible for batch views, speed layer provides real-time views. To answer query system merges data from both types of views.}
+  \label{fig:lambda_architecture}
+\end{figure}
+
+The \textit{batch layer}\mnote{batch layer} of the Lambda architecture is responsible for batch processing.
 It takes the whole dataset and executes batch computations on it.
-Views, that are the result of the batch processing, we call \textit{batch views} \mnote{batch view}. 
+Views, that are the result of the batch processing, are called \textit{batch views}\mnote{batch view}.
 This operation is efficient, because all data is at once in disposal.
 We can execute any algorithm, and produce any kind of index or aggregation.
 It is also easy to programm using such greate batch processing approaches as MapReduce.
-This paradighm is inherently distributed and scalable.
+This paradighm is inherently distributed and scalable, what allows to use hunderds and thousends of machines for batch processing.
 %In example with website we would use MapReduce to create inverted index having all posts.
 %It requires only several lines of code in the simplest case. 
-
-\begin{figure}
-  \centering
-  \includegraphics [width=1.0\textwidth]{images/LambdaArchitecture}
-  \caption{General structure of the Lambda architecture. Batch and sevring layer are responsible for batch views, speed layer provides real-time views. To answer query system merges data from both types of views.}
-  \label{fig:lambda_architecture}
-\end{figure}
 
 After the batch layer has precomputed views, it places them into the \textit{serving layer}\mnote{serving layer}.
 The serving layer is responsible for storage of batch views.
@@ -65,7 +65,7 @@ It also creates indices on those views and provides interfaces to get particular
 
 Batch layer starts then computations again, considering now data, that has come during the last batch processing.
 This loop goes on infinitely.
-Batch processing always starts again from scratch using all available data.
+Batch processing always starts again from scratch using all data, available to the moment of its start.
 When the batch layer stores computed views into the serving layer, it discards old ones.
 
 Batch computations, although easy and efficient, take long time to be done.
@@ -79,15 +79,16 @@ This cannot be underestimated, because on the BigData scale computations can las
 As long as batch computations take much time, views are always outdated for several hours.
 During this time new data arrives to the system, and it must be also counted in query answers.
 This is not possible to solve using only batch processing.
-Therefore, another approach is to apply.
+Therefore, another approach has to be applied.
 
 To overcome delay of batch computations the Lambda architecture has additional component - the \textit{speed layer}\mnote{speed layer}.
 It also computes views, but in incremental fashion.
-We call them \textit{real-time views} \mnote{real-time view}.
+Such views are called \textit{real-time views}\mnote{real-time view}.
 As new data arrives, the speed layer updates incrementally real-time views.
 Hence, they always has information from data, gathered during current batch processing.
+When batch processing finishes and old batch views are replaced by new, the speed layer drops real-time views and start to accumulate them from the beginning.
 
 Finally, to answer queries system uses both batch and real-time views.
 Batch views contain result of the last batch processing.
-Real-time views provide infromation from data, gathered after the beginning of the current batch processing.
+Real-time views provide information from data, gathered after the beginning of the current batch processing.
 Merging both types of views, system produces accurate and actual answers to the queries.

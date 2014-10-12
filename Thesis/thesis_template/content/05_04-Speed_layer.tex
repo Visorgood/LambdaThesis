@@ -1,13 +1,10 @@
 \section{Speed layer}
 
-Real-time part consists only of speed layer.
-Speed layer provides real-time views.
-They contain sketches of data, that is being obesrved during ongoing batch processing in the batch layer.
+To overcome delay of the batch processing the Lambda architecture has a speed layer, that uses online incremental processing of arriving data.
+It computes real-time views, that contain sketches of data, that is being obesrved during ongoing batch processing in the batch layer.
 Speed layer is much more complex than batch layer, because of its incremental nature.
-And it provides only approximated results.
-We discuss each layer in more details in particular chapters.
+It provides usually approximated results, because algorithms, used for online processing, are often approximated in nature.
 
-To overcome delay of batch processing the Lambda architecture uses online incremental processing of arriving data.
 It maintains additional data structures, called real-time views.
 They store information, derived from data arriving during current batch processing.
 Real-time views are normally different from batch views, and also more complex.

@@ -11,7 +11,7 @@ It places there only raw data.
 It does not allow to modify or delete stored records, what saves from much of storage complexity and from dangerous mistakes in programming code.
 This properties lead to a specific data model.
 
-To answer as much different queries as possible, the batch layer stores only \textit{raw data} \mnote{raw data}.
+To answer as much different queries as possible, the batch layer stores only \textit{raw data}\mnote{raw data}.
 We can derive other relevant data from it, but not vise versa.
 It is important, because we do not know in advance all queries we will want to answer in the feature.
 The more basic is the data, the more information we can possibly deduce from it.
@@ -35,9 +35,9 @@ It is much more safe from programming mistakes and consequent errors.
 Another advantage of immutability is that mistakes in algorithms can not corrupt data anymore.
 We call this \textit{human fault-tolerance}\mnote{human fault-tolerance}.
 This is important property, because programmers always do mistakes.
-As a result, is is possible, that wrong code can incorrectly update or delete data.
+As a result, it is possible, that wrong code can incorrectly update or delete data.
 When data is immutable, programmers' mistakes can only write wrong data to the dataset.
-This can be later repaied by administrator, but all proper data is always safe.
+This can be later repaired by administrator, but all proper data is always safe.
 
 Immutability leads to completely different data model.
 Relational databases manipulate tuples of complex objects altogether.
@@ -47,7 +47,7 @@ Such technique allows to have the whole history of logical updates of all attrib
 The actual value is the one with the oldest timestamp.
 
 As a result, the Lambda architecture introduces the notion of the master dataset.
-The \textit{master dataset}\mnote{master dataset} is the main storage, where all data, that ever arrived to the system, resides.
+The \textit{master dataset} \mnote{master dataset} is the main storage, where all data, that ever arrived to the system, resides.
 The batch layer is responsible for its storage and maintainance.
 If there is a fault of the master dataset - we can loose all data.
 And data is of the most importance in this context.
