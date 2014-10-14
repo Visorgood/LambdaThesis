@@ -95,6 +95,16 @@ Tim Lindholm, Frank Yellin, Gilad Bracha, and Alex Buckley.
   March 2014.
 \newblock Accessed 09.09.2014.
 
+\bibitem[Mac13]{Macbeth2013}
+Soren Macbeth.
+\newblock Introduction to elephantdb, 2013.
+
+\bibitem[Mar]{ElephantDB}
+Nathan Marz.
+\newblock Elephantdb repository on github.
+\newblock \url{https://github.com/nathanmarz/elephantdb}.
+\newblock Accessed 14.10.2014.
+
 \bibitem[MW14]{Marz2014}
 Nathan Marz and James Warren.
 \newblock {\em Big Data. Principles and best practices of scalable realtime

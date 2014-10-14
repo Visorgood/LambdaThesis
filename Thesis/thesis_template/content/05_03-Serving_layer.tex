@@ -1,9 +1,53 @@
 \section{Serving layer}
 
-Serving layer holds batch views.
-When batch layer computes batch views, it loads them into the serving layer.
-Then serving layer indexes them for a fast access.
-It uses specific distibuted database to store batch views.
-Such databases allow to swap the whole dataset with new data, but they does not give ability to make random writes.
-That simplifies things extremely, because opportunity to make random writes brings the most of complexity in databases.
-One example of database that can be used in the serving layer is Cassandra (described in the Section~\ref{subs:cassandra}).
+The serving layer is the end point in the approach of batch computations.
+It provides low-latency answers to the clients' queries from the results of batch proccessing of the master dataset.
+The serving layer has two main responsibilities: storing of the batch views and creation of indexes for the fast access to those views.
+The first issue requires usage of a storage system, that fulfils several specific requirements, as for example fast batch writes and fast random reads. 
+Creation of indexes on batch views demands from the serving layer to tackle such problems as for instance denormalization of data.
+Each time the batch layer finishes computation of batch views, it stores them into the serving layer, discarding the old ones.
+The speed layer recomputes then its indexes.
+
+\mnote{General requirements}
+The serving layer has two main metrics of efficiency: throughput and latency.
+Throughput implies the number of queries, that can be done in the time unit.
+Latency is the time to execute one particular query.
+To satisfy both of these properties it is important to design indexes of batch views in a specific way.
+For example, in case of storing key-value data, data associated with the key must be collocated on the same machine and stored sequentially.
+This makes reading much faster (especially in case of HDD usage), because requires only one disk seek and following sequential read.
+Generally, indexes must require access to as few as possible machines for retrieving data, needed for answering query.
+
+\mnote{Denormalization of data}
+The serving layer allows to denormalize data of the batch views creating indexes.
+This is opposite to the master dataset, where it is possible to keep completely normalized data.
+The batch layer does not have to provide low-latency response, and can process such data without any penalty, doing joins or any other data linking.
+The serving layer has to return data fast, what imposes a need to make access to indexes as efficient as possible.
+Denormalization of data saves from expensive joins.
+This makes request time much smaller.
+
+Denormalization leads usually to a redundancy of data.
+It also can result in inconsistency of a repeated data pieces, especially when the system becomes complex.
+This is, nevertheless, not a problem because of two things.
+Firstly, space is not an issue in the serving layer, as long as distributed storage is used, and any number of machines can be added any time.
+Secondly, even if there is an inconsistency in data in prepared indexes, it is only temporal, and will be repaired after the next update of batch views.
+
+\mnote{Database requirements}
+Database system, that the serving layer uses, must fulfil several requirements.
+First of all, it must provide batch writes.
+The batch layer recomputes batch views from scratch, and override old ones with newly computed.
+It must be possible to write them in a batch fashion efficiently.
+The second required property is scalability, that is the database system must be essentially distributed.
+It must allow to add as many new machines as needed in case of grow of space requirements.
+The third point is ability to make fast random reeds.
+This is highly important for a final low-latency query response.
+Specifically, fast random reeds of data in prepared indexes gives required efficiency.
+The last issue is fault-tolerance, what is a standard property for the Lambda architecture.
+It must be provided for the serving layer via distributed database system with replications.
+
+\mnote{Example of a storage system}
+An example of a storage system, that can be used for the speed layer is ElephantDB \cite{ElephantDB, Macbeth2013}.
+The main properties of ElephantDB is that it is a key-value store, that is simple, easy to use, distributed, and open source.
+It fulfils all requirements of the speed layer storage system.
+Specifically, it allows to make batch writings, for example as a result of MapReduce computations.
+Also, it provides fast read-only random reads.
+It does not support random writes, what makes it so simple and almost saves from bugs.
