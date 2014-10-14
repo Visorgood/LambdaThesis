@@ -1,64 +1,97 @@
 \section{Batch layer}
 
-The batch layer has two responsibilities.
-It holds all data, that arrives from users or other outer sources.
-And it processes that data to create batch views, useful for fast query answering.
+The batch layer is the heart of the Lambda architecture.
+It is the place where all ever gathered data resides and being processed.
+The batch layer executes two main tasks: storing of data arriving from outer sources, and processing of that data to create batch views, used for the low-latency query answering.
+The first issue requires usage of a storage system, that provides fast appending, efficient batch reads, and no random reads/writes of data.
+Computation of batch views demands application of distributed efficient batch processing algorithms as for example MapReduce.
 
-\subsection{Data storage}
+\subsection{Data model}
 
-The batch layer stores all data in the master dataset.
-It places there only raw data.
-It does not allow to modify or delete stored records, what saves from much of storage complexity and from dangerous mistakes in programming code.
-This properties lead to a specific data model.
+%\mnote{Properties of data}
+The batch layer requires usage of a specific data model to make the Lambda architecture scalable, highly efficient and fault-tolerant.
+This data model is based upon four main notions.
+\textit{Information} - the whole knowledge, that system holds.
+\textit{Data} - collecting notion for records, strings, values, etc., kept in the system, so that they can not be derived from any other data.
+\textit{Query} - a question that is asked to the system, and demands a piece of information that answers it.
+\textit{View} - a data structure, that holds information directly useful for answering query.
 
-To answer as much different queries as possible, the batch layer stores only \textit{raw data}\mnote{raw data}.
-We can derive other relevant data from it, but not vise versa.
-It is important, because we do not know in advance all queries we will want to answer in the feature.
-The more basic is the data, the more information we can possibly deduce from it.
-In this sense, unstructured data is always better than normalized.
-%In the website example we can consider event of a post addition as an instance of a raw data.
+\mnote{Raw data}
+To answer as much different queries as possible, the batch layer stores only \textit{raw data}.
+It is possible to derive from it data, particularly relevant for query, but not vice versa.
+This is important, because the system does not know in advance all queries it will have to answer in the feature.
+The more basic is the data, the more information can be possibly deduced from it.
 
-The batch layer does not allow modification or deletion of records.
-It only allows to append new data.
-We call this property \textit{immutability}\mnote{immutability}.
+In the current context, unstructured data is always better than normalized, because it is rawer.
+As an example, let us consider the system, that stores users' search of a geographic location.
+Suppose, that system stores all those queries for further analytics.
+If it saves them normilized, or in other words parsed and mapped to a known geogrphic location, it can for certain queries save nothing or NULL value, because algorithm cannot execute correct mapping.
+In other case, when the system stores raw string, that user typed, it can later on have this data properly parsed, if parsing and mapping algorithms are improved.
+This example shows, that unstructured raw data is preferred to store in the batch layer.
+
+\mnote{Data immutability}
+The batch layer does not allow modification or deletion of data.
+It only allows to append new records.
+This propery is called \textit{immutability} of data.
 It gives two crucial advantages.
 
 Immutability drammatically simplifies complexity of the storage mechanisms.
 This is because maintainance of modifications in the distributed environment is not an easy task.
-To successfully update a record, the system must do it with all replications.
-It must provide locks and not allow simultaneous updates.
+To successfully update a record, the system must perform it for all replications, provide locks and prohibit simultaneous updates.
 It has to maintain versions of the same record for different users.
-Absence of all these and many other requirements saves us from much of complexity.
+Absence of all these and many other requirements saves from much of complexity.
 The system is easier to understand, repair and improve.
 It is much more safe from programming mistakes and consequent errors.
 
+\mnote{Human fault-tolerance}
 Another advantage of immutability is that mistakes in algorithms can not corrupt data anymore.
-We call this \textit{human fault-tolerance}\mnote{human fault-tolerance}.
-This is important property, because programmers always do mistakes.
+This property is called \textit{human fault-tolerance}, and it is very important, because programmers always do mistakes.
 As a result, it is possible, that wrong code can incorrectly update or delete data.
-When data is immutable, programmers' mistakes can only write wrong data to the dataset.
+When data is immutable, programmers' mistakes can only append wrong data to the dataset.
 This can be later repaired by administrator, but all proper data is always safe.
 
-Immutability leads to completely different data model.
-Relational databases manipulate tuples of complex objects altogether.
+Immutability leads to high growth of data volume, bevause everything last stored basically forever.
+This is, however, not a problem, because, as we discuss later on in this chapter, the batch layer is purely distributed and scalable.
+It allows to increase capacity of its data store to any extent, adding new machines at any time.
+
+Immutability requires completely different data model, comparing to relational databases, that manipulate tuples of complex objects altogether.
 In contrast, the batch layer stores each attribute of a logical tuple separately.
-Each value has the timestamp of addition. 
-Such technique allows to have the whole history of logical updates of all attributes.
+Each value has the timestamp of addition moment. 
+Such technique allows to have the whole history of logical updates of all records.
 The actual value is the one with the oldest timestamp.
 
-As a result, the Lambda architecture introduces the notion of the master dataset.
-The \textit{master dataset} \mnote{master dataset} is the main storage, where all data, that ever arrived to the system, resides.
-The batch layer is responsible for its storage and maintainance.
-If there is a fault of the master dataset - we can loose all data.
-And data is of the most importance in this context.
-Therefore, we must carefully design, set up and protect the master dataset.
-We must save it from all types of failures, e.g software, hardware or human.
+\mnote{Eternal truthfulness of data}
+Immutability gives one more important property of data, stored in the batch layer.
+This is \textit{eternal truthfulness of data}.
+When new record is added, no matter is it a new piece of data or update of an old data, it represents true information in that particular moment in time.
+This never becomes false, because it describes event or state of the world, that is an occured fact.
+This property implies, that the batch layer not only stores data, describing the state of the system, but also the history of its state changes.
 
+\mnote{Master dataset}
+Having defined the main properties of data, we can introduce the notion of the \textit{master dataset}.
+The master dataset is the main storage, where all data, that ever arrived to the system, resides.
+The batch layer is responsible for its maintainance.
+If there is a fault of the master dataset - all data can be lost.
+And data is of the most importance in this context.
+Therefore, the master dataset must be carefully designed, set up and protected.
+It must be saved from all types of failures, e.g software, hardware or human.
 The master dataset is logically a large list of records.
-When new piece of data arrives into the system, batch layer appends it to the master dataset.
-This is a simplified representation, but it is enough for the current discussion.
+When new piece of data arrives into the system, the batch layer appends it to the master dataset.
+The more exact description of how the master dataset can look like will be discussed later on in this chapter.
+
+%\mnote{Fact-based model}
+
+%\mnote{Graph schemas and serialization frameworks}
+
+\subsection{Data storage}
+
+\mnote{Requirements}
+\mnote{Usage of HDFS}
 
 \subsection{Computation of batch views}
+
+\mnote{Execution of functions}
+\mnote{Application of MapReduce and Hadoop}
 
 Answering particular query is often unreasonably expensive or even infeasible.
 This is so, because amount of available data is huge, and because data is raw. 

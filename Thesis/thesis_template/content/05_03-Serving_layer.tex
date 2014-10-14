@@ -2,11 +2,14 @@
 
 The serving layer is the end point in the approach of batch computations.
 It provides low-latency answers to the clients' queries from the results of batch proccessing of the master dataset.
-The serving layer has two main responsibilities: storing of the batch views and creation of indexes for the fast access to those views.
+The serving layer has two main responsibilities: storing of the batch views, and creation of indexes for the fast access to those views.
 The first issue requires usage of a storage system, that fulfils several specific requirements, as for example fast batch writes and fast random reads. 
 Creation of indexes on batch views demands from the serving layer to tackle such problems as for instance denormalization of data.
+
 Each time the batch layer finishes computation of batch views, it stores them into the serving layer, discarding the old ones.
 The speed layer recomputes then its indexes.
+Problems with batch views or indexes, as for example inconsistency or corruption of data, are only temporal.
+They are repaired after the next batch processing.
 
 \mnote{General requirements}
 The serving layer has two main metrics of efficiency: throughput and latency.
@@ -37,7 +40,7 @@ First of all, it must provide batch writes.
 The batch layer recomputes batch views from scratch, and override old ones with newly computed.
 It must be possible to write them in a batch fashion efficiently.
 The second required property is scalability, that is the database system must be essentially distributed.
-It must allow to add as many new machines as needed in case of grow of space requirements.
+It must allow to add as many new machines as needed in case of growth of space requirements.
 The third point is ability to make fast random reeds.
 This is highly important for a final low-latency query response.
 Specifically, fast random reeds of data in prepared indexes gives required efficiency.
