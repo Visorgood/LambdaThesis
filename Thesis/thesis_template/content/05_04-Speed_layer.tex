@@ -1,10 +1,60 @@
 \section{Speed layer}
 
-To overcome delay of the batch processing the Lambda architecture has a speed layer, that uses online incremental processing of arriving data.
-It computes real-time views, that contain sketches of data, that is being obesrved during ongoing batch processing in the batch layer.
-Speed layer is much more complex than batch layer, because of its incremental nature.
-It provides usually approximated results, because algorithms, used for online processing, are often approximated in nature.
+To overcome delay of the batch processing the Lambda architecture has the speed layer.
+It applies the real-time incremental processing to arriving data.
+The speed layer has higher complexity than the batch layer, because of the incremental nature of applied algorithms.
+It provides usually approximated results, because algorithms, used for online processing, are often approximated.
 
+The speed layer computes real-time views, that are similar to batch views in the sense, that they store data useful for fast answering queries.
+Real-time views contain data, observed during ongoing batch processing in the batch layer.
+The speed layer also prepares indexes on those views, that allow to answer queries ``on the fly''.
+
+\subsection{Computation of real-time views}
+
+To compute real-time views, one could consider the same approach as for batch views, but use only new data for computations.
+This would simulate batch processing on the much smaller scale.
+Nevertheless, if we want to achieve latency of miliseconds, such approach is not going to work.
+Batch processing even on the scale of several gigabytes is not possible to do in miliseconds.
+
+To solve this issue there is a completely different approach.
+Real-time views are not considered as a function of a recent data, that has arrived during current batch processing.
+Instead, they are the result of the function of a new data, that just came, and of their previous state.
+Basically, it is an incremental update with a small piece of data, everytime it arrives.
+This normally leads to only approximated answers to the queries, provided by real-time views.
+But this is again not a problem, because error does not accumulate for too long.
+
+\subsection{Data storage}
+
+Speed layer must obey low-latency requirement, and must allow application complex incemental algorithms.
+Having such demands, storing of real-time views requires several properties to be fulfiled: ability to make random reads and writes, scalability and fault-tolerance.
+Ability to make random reads is particularly important to make answering queries fast.
+Ability to make random writes is necessary, because of the need to apply incremental algorithms, that always demand this property.
+Real-time views must be scalable, because amount of data to process can still be of a huge size.
+That means, that distribtuion to many machines must be supported.
+Fault-tolerance is as usual must be provided via replications of data in the real-time views.
+
+There are many storage systems, that fulfil these properties.
+They are usually called \textit{NoSQL databases}\mnote{NoSQL database}.
+They store data using different data models than relational databases.
+We have already briefly discussed one of such system, namely ElephantDB, that was useful for storing batch views in the serving layer.
+One can choose specific database, that fulfils his or her requirements to data representation.
+Sometimes batch and real-time views has the same data format.
+But it is not always the case, because it is not always easy to execute the same function in the batch and in the incremental way.
+Also, as long as real-time views have to be updated incrementally, they have more complex data structure.
+Because of those factors, it often happens, that real-time views represent data differently, than batch views.
+
+%\subsection{Issues of incremental computations}
+
+%We have already discussed the difference between incremental and recomputation algorithms.
+%Batch computations imply, that computations of a specific function is executed on the whole dataset.
+%This is usually easy to program, even though can take much time.
+%In case of incremental computations, building of real-time view is going continuously.
+
+
+\subsection{Expiration period}
+
+
+%%%%%%%%%%%%
 It maintains additional data structures, called real-time views.
 They store information, derived from data arriving during current batch processing.
 Real-time views are normally different from batch views, and also more complex.
@@ -27,56 +77,3 @@ Because of those issues, speed layer is more error prone, and takes more effort 
 But real-time views are discarded every time, when batch layer completes processing of batch views.
 Such temporal nature of real-time views saves us from accumulation of error.
 This property of the Lambda architecture is called \textit{complexity isolation}\mnote{complexity isolation}.
-
-\subsection{Computaition of real-time views}
-To compute real-time views, one could consider the same approach as for batch views, but use only new data for computations.
-This would simulate batch processing on the much smaller scale.
-Nevertheless, if we want to achieve latency of miliseconds, such approach is not going to work.
-Batch processing even on the scale of several gigabytes is not possible to do in miliseconds.
-
-To solve this issue we have to use completely different approach.
-We do not consider the whole bunch of data, that has arrived during current batch processing, for creating real-time views.
-Instead, we incrementally update them with a small piece of data, everytime it arrives.
-This normally leads to only an approximated answers to the queries, provided by real-time views.
-But this is again not a problem, because error does not accumulate for too long.
-
-\subsection{Storage of real-time views}
-Speed layer must obey low-latency requirement, and must allow to apply complex
-incemental algorithms.
-Having such demands, storing of real-time views requires much more properties
-to be fulfilled:
-1. Ability to make random reads. This is particularly important to make
-answering queries fast.
-2. Ability to make random writes. This is necessary, because we want to apply
-incremental algorithms, that always demand this property.
-3. Real-time view must be scalable, because amount of data to process can still
-be of a huge size. That means, that distribtuion to many machines must be
-possible.
-4. Fault-tolerance is as usual an issue. Replication of real-time views is then
-to accomplish.
-
-Databases, that commonly obey these properties, are called \textit{NoSQL databases}\mnote{NoSQL databases}.
-They store data using different data models.
-One can choose specific database, that obeys his or her requirements to data
-representation.
-Sometimes batch and real-time views stores data in the same format.
-But it is not always the case, because it is not always easy to execute the
-same function in the batch and in the incremental way.
-Also, as long as real-time views provide only temporal information, it is
-usually possible to simplify data representation, becoming small approximation
-error.
-Because of those factors, it often happens, that your real-time views represent
-data differently, than batch views.
-
-\subsection{Issues of incremental computations}
-Incremental computations are opposite to batch computations.
-Batch computations imply, that we take the whole dataset, and compute
-specific function on it.
-This is usually easy to program, even though can take much time.
-
-In case of incremental computations, we build specific data structure
-continuously.
-This data structure is called real-time view in our context.
-It must be possible to update this data structure as well as to make requests
-answering queries fast.
-This two properies are the key to low-latency requirement satisfaction.
