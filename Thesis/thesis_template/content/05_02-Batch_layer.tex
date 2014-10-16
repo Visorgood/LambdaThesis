@@ -8,7 +8,6 @@ Computation of batch views demands application of distributed efficient batch pr
 
 \subsection{Data model}
 
-%\mnote{Properties of data}
 The batch layer requires usage of a specific data model to make the Lambda architecture scalable, highly efficient and fault-tolerant.
 This data model is based upon four main notions.
 \textit{Information} - the whole knowledge, that system holds.
@@ -79,22 +78,73 @@ The master dataset is logically a large list of records.
 When new piece of data arrives into the system, the batch layer appends it to the master dataset.
 The more exact description of how the master dataset can look like will be discussed later on in this chapter.
 
-%\mnote{Fact-based model}
+\mnote{Fact-based model}
+In contrast to relational databases, data in the master data is stored using a so called \textit{fact-based model}.
+It supposes, that all data is divided to a simple units called facts.
+Fact has several properties.
+It is timestamped on addition to the master dataset.
+Fact cannot be divided to a smaller units, it is already atomic.
+Fact is identifiable in the sense that any two facts in the dataset must be distinguishable.
 
-%\mnote{Graph schemas and serialization frameworks}
+Fact-based model affords several important advantages.
+It allows to make queries to a state of the dataset at any time in its history, because each piece of data (fact) is timestamped and immutable, or, in other words, eternally true.
+It provides human-fault tolerance, as long as facts are immutable, and if a fact is added mistakenly, administrator can delete it.
+If any of attributes of a complex object are absent, it is not necessary to store any NULL values, because data is stored in atomic facts.
+Data can be stored in an unstructured denormalized form, because it is not queried directly from the master dataset, but from batch views of the serving layer, discussed later on.
+
+\mnote{Graph schema}
+To unite facts into related data there are so called \textit{graph schemas}.
+Graph schema is a graph that describes the structure of a fact-based model.
+It defines relations between entities similarly as entity-relationship model for relational databases does.
+Figure~ [add figure] shows an example of a graph schema for a simple data model.
+
+Graph schema consists of three elements: nodes, esdges and properties.
+Nodes are entities representing particular objects of a describable system.
+Edges define relationships that connect nodes into the specific structure.
+Properties provide information associated with nodes.
+
+\mnote{Serialization frameworks}
+To save developers from detailed implementation of graph schema every time, and from possibility to do mistakes during this process, there are so called \textit{serialization frameworks}.
+They provide a useful tool, that generates all needed code, having descibed schema of the dataset in a specific descriptive language.
+Serialization frameworks require only description of a key notions, e.g. nodes, edges and properties.
+They enforce then generation of all additional data fields and proper structure and data types for defined elements, as for example timestamps.  
+Examples of serialization frameworks are Avro \ref{subs:avro} and Thrift \ref{subs:thrift}.
 
 \subsection{Data storage}
 
+Physical data storage of the master dataset is another important issue.
+In the big data context it is not possible to store all the data on one server.
+Hence, distributed solution, that provides easy access, scalability and fault-tolerance, is required. 
+
 \mnote{Requirements}
+To understand requirements to the data storage, it is important to understand how data is going to be written and read.
+Two main actions, it must support, are appending of new records and a bulk read for batch processing.
+Immutability of data and continual appendings demand, that high growth of the size of the master dataset must be easily affordable and maintainable.
+Bulk reads require ability to access data in a parallel fashion.
+There is no need for random writes or reads, what simplifies things dramatically.
+Another important issue, that the master dataset must allow to access only useful (for particular computations) parts of data.
+This property is called \textit{vertical partitioning}.
+The last requirement is that the master dataset must provide flexible way to store data compressed.
+
 \mnote{Usage of HDFS}
+There are many solutions, that fulfil all described properties, starting from distributed file systems and finishing with distributed database systems. 
+We choose the \textit{Hadoop Distributed File System} (HDFS), that we describe later on in all details \ref{subs:HDFS}.
+Briefly, its main properties are: complete distributiveness allowing to add as many new nodes as required, fault-tolerance via replication of data, high throughput via parallel access, tight connection with Hadoop MapReduce, simple access to the tree-structured file data.
+HDFS fulfils all requirements, that were stated for the master dataset storage system.
+
+As long as HDFS stores data in the tree of files and folders, the way of applying it for the master dataset is straightforward.
+All the data of the master dataset is then stored in the common folder.
+Each piece of data, containing possible a set of records, is stored in a separate file, that is automatically replicated.
+There is also a necessity to fuse several small files into one big file periodically to avoid fragmentation and to increase batch access throughput.
+
+An example of abstraction of the access to files and directories, that can be used to simplify access to HDFS, and to avoid use of a low-level HDFS API, is a \textit{Pail}.
+Pail is a Java library, that allows to work with HDFS in a more object-oriented way.
+It makes code shorter an easier to read, and saves from many standard mistakes, that occur working with HDFS directly.
 
 \subsection{Computation of batch views}
 
-\mnote{Execution of functions}
-\mnote{Application of MapReduce and Hadoop}
-
-Answering particular query is often unreasonably expensive or even infeasible.
-This is so, because amount of available data is huge, and because data is raw. 
+Answering particular query is often unreasonably expensive or even infeasible in the real time.
+This is because amount of available data is huge, and because this data is raw. 
 Moreover, query answer demands usually a piece of information, that is far away from what raw data describes.
 It requires often execution of complex algorthims on the whole dataset.
 In the BigData context that can mean hours of processing, while low-latency response is typically a condition.
@@ -109,8 +159,37 @@ After completion of data processing, it starts from the beginning.
 Processing of all the data and creating batch views is a long operation.
 It can take hours and even days to be done.
 As a result batch views are always out-of-date.
+This is, however, can be considered as a deep analysis of data, that connect pieces together to produce intelligent inference.
+To overcome an issue of a long time processing, the Lambda architecture introduces the speed layer, that we discuss in details later on in this chapter.
 
-Computation of batch views is inherently distributed operation.
+The batch layer executes specific functions on the master dataset, that result in batch views.
+These batch views store data, that is easy to use to answer particular queries on the fly.
+But it is important to mention, that this is not exact values, that satisfy clients queries.
+Rather, batch views hold data, that can be on the fly used by the serving layer.
+Storing of endpoint values would be in many cases way too expensive or even infeasible.
+Figure~ [add figure] shows this approach.
+
+\mnote{Recomputation and incremental algorithms}
+There are two approaches to compute batch views: to recompute them from scratch, and to make incremental updates.
+Both of them have advantages and disadvantages, that are the consequence of three properties: performance, human fault-tolerance, and generality of the algorithm.
+Performance is usually much higher for incremental algorithms to cumpute batch views, because they simple do not have to process the whole master dataset, but only new data after previous processing.
+But batch views has to be designed in a more complex way to allow incremental updates, what makes them usually larger, and slower to update.
+Human fault-tolerance is inherent for the recomputational model.
+If there is a mistake in building of batch views, it requires only to remove that bug and deploy new code.
+After next batch processing batch views will be properly creted.
+In contrast, for incremental method, it can be hard to find and correct results of mistakes in the algorithm.
+It requires repairing of batch views, what is not an easy task in many cases.
+Generality of the algorithm is a standard property of recomputational model.
+Computations are simple and easy to tune, if query needs are changed.
+Incremental algorithms are often approximated, what leads to a possible with some probability error in answering query.
+They also move usually the part of computations to the quering time, what makes latency of the system's response higher.
+As a result, it is strongly recommended to use recomputational algorithms.
+
+\mnote{Application of Hadoop MapReduce}
+Computation of batch views is an inherently distributed operation.
 Developer does not have to think about multithreading issues.
 He only wrties simple one-threaded code, that is distributed then automatically in the cluster.
-MapReduce is a perfect example of a batch processing.
+MapReduce is a perfect example of batch processing.
+We have already discussed MapReduce programming paradigm in details in the Section~\ref{sec:mapreduce}.
+Framework Apache Hadoop, based on HDFS, provides a powerful implementation of the MapReduce.
+It is available for free as an open source product, and requires from developer only an implementation of \lstinline{map} and \lstinline{reduce} functions, what makes batch processing easy to implement in the real system.
