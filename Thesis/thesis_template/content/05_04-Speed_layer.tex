@@ -43,37 +43,59 @@ But it is not always the case, because it is not always easy to execute the same
 Also, as long as real-time views have to be updated incrementally, they have more complex data structure.
 Because of those factors, it often happens, that real-time views represent data differently, than batch views.
 
-%\subsection{Issues of incremental computations}
+\subsection{Issues of incremental computations}
 
-%We have already discussed the difference between incremental and recomputation algorithms.
-%Batch computations imply, that computations of a specific function is executed on the whole dataset.
-%This is usually easy to program, even though can take much time.
-%In case of incremental computations, building of real-time view is going continuously.
+We have already discussed the difference between incremental and recomputation algorithms.
+Batch computations imply, that computations of a specific function is executed on the whole dataset.
+This is usually easy to program, even though can take much time.
+In case of incremental computations, building of real-time view is going continuously.
+It is usually more efficient, but can lead to accumulation of error, especially if programming mistake takes place.
 
+The important aspect to discuss it a relation of incremental computations and a so called CAP theorem.
+The CAP theorem states, that consistency and availability are not possible simultanously to achieve, when data is partitioned.
+The meaning of the CAP theorem is that it is possible to make the system completely available, but it can sometimes return not yet actual data, or it is possible to make it truly consistent, but it can sometimes provide now response for a request, because data is not yet propogated to partitions.
 
-\subsection{Expiration period}
+There several ways of how to design the system, so that it provides consistency or availability completely, or has a tradeoff between them.
+System is fully consistent, if it updates all replicas of a piece of data at once, and only then allow to access this data.
+It is fully available, if it stores an update as a new temporal record, and then tries to merge it with the real data in the system.
+This can take time, and reading of that data can return old values.
 
+To achieve a tradeoff there so called \textit{conflict-free replicated datatypes} (CRDTs).
+They provide eventual consistency working in a distributed fashion.
+For example the G-Counter allows to maintain a counter, that allows only incrementation.
+It stores different versions of an integer counters in different replicas, and the merge them to provide correct results.
+There is unfortunately no way to aboid this complexity, and to make the system fully consistent and available at once.
 
-%%%%%%%%%%%%
-It maintains additional data structures, called real-time views.
-They store information, derived from data arriving during current batch processing.
-Real-time views are normally different from batch views, and also more complex.
-That is because they must be updated and available continuously, as new data arrives.
-This demands usage of such techniques like sketch algorithms.
-It is described in all details in the particular chapter.
-It worth to mention that real-time views contain often approximated information, because of requirements they must obey.
-But that is not a crucial problem, because they do not accumulate error for a too long time.
-Real-time view exists only during current batch processing.
-When it is done, real-time views are dropped, and start to be created from the beginning.
+\subsection{Expiration period of real-time views}
 
-The main purpose of the speed layer is the same as of batch part - to answer queries.
-As long as the batch layer computes views for several hours, speed layer is dedicated to cover this interval, providing low-latency answers.
-During the time of current batch processing, data coming to the system is stored to master dataset as well as added incrementally to the real-time views in speed layer.
+Real-time views, though more complex than batch views, but have only transient nature.
+They are discarded every time, when batch layer completes processing of batch views.
+Batch views then contain all information, that real-time views gathered during the last batch processing. 
+Such temporal nature of real-time views saves from accumulation of error, and leads to eventual accuracy of query answering.
 
-This ability to update views on the fly makes speed layer much more complex.
-It involves usage of databases, that allow random writes.
-Algorithms, used to make online stream processing, are also usually more complex.
-Because of those issues, speed layer is more error prone, and takes more effort from developer.
-But real-time views are discarded every time, when batch layer completes processing of batch views.
-Such temporal nature of real-time views saves us from accumulation of error.
-This property of the Lambda architecture is called \textit{complexity isolation}\mnote{complexity isolation}.
+The simplest solution of discarding old real-time views is to set expiration time or period.
+But it suffers from unstability of the duration of batch processing, that can vary every time.
+Because of that, more robust, generic solution were proposed.
+
+Let us consider a new information system, that does not have yet any data.
+On the first run of batch processing the master dataset is empty.
+But it still takes time, let say 10 minutes, because of overhead for creation of empty views, indexes, and so forth.
+The speed layer gathers during this first batch processing data, and to its end has already real-time views, containing data, processed during this 10 minutes.
+
+When the second start of batch computations runs, it consider the first 10 minutes of data, that resides now in the master dataset, for processing.
+The speed layer continues to update real-time views.
+Let's say the second batch processing takes 15 minutes.
+To its end batch views have the reflection of the first 10 minutes.
+Real-time views reflect all 25 minutes of system's life.
+Now the part of them, that was built during th first 10 minutes can be discarded.
+
+When the third batch processing starts, it considers data gathered during 25 minutes.
+The online processing in the speed layer has updates now views, that has 15 minutes of processed data, gathered during the second batch processing.
+Let's say the batch processing takes 18 minutes now.
+When it finishes, batch views reflect the first 25 minutes of data, whereas real-time views reflect 33 minutes of data, starting after 10 minutes of the system's functioning.
+Now real-time views must leave only reflection of the last 18 minutes of arriving data.
+
+To make it possible, two sets of real-time views must be maintained.
+The speed layer then switch between them after each finish of the batch processing.
+Each set of real-time views store them results of processing during two consecutive batch runs.
+This can look redundant and expensive, but is actually not, because real-time views store only small data, gathered during short time.
