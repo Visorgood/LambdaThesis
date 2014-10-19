@@ -1,6 +1,7 @@
 \section{Anomaly detection algorithms}
 
 % [Anomaly Detection : A Survey]
+\mnote{anomaly}
 \textit{Anomaly} is the data that does not correspond to any expected data patterns.
 The presence of anomalies in a data flow can be a sign that something has happened with a source of data.
 For example, anomalies are caused by a malicious software that changes the system behavior. 
@@ -23,6 +24,7 @@ The degree of deviation from the normal behavior can be different in different s
 Sometimes anomaly differs from the expected pattern slightly, while in other case the difference can be huge.
 Finally, the malicious software often tries to imitate the normal behavior to obstruct its detection. 
 
+\mnote{types of anomaly}
 Anomalies can be divided into three categories.
 The simplest one is a \textit{point anomaly}.
 It is an individual instance that differs from all other instances in a given data flow.
@@ -34,6 +36,7 @@ The third category is a \textit{collective anomaly}.
 It appears only when the data instances in a data set are related to each other.
 For example, a collective anomaly is an appearance of the same data instance in a row, while usually they should be separated by other instances.
 
+\mnote{supervised approach}
 Different approaches of anomaly detection exist.
 They are grouped into three types: supervised, semi-supervised and unsupervised approaches.
 For using a supervised mode, one needs two labeled sets: the normal data and anomalous data.
@@ -41,21 +44,128 @@ If a system receives an unlabeled instance, it compares this instance to existin
 The problem with supervised approach is that usually the anomalous data set is much smaller than the normal one.
 Moreover, as anomaly occures accidentally, it is not possible in some cases to have representative lables for this class of instances.
  
+\mnote{semi-supervised approach}
 The semi-supervised anomaly detection is almost the same as the supervised, with the exception that it has lables only for the normal instances.
 In this case the received data is compared to existing normal pattern and the conclusion is made whether this instance is an anomaly or not.
 Theoretically it is possible to use such technique vice versa, having the lables only for anomalous data.
 However, often it is hard to predict all the anomalies that can occure in a given system.
 
+\mnote{unsupervised approach}
 The unsupervised approach does not need a predetermined data classes.
 This technique is based on the assumption that anomalies occure rarely, comparing to the normal data instances.
 Because this approach does not use a training set, it is the most popular anomaly detection mechanism.
 This assumption makes possible to adapt a semi-supervised way to an unsupervised one.
-For this purpose all the available data os labeled as a normal class.
+For this purpose all the available data is labeled as a normal class.
+
+From the practical side multiple techniques are used for anomaly detection:
+(1) Classification based, (2) Nearest neighbor based, (3) Clustering based, (4) Statistical, (5) Information theoretic, (6) Spectral.
+Each of them has its own advantages and disadvantages and is better suited for different data sets.
+Several most widespread techniques are described in the following paragraphs.
+
+\mnote{classification based anomaly detection}
+Classification based anomaly detection uses a training data set to learn a model.
+Then a trained model works as a classifier, assigning a newcomer data instance a label 'normal' or 'anomaly'.
+Classification based technique can be multi-class or one-class.
+Multi-class case implicates multiple normal classes.
+A classifier detects which normal class a new data instance belongs to.
+If it does not belong to any, it is considered to be an anomaly.
+One-class teqnique has the same logic, except that in this case there is only one normal class.
+
+\mnote{neural network}
+One can use various machine learning algorithms to implement classification based anomaly detection.
+An example of such algorithm is a neural network based approach.
+In the first phase, the neural network is learned using a labeled training set. 
+In the second phase, the network receives an unlabeled instance and accepts or rejects it.
+In the case of rejection the instance is considered an anomaly.
+
+\mnote{Bayesian network}
+Another algorithm is a Bayesian network based approach.
+It works on an estimation of the posterior probability that the data instance belongs to one of the given classes.
+The class label that has the greatest posterior probability is assigned to an observed data instance.
+
+\mnote{SVM}
+One more algorithm in classification based category is Support Vector Machines (SVM).
+In this case the result of learning is a region.
+If a test instance falls into this region - it is normal, if not - it is an anomaly.
+
+\mnote{rule based}
+The last algorithm in this category is rule based.
+In the first phase the rules are created from the test data.
+In the second phase the rule is chosen that is best suited for a given data instance. 
+A well-known example of such algorithm is Decision Trees.
+
+The advantage of classification based approaches is that the data model is pre-computed.
+It means that the new unlabeled data instance can be immediately compared to the existing model and became classified.
+The main drawback is that sometimes it is difficult or not possible to put lables on all normal classes.
+
+\mnote{nearest neighbor based anomaly detection}
+The next technique is nearest neighbor based anomaly detection.
+The main concept of this method is a distance metric between data instances.
+It is assumed that anomalies are situated far from other instances in a feature space.
+
+Nearest neighbor techniques consist of two groups depending on how the anomality score is computed.
+On the one hand, it is possible to calculate the distance between a data instance and its neighbors.
+On the other hand, one can find a relative density of a data instance to detect anomalies.
+
+The main attraction of nearest neighbour methods is that they are unsupervised.
+There is no need in labeling data instances, these methods are data driven.
+The drawback is that such tequnique works only for those data sets, where normal data instances have many close neighbors, while anomalies have few neighbors.
+Moreover, it has a problem with computation complexity.
+As it is necessary to calculate distances to all the instances, it usually takes $O(N^2)$ time.
+The performance can be improved by using k-d trees or R-trees for searching nearest neighbors.
+
+\mnote{clustering based anomaly detection}
+In the case of clustering based anomaly detection all the data is grouped into clusters.
+There are three ways how clustering can be used.
+First approach assumes that the data instances that are not belong to any clusters can be considered as anomalies.
+An example of such clustering algorithm is DBSCAN, that allows instance to be an outlier that does not belong to any cluster.
+Second approach consideres the instances as anomalies when they are far from cluster centroids.
+For instance, K-means clustering can be used in this case.
+Third, when anomalous data instances also compose clusters, the distinction between cluster size or density serves as a dividing factor.
+
+The clustering based technique differs from the nearest neighbor based one in that in the former case a data instance depends on the cluster it belongs to, while in the latter case the neighborhood of the data instance influence on its evaluation.
+
+Clustering based anomaly detection also gives an advantage of operating in an unsupervised mode.
+Another positive side is testing phase performance.
+As the number of clusters is limited, the algorithm works fast.
+The disadvantage of this technique is that clustering initially designed to form clusters from data set and anomaly detection is only a by-product of the algorithms.
+
+\mnote{statistical anomaly detection}
+Statical technique constructs a statical model and tests whether a new data instance belongs to it or not.
+There are two types of statical methods: parametric and non-parametric.
+The former one assumes that the distribution of processed data is known, while the latter does not know about the underlying distribution.
+
+Parametric methods include techniques, that based on various distributions.
+For example, the data can be distributed according to Gaussian law.
+In this case the anomaly score is the distance between estimated mean and the data instance.
+Another parametric method is a regression model based technique.
+Moreover, there is a possibility to use several statistical distributions in one technique.
+
+Non-parametric techniques construct a data model from given data.
+For instance, histogram based method creates a histogram that reflects the normal data values.
+If a new data instance can not be put in any bin of the histogram, it is labeled as anomaly.
+
+Statistical anomaly detection techniques do not need labeled data for training, so they run in an unsupervised mode.
+Another benefit is that when the distribution law works for given data, the detected anomaly can be statistically justified.
+However, usually it is a difficult task to find a proper statistical model.
+
+\mnote{information theoretic anomaly detection}
+Information theoretic way is based on information content analysis of given data.
+It assumes that anomalies increase entropy of the information content.
+Along with entropy, other measures like relative entropy or Kolomogorov Complexity are used.
+
+\mnote{spectral anomaly detection}
+Spectral anomaly detction methods try to find subspaces, where normal and anomalous data is easy distinguishable.
+For example, projections or embeddings can be used to create such subspaces.
+Therefore such techniques can work with high dimensional data.
+The drawback of spectral analysis is its high computational complexity.   
+  
 
 
+ 
+  
 
-
-- detect intrusion(внедрение)
+  
 
 
 
