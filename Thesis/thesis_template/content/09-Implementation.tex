@@ -1,2 +1,18 @@
 \chapter{Implementation}
 \label{chap:implementation}
+
+Aggregations
+
+In our project we use two types of aggregations: user-based and application-based.
+Figure~\ref{fig:user_based_aggregations} represents the table of user-based aggregations.
+Each of these aggregations is calculated with different granularities: hourly, daily, weekly and monthly.
+
+\begin{figure}
+  \centering
+  \includegraphics [width=1.0\textwidth]{images/user_based_aggregations}
+  \caption{User-based aggregations}
+  \label{fig:user_based_aggregations}
+\end{figure}
+
+The aggregations presented in the table are made for each user separately.
+However, all these aggregations except SCREEN\_LOCK are also implemented as a sum and averadge for all users. 
