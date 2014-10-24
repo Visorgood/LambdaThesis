@@ -4,6 +4,92 @@
 Benchmark
 Test suite realization
 Performance evaluation
+
+It should be mentioned that they solve a bit different problems.
+Storm performs indeed a real time processing.
+Spark, in its turn, does a micro-batching.
+In the latter case the size of batch is small, so this technology can be considered close to real time processing.
+Spark has latency
+
 Codability comparison
+
+% TODO: installation of Storm and Spark on the machine
+
+In the previous section Storm and Spark implementations are compared from the performance point of view.
+However, it is not the decisive factor when choosing which technology to use in our project.
+In modern world the cost of hardware decreases significantly comparing to the prices that were ten years ago.
+Thus it is not a problem to add several machines into our cluster, increasing performance.
+Hence the human sources become an important factor for making our choice.
+In this section we compare which technology, Storm or Spark, is easier to implement.
+
+\mnote{Compatibility with Kafka}
+We use Kafka as a message queue in the backend part of the Menthal project.
+Therefore it is needed to adjust necessary setting to allow Storm or Spark receive messages from Kafka topics.
+Currently for each event type we use a separate Kafka topic.
+For now there are 9 of them: app\_install, app\_session, call\_missed, call\_outgoing, call\_received, screen\_off, screen\_unlock, sms\_received and sms\_sent.  
+In the future this list can be changed or extended.
+Moreover, the event type detection can be done in different way.
+For instance, the information about the event type can be carried in a message header.
+However, currently the infrastructure of our project is constructed in a way that the message type is determined by the Kafka topic it goes from.
+
+\mnote{Kafka and Strom}
+In Storm all the logic is based on the computation graph named \textit{Topology}.
+It consists of \textit{Spouts}, the sources of data and \textit{Bolts}, data consumers.
+In our project we have a single topology that contains one spout and one bolt for each Kafka topic.
+To allow Kafka-Storm interaction, we use an existing storm-kafka module.
+It provides a special class \textit{KafkaSpout}, that receives data from Kafka.
+As Kafka and Storm interact through ZooKeeper, we specify ZooKeeper hosts, port and a path to Kafka brokers (clusters).
+Furthermore, each Kafka spout stores consumer offsets in ZooKeeper.
+For this purpose we specify a root path in ZooKeeper and a unique id for every spout.
+There is a possibility to set from which offset to start consuming.
+Also we indicate a topic name for each spout.
+There are some other settings that allow to adjust the Kafka-Storm interaction more precisely, that are not mentioned in our work.
+
+\mnote{Kafka and Spark}
+Spark has another conception, different from Storm.
+In our project we use Spark Streaming - technology that allows to handle data in real time.
+Thus the main notion in Spark implementation is a \textit{discretized stream} (DStream).
+Later on this stream is divided inro batches and they are processed by a Spark engine.
+Similar to the Storm case, we also create one DStream for each Kafka topic.
+Because of this we have a possibility to handle each type of events separately.
+In Storm we run a Topology, here we run a StreamingContext.
+To provide it with the data from Kafka, the following settings are needed.
+We specify a list of ZooKeeper hosts, the name of Kafka consumer group and the topic name.
+The number of threads used for consuming data from a Kafka topic is also customizable.
+Not all the possible setting are mentioned here.
+
+As a result, we can note that both Spark and Storm have built-in modules to interact with Kafka.
+Moreover, the needed setting are almost the same and do not present any difficulties.
+The only distinction that should be mentioned is the availability of documentation.
+As the support of Kafka was included only in the last version of Storm (storm-kafka-0.9.2-incubating), this module is not wholly documented and there are no examples on the official Storm site.
+On the contrary, Spark has an example code on its official site and API documentation. 
+
+\mnote{Usage}
+As regards the usability, Storm seems to be more intuitive than Spark Streaming.
+It was mentioned that Storm consists of spouts and bolts.
+We receive the data from Kafka spout.
+So, the only thing we have to implement is one or several bolts that process the received information.
+In our simple case we use only one bolt, that inherits \textit{BaseRichBolt}.
+We override its \textit{execute} method to perform our operations.
+
+In the case of Spark Streaming, we have to deal with its Resilient Distributed Datasets (RDD).
+RDD represents the Spark (not Spark Streaming) main concept, that allows to perform batch processing.
+To provide near real-time processing, Spark Streaming uses DStreams as sources of data.
+Each DStream than divided by Spark into a sequence of RDDS.
+From this moment Spark can perform the same operations on RDDs as it uses in batch processing.
+In our case we use \textit{foreachRDD} as an output operation on RDDs.
+This function triggers the computation of the corresponding stream.
+RDD is a distributed collection, and to execute a peace of code, the Spark driver node serializes this code and sends to the workers, where it can be deserialized and executed.
+Our problem is that we use several classes to process the input data and store the results in Redis, that are not serializable.
+Therefore we have to be careful with the place where the code, that calls the functions from nonserializable classes, is placed.
+The best solution in our case is to use \textit{foreachPartition} method, that is called for each RDD.
+As a result, we create an instance of this nonserializable class for the whole partition and than apply the needed operations on each record of this partition. 
+ 
+\mnote{Redis}
+The finishing point of both Storm and Spark approaches is calculating aggregations on the received data and storing the results into a database (Redis).
+There is nothing to compare in this case, because both of these technologies use exactly the same code to perform these steps.
+
+% TODO: scaling of Storm and Kafka on several nodes
+
 
 \authorsection{Evaluation of possibilities of the system}{NO}

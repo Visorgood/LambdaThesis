@@ -1,7 +1,7 @@
 \chapter{The Menthal Backend (Speed) Architecture}
 \label{chap:menthal_backend_architecture}
 
-\authorsection{Requirements analisys}{NO}
+\authorsection{Requirements analisys}{SP}
 
 Use cases (quantified self + depression detection) - Use case diagram?
 Scope of our work (functional/nonfunctional requirements)
@@ -24,11 +24,11 @@ The responsibility of the data receiver is to deserialize incoming messages, ide
 \mnote{Aggregations}
 The processing part of the Speed Layer performs various aggregations on the incoming data.
 The distinctive feature of the Speed Layer is that it works only with limited amount of data, processing only the recent events.
-Hence it can calculate aggregations and perform analisys in a real time.
+Hence it can calculate aggregations and perform analisys in real time.
 The created aggregations have different granularities and characterize the different aspects of user-smartphone interaction.
 
 \mnote{Anomaly detection}
-As the events are analyzed in a real time, it gives an advantage of detecting various anomalies in incoming data.
+As the events are analyzed in real time, it gives an advantage of detecting various anomalies in incoming data.
 We should use an appropriate anomaly detection algorithm that can be applied for the given data.
 The system should detect the strange behavior in proper time and immediately notify a user if needed.
 
@@ -80,7 +80,7 @@ Furthermore, only authorized parties can get an access to these results.
 % 3) Real time processing
 % Performance / response time
 \mnote{Performance}
-As the Speed Layer should provide the results of data processing in a real time, it puts one more requirement on our system.
+As the Speed Layer should provide the results of data processing in real time, it puts one more requirement on our system.
 It should have good performance characteristics.
 In our case the costs of processing cores, physical memory and therefore the number of machines needed to perform calculations is less significant than the system performance.
 It should work with the fixed and relatively small response time. 
