@@ -1,4 +1,4 @@
-\section{Stream processing algorithms}
+\section{Sketch algorithms for estimation of stream paramaters}
 
 To create aggregations, indicies and views of data, coming from the stream, we have often to answer different mathematical questions.
 For example: ``has a particular item already been observed in the stream?'', ``how many times specific item has already arrived from the stream?'', ``what is the cardinality of the set of items so far observed in the stream?'', etc.
@@ -37,7 +37,7 @@ We can adjust rate of false positives, changing parameters of the Bloom filter.
 If answers is ``no'', it is always true by definition of the filter.
 Figure~\ref{fig:bloom_filter} depicts the inner state and the way of requests to the Bloom filter.
 
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.6\textwidth]{images/BloomFilter}
   \caption{The inner state and requests to the Bloom filter.}
@@ -76,7 +76,7 @@ Google BigTable and Cassandra systems use the Bloom filter to reduce the number 
 
 \subsection{Count-min sketch}
 
-The Count-min sketch answers the query ``how many times has an item been observed in the stream?''  \cite{Cormode}.
+The Count-min sketch answers the query ``how many times has an item been observed in the stream?'' \cite{Cormode}.
 It gives always estimated value of the number of occurances of a particular item.
 The rate of error is again a matter of adjusting parameters.
 The Count-min sketch can only overestimate the result, meaning give a value equal or greater than true frequency.
@@ -100,7 +100,7 @@ $$
 where $f(i)$ is a frequency of an item $i$.
 You can see the view of the Count-min sketch on the Figure ~\ref{fig:count_min_sketch}
 
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.6\textwidth]{images/CountMinSketch}
   \caption{The view of the Count-min sketch.}
@@ -117,20 +117,9 @@ $$
 \hat{f}(i) = min_{1 \leq j \leq d}C[j,h_j(i)]
 $$
 
-\subsection{Flajolet-Martin sketch}
-
-The Flajolet-Martin sketch answers the query ``how many distinct items have been observed in the stream?''.
-It is very space-efficient, because it requires not more than $32$ bytes of memory in any imaginable case.
-Nevertheless, it has a drawback, that it begins to show accurate estimation only when the number of items is big enough.
-
-Internally the Flajolet-Martin sketch is a bitset.
-
 \subsection{HyperLogLog algorithm}
 
-
-
-
-
-
+The HyperLogLog algorithm answers the query ``how many distinct items have been observed in the stream?''.
+\cite{Heule2013, Flajolet2007}
 
 

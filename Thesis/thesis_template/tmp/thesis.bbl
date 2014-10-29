@@ -49,6 +49,12 @@ DataStax.
   \url{http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html}.
 \newblock Accessed 07.10.2014.
 
+\bibitem[FFGM07]{Flajolet2007}
+Philippe Flajolet, Éric Fusy, Olivier Gandouet, and Frédéric Meunier.
+\newblock Hyperloglog: the analysis of a near-optimal cardinality estimation
+  algorithm.
+\newblock 2007.
+
 \bibitem[Foua]{Spark1}
 Apache~Software Foundation.
 \newblock Spark programming guide.
@@ -80,6 +86,12 @@ Apache~Software Foundation.
 Eben Hewitt.
 \newblock {\em Cassandra - The Definitive Guide}.
 \newblock 2011.
+
+\bibitem[HNH13]{Heule2013}
+Stefan Heule, Marc Nunkesser, and Alexander Hall.
+\newblock Hyperloglog in practice: Algorithmic engineering of a state of the
+  art cardinality estimation algorithm.
+\newblock 2013.
 
 \bibitem[LM]{Avinash2014}
 Avinash Lakshman and Prashant Malik.

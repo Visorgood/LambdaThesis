@@ -1,8 +1,8 @@
 \chapter{Real-time processing in the Big Data context [VI]}
 \label{chap:real_time_processing}
 
-Many information systems today require fast or even instant response to a coming data.
-When new peace of data arrives into the system from a user, outer sensor, or any other source, system must reflect change of its state quickly. 
+Many information systems require today fast or even instant response to a coming data.
+When new piece of data arrives into the system from a user, sensor, or any other outer source, system must reflect changes of its state quickly. 
 The batch processing, that we describe in the Chapter~\ref{chap:google_architecture}, can not fulfil this requirement, because it takes usually long time to execute.
 The real-time processing allows to do that.
 
@@ -23,7 +23,7 @@ To define the real-time processing, we need first to explain what is the real ti
 There is no such thing in physics as real time, because any event takes time to happen.
 But human understands, and even feels, that one event takes long time, but another is happening ``instanlty''.
 This is of course only a matter of our perception.
-We are not able to differentiate intervals smaller than parts of a second.
+We are not able to differentiate intervals smaller than fractions of second.
 As a result, we define real time as an interval of time that short enough in the current context.
 In some cases it is seconds or minutes, but sometimes even milliseconds, and then things become really interesting.
 
@@ -46,5 +46,5 @@ We discuss the real-time processing algorithms further in this chapter in more t
 
 \input{content/06_01-Examples_from_real_life}
 \input{content/06_02-Stream_processing_algorithms}
-%\input{content/06_03-Application_in_the_speed_layer}
-%anomaly detection
+\input{content/06_04-Anomaly_detection_algorithms}
+\input{content/06_03-Application_in_the_speed_layer}
