@@ -4,17 +4,26 @@
 \authorsection{Requirements analisys}{SP}
 
 Use cases (quantified self + depression detection) - Use case diagram?
+% как у них диаграмму 
+
 Scope of our work (functional/nonfunctional requirements)
 5 pages
 
 Functional requirements
 
+% to analyze speed layer architecture
 The scope of our work is a part of Lambda Architecture named a Speed Layer.
+% it consists o three components
+% three parts for: receivivg data, ..
 It requires to implement three main parts: data receiving part, real-time data processing and the store of the results of computations.
-The data receiving part do not need to provide any feedback except the acknoledgement that the data was succeessfully received.
+The data receiving part does not need to provide any feedback except the acknoledgement that the data was succeessfully received.
 Thus on this end of the system we do not need any special API.
 On the contrary, the results of computations can be used further by the other components of the Lambda architecture.
 Therefore it can be useful to provide an API that allows to request the necessary information.
+
+% проверить главу про speed layer, есть ли там уже эти названия?
+% or give a big picture (how data goes)
+
 
 \mnote{Event receiving}
 The data receiving part collects the data that arrives from a message queue.
@@ -43,14 +52,17 @@ Non-functional requirements
 % 1) interact with other parts (Batch layer, Client app, etc)
 % Dependency on other parties
 % Documentation
-\mnote{Dependency on other parties}
+\mnote{Dependency on other components}
 The Speed Layer, as a part of the Lambda Architecture in particular and the Menthal project in general, actively interacts with other components of the system.
-As a result, it should meet the following requirements.
+As a result, it should meet the following two requirements.
+% as menthal uses heteregeneous architecture, it has to be well defined and documented - as a topic sentence
 First, the Speed Layer needs to be designed taking into account its dependency on other system components.
 On the one hand, it should follow the principle of modularity, i.e. be self-contained.
 Thus, when other parts of the system change, it should not influence the Speed Layer inner structure.
 On the other hand, it should be flexible.
 In the case of significant changes in the whole system, the adaptation process to the new environment should be fast and easy.
+% devide into two paragraphs
+% similarly, the fitures must be well documented
 \mnote{Documentation}
 Second, all the available features should be well documented.
 As other parts of the system are maintained by other developers, it is necessary to provide them with the most detailed and relevant information.    
@@ -58,16 +70,18 @@ As other parts of the system are maintained by other developers, it is necessary
 % 2) It consists of various technologies
 % Extensibility (adding features, and carry-forward of customizations at next major version upgrade)
 \mnote{Extensibility}
+% the system must be easy to extend by additional functionalities.
 From the technical side, the Speed Layer consists of a number of cooperating technologies.
 These third-party technologies actively develop, the versions of software upgrade.
 Therefore our system should allow easy upgrading of its components without a threat of failure.
 From the application side, the Menthal project has a great development potential.
 New features are constantly added, the functionality is expanded.
-Thus our system should meet the extensibility requirement.
+% Thus our system should meet the extensibility requirement.
 
 % 3) Confidential information
 % Security
 \mnote{Security}
+% our system needs to meet high security requirement.
 The essential aspect of our system is its security requirement.
 Menthal works with user data and stores personal information of real people.
 Therefore it is important to protect the stored information from unauthorized access.
@@ -86,6 +100,7 @@ In our case the costs of processing cores, physical memory and therefore the num
 It should work with the fixed and relatively small response time. 
 
 \mnote{Availability and Reliability}
+% the system must be available and reliable
 Availability and reliability are the other important aspects of real-time processing system.
 The Speed Layer is the only component that has calculated aggregations on the latest data.
 Moreover, for anomaly detection purposes it is important not to miss the significant changes in incoming data and react to them in a timely manner.
@@ -97,6 +112,7 @@ A real-time system should be fault tolerant.
 In the case of Speed Layer it is especially relevant, because it consists of many cooperating components.
 Even if several nodes in the cluster crash, it should not break the whole system and interrupt the calculation process.
 The Speed Layer should have small recovery time in the case of failure. 
+% add examples - what if tuple is illegal
 
 % 5) it uses commodity machines
 % Efficiency (resource consumption for given load)
@@ -131,17 +147,24 @@ It should be easily configurable.
 It need to provide a convenient mechanism to perform the tracking of the running tasks, e.g. using log files.
 Finally, our system should have necessary tools for testing its functionality.
 
+
+% summary - tradeoff between smth, new, old, from real-time programming, from distributed systems, easy, hard
+
 \section{Design of the system [VI]}
-
-kafka + storm + redis
-
+Architecture - general schema (picture)
+9 pages
 
 \section{Data pipeline (from where to where)}
 General schema (picture)
 3 pages
+
+kafka + storm + redis
 
 \section{Algorithms}
 
 \section{Mapping to hardware}
 how many servers, characteristics, data transferring
 1 page
+
+\authorsection{Aspects od implementation}{NO}
+programming languages, etc.
