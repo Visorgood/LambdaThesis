@@ -25,13 +25,16 @@ Each of these aggregations is calculated with different granularities: hourly, d
 
 The aggregations presented in the table are made for each user separately.
 However, all these aggregations except SCREEN\_LOCK are also implemented as a sum and averadge for all users. 
+Another group of aggregations is global summaries for different applications.
+We calculate for each application the number of unique users, the number of sessions and total time spent. 
 
+The implementation of aggregations in our case is based on Redis.
+There is an interface \textit{EventAggregator} that actually allows to use any other data storages.
+However, in our work we concentrate on Redis implementation of this interface.
+It perfectly fits our needs for fast access and this storage is easy to use and does not need a lot of programming effort.
 
 
 Anomaly Detection
-
-% first part - general stuff
-% second - concrete, all the parameters into second part 
 
 People download various applications for their smartphones and do not pay much attention to the questions of security.
 There is a risk that applications from unofficial stores contain the malicious software.
@@ -46,15 +49,6 @@ For instance, a virus can send an sms, that contains its copy.
 The virus can download and install another malicious software on the user's smartphone.
 To apply some changes that the virus has performed in the system, it can restart the device.
 Sometimes the malicious software can even make calls to specific numbers, so the user is charged for them.
-
-Follow the assumed malicious software behavior, we try to detect the suspicious behavior of the smartphone.
-For this purpose we analyze four events that are received from the clients: \textit{sms\_sent}, \textit{app\_install}, \textit{phone\_shutdown} and \textit{call\_outgoing}.
-For simplicity we only count the number of these events.
-However there is a possibility to make more thoroughtful research, using the values that these events contain.
-For example, traffic data, namely the number of transferres bytes, can be used for analysis.
-To have a basis for comparing the amount of events, we use a time window.
-In other words, for each type of event we calculate the number of times it occures in a specified time interval (one hour by default).
-Roughly speaking, we can take the number of times the event occures in a normal state, than calculate this number for an unknown state and make a conclusion whether it is normal or abnormal.   
 
 \mnote{anomaly type}
 As it was mentioned in Chapter , there are a lot of ways to detect anomaly in incoming data.
@@ -80,21 +74,19 @@ First, it needs only 'normal' data instances for learning.
 Also it can work with high-dimension data, i.e. when a feature vector consists of more than two features (we need four in our case).
 Moreover, there is an existing java library called libsvm [http://www.csie.ntu.edu.tw/~cjlin/libsvm/] that among other techniques implements one-class SVM.
 
-One-class SVM algorithm works as follows.
-First, we need to create a training set.
+Follow the assumed malicious software behavior, we try to detect the suspicious behavior of the smartphone.
+For this purpose we analyze four events that are received from the clients: \textit{sms\_sent}, \textit{app\_install}, \textit{phone\_shutdown} and \textit{call\_outgoing}.
+For simplicity we only count the number of these events.
+However there is a possibility to make more thoroughtful research, using the values that these events contain.
+For example, traffic data, namely the number of transferres bytes, can be used for analysis.
+To have a basis for comparing the amount of events, we use a time window.
+In other words, for each type of event we calculate the number of times it occures in a specified time interval (one hour by default).
+Roughly speaking, we can take the number of times the event occures in a normal state, than calculate this number for an unknown state and make a conclusion whether it is normal or abnormal.
+
+To use One-class SVM algorithm we need to create a training data set.
 % TODO: write about training data
 
-Second, we select the optimal parameters.
-Figure~\ref{fig:svm_parameters}  represents the parameters, their meaning and values that are optimal for our case.
-
-\begin{figure}[h]
-  \centering
-  \includegraphics [width=0.9\textwidth]{images/svm_parameters}
-  \caption{One-class SVM parameters}
-  \label{fig:svm_parameters}
-\end{figure}
-
-When the training set is ready and the parameters are set, we run \textit{svm\_train} method to create a model.
+When the training set is ready we run \textit{svm\_train} method to create a model.
 Then we use \textit{svm\_save\_model} method to safe the trained model, so it can be used later for anomaly detection.
 
 \mnote{flow of events}
@@ -136,7 +128,18 @@ If we want to perform an anomaly detection analysis, we take the mentioned earli
 Using this numbers the bolt forms a data instance.  
 Then it checks whether the instance is an anomaly or not using the trained one-class SVM model.
 
+To get correct results it is essential to select the optimal parameters for One-class SVM.
+Figure~\ref{fig:svm_parameters} represents the parameters, their meaning and values that are optimal for our case.
+The process of parameters selection includes a technique called \textit{cross-validation}.
+Here the data set is divided into two parts - training set and testing set.
+This helps to avoid the problem of model overfitting.  
 
+\begin{figure}[h]
+  \centering
+  \includegraphics [width=0.9\textwidth]{images/svm_parameters}
+  \caption{One-class SVM parameters}
+  \label{fig:svm_parameters}
+\end{figure}
 
 
 
