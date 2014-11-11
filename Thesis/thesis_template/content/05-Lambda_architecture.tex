@@ -12,37 +12,26 @@
 % immutability
 
 The Lambda architecture is a new solution for generic BigData systems \cite{Marz2014}.
-To answer queries it uses both batch and online processing.
-It fulfils all requirements that such systems demand, e.g. efficiency, scalability, fault-tolerance, etc.
-It provides human fault-tolerance, what is often overlooked in other approaches.
+It is a distributed system, that answers queries using both batch and online processing.
 All its components automatically distribute computations across many machines.
-
-%The core purpose of the Lambda architecture is to answer queries, having data, gathered during system's functioning.
-%We consider any query as a function of the whole dataset, i.e. taking all available data, system can derive information, that answers specific query.
-%The Lambda architecture is also able to answer queries that have not yet arised to the moment of the system's design or deployment.
+The Lambda architecture fulfils all requirements that such systems demand.
+It is highly scalable, because any number of machines can be used for computations.
+It is efficient, and provides low-latency query answering.
+It is generic, extensible, robust and fault-tolerant.
+It allows to make ad hoc queries, requires minimal maintenance, and is debuggable.
+It provides human fault-tolerance, what is often overlooked in other approaches.
 
 The Lambda architecture uses both batch and online processing of data to answer queries fast as well as accurate.
 It applies batch processing to all data to precompute specific data structures.
-These data structures help to answer queries with low-latency.
+These data structures help to answer queries fast.
 It also executes online incremental processing of arriving data.
 This helps to overcome a delay of batch computations.
-
-The Lambda architecture has all properties to be an effective and efficient BigData system.
-It is robust and fault-tolerant.
-It provides low-latency query answering.
-It is scalable, generic and extensible.
-It allows to make ad hoc queries, requires minimal maintenance, and is debuggable.
 
 Important aspect of the Lambda architecture, that makes a difference with other approaches, is that human fault-tolerance is inherent.
 Human fault-tolerance is a robustness of the system to mistakes in programming code.
 This is important issue, because programmers always do mistakes.
 As a result, deleting or updating data in a wrong way is also possible.
 The Lambda architecture overcomes this issue not allowing to delete or modify so far gathered data.
-
-The Lambda architecture is a distributed system.
-Every its component provides this property inherently.
-That lets developer to concentrate on the logic and algorithms, instead of thinking about multithreading issues.
-It also makes the Lambda architecture highly scalable, because any number of machines can be used for computations.
 
 \input{content/05_01-General_structure}
 \input{content/05_02-Batch_layer}

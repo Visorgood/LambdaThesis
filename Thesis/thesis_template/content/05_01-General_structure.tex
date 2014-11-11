@@ -1,24 +1,26 @@
 \section{General structure}
 
-Amount of data and complexity of algorithms demand to make computations, useful for fast answering queries, in advance.
-The Lambda architecture precomputes specific data structures, that provide data, prepared for answering to particular queries.
+The Lambda architecture precomputes specific data structures for answering particular queries.
+This is because of the large amount of data and complexity of algorithms.
 These data structures are called \textit{views}\mnote{view}.
-They store indices and aggregations of the original data.
+They store aggregations of the original data and result of execution of classification or other algorithms.
 
 There are two approaches of preparing views.
 The first one is to do it in a batch mode considering all available data for computations.
 The second one is to construct views incrementally in the real time with newly arrived data.
 Together these two methods give an opportunity to answer queries fast and accurate.
 Figure~\ref{fig:lambda_architecture} depicts how the Lambda architecture combines batch and incremental processing to answer queries.
+Batch and serving layer are responsible for batch views, speed layer provides real-time views.
+To answer query system merges data from both types of views.
 
 \begin{figure}[h]
   \centering
   \includegraphics [width=1.0\textwidth]{images/LambdaArchitecture}
-  \caption{General structure of the Lambda architecture. Batch and serving layer are responsible for batch views, speed layer provides real-time views. To answer query system merges data from both types of views.}
+  \caption{General structure of the Lambda architecture.}
   \label{fig:lambda_architecture}
 \end{figure}
 
-The \textit{batch layer}\mnote{batch layer} of the Lambda architecture is responsible for batch processing.
+The \textit{batch layer} \mnote{batch layer} of the Lambda architecture is responsible for batch processing.
 It takes the whole dataset and executes batch computations on it.
 Views, that are the result of the batch processing, are called \textit{batch views}\mnote{batch view}.
 This operation is efficient, because all data is at once in disposal.
