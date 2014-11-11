@@ -146,41 +146,7 @@ The maintainability and good documentation are easily reachable, they only need 
 On the contrary, such requirements as high security and good performance can be hard to implement.
 In our work we tried to meet most of these requierements.  
 
-\section{Design of the system [VI]}
-Architecture - general schema (picture)
-9 pages
-
-General architecture as a speed layer.
-
-Figure~\ref{fig:SpeedLayerArchitecture}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics [width=1.0\textwidth]{images/SpeedLayerArchitecture}
-  \caption{General structure of the Speed Layer.}
-  \label{fig:SpeedLayerArchitecture}
-\end{figure}
-
-one paragraph for each part: source, processing, storage
-
-\subsection{Data source}
-kafka
-topics and spouts for each event type
-
-\subsection{Data processing}
-storm
-topology
-bolts
-events
-aggragations
-anomaly detection
-classes
-
-\subsection{Data storage}
-redis
-keys
-access to redis
-transactions and pipelining
+\input{content/08-Menthal_backend_architecture(Design_of_the_system)}
 
 \section{Data flow}
 General schema (picture)
