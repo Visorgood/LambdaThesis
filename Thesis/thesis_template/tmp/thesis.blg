@@ -1,5 +1,19 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: thesis.aux
 The style file: alpha.bst
-I found no \citation commands---while reading file thesis.aux
-I found no \bibdata command---while reading file thesis.aux
-(There were 2 error messages)
+Database file #1: bibliography/literature.bib
+Warning--to sort, need author or key in AMQP2011
+Warning--empty journal in BroderMitzenmacher2005
+Warning--empty journal in Boykin2013
+Warning--empty journal in Cormode
+Warning--empty year in Cormode
+Warning--empty journal in Flajolet2007
+Warning--empty publisher in Hewitt2011
+Warning--empty journal in Heule2013
+Warning--empty journal in Pinheiro2007
+Warning--empty journal in Slee2007
+Warning--empty publisher in Seguin2012
+Warning--empty journal in Toshniwal2014
+Warning--empty publisher in AlvaroWilliams2012
+Warning--empty journal in Zaharia2010
+Warning--empty journal in Zaharia2013
+(There were 15 warnings)

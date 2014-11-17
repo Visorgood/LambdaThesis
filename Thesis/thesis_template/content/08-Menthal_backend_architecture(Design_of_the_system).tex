@@ -161,17 +161,101 @@ Counter collects the number of events of any particular type.
 Duration accumulates the total duration of the continuing action on the smartphone.
 Length contains the total length of sms or whatsapp messages, etc.
 There is a different logic of how to compute them for these three types of aggregations. 
-
-anomaly detection
+For each aggregation we store four cases for different time intervals: last hour, last day, last week, last month.
+Specifically, for each aggregations consists of two value: timestamp of the start of the current hour/day/week/month, and aggregation value itself.
+Each time we update aggregation, that requires to recompute its starting timestamp.
 
 \subsection{Data storage}
 
-Data storage Redis \ref{subs:redis} is a place, where all results of computations are kept.
+Data storage Redis \ref{subs:redis} keeps all results of computations.
 These results are different aggregations, specifically counters, that are stored in the complex data model.
 Redis provides simple access to save and then get that data.
 Counters, saved in the Redis data storage can be then used by the Speed layer to merge them with the results of batch computations.
 
-redis
-keys
-access to redis
-transactions and pipelining
+Redis is a key-value store, what defines the approach of storing data.
+Each aggregations that we save to Redis is a list of two values: timestamp and value.
+
+To work with aggregations in Redis we have developed a concrete class \lstinline{RedisEventAggregator}, that implements an interface \lstinline{EventAggregator}.
+It works with the object of the type \lstinline{RedisProxy}, that we discribe later on in this section.
+Each method of the class \lstinline{RedisEventAggregator} receives arguments as for example: user id, timestamp, app name, etc.
+We then combine these values to a proper key name, that is present in Redis (or must be created on the first update).
+Listing~\ref{listing:processAppSession} shows an example of key creation and passing it to \lstinline{RedisProxy}.
+
+\begin{lstlisting}[float=h, caption=Example of key creation for aggregation update., label=listing:processAppSession, language=Java]
+public void processAppSession(long userId, long time, long duration, String appName) {
+  String key = String.format("app:%s:%s", appName, "sessions");
+  redisProxy.incrementCounters(key, time);
+  key = String.format("app:%s:%s", appName, "total_time");
+  redisProxy.incrementDurations(key, time, duration);
+  ...
+\end{lstlisting}
+
+We keep keys in Redis in the following way.
+Each key is associated with the list, that has two elements.
+The first one is the timestamp of the beginning of counting.
+The second one is the value itself.
+There are several examples of the keys in the Listing~\ref{listing:keysInRedis}.
+
+\begin{lstlisting}[float=h, caption=Examples of the keys in Redis., label=listing:keysInRedis]
+user:$user_id:$phone_hash:incoming_msg_count:count:hourly
+user:$user_id:$phone_hash:incoming_msg_count:count:daily
+user:$user_id:$phone_hash:incoming_msg_count:count:weekly
+user:$user_id:$phone_hash:incoming_msg_count:count:monthly
+user:$user_id:$phone_hash:outgoing_call_duration:duration:hourly
+user:$user_id:$phone_hash:outgoing_call_duration:duration:daily
+user:$user_id:$phone_hash:outgoing_call_duration:duration:weekly
+user:$user_id:$phone_hash:outgoing_call_duration:duration:monthly
+user:$user_id:$phone_hash:outgoing_msg_length:length:hourly
+user:$user_id:$phone_hash:outgoing_msg_length:length:daily
+user:$user_id:$phone_hash:outgoing_msg_length:length:weekly
+user:$user_id:$phone_hash:outgoing_msg_length:length:monthly
+\end{lstlisting}
+
+To access Redis we use Jedis java library \cite{Jedis}.
+It provides the the whole functionality, that Redis offers itself.
+The class \lstinline{RedisProxy} contains all the communication with Redis.
+It contains two fields, presentd on the Listing~\ref{listing:RedisProxyFields}.
+They are the part of the Jedis library, and provide exact access to the Redis database.
+
+\begin{lstlisting}[float=h, caption=Two main fields of the class RedisProxy., label=listing:RedisProxyFields, language=Java]
+private final Jedis jedis;
+private Pipeline pipeline;
+\end{lstlisting}
+
+\mnote{Pipeline}
+We use \textit{pipelines} to communicate with Redis database.
+Pipeline allows to combine several reqests to Redis into one batch, and send it altogether to the server through the network.
+It reduces network congestion, and makes probability of race conditions on the server less.
+\mnote{Transaction}
+Inside of pipeline we use \textit{transaction} to tell Redis server, that we this set of commands must be executed as a one atomic command.
+This is important to avoid race conditions, because many clients in the same time can try to access the same keys in the Redis database.
+We demonstrate changing of the counter on the Listing~\ref{listing:incrementCounter}.
+
+\begin{lstlisting}[float=h, caption=Example of updating counter aggregation in the Redis database., label=listing:incrementCounter, language=Java]
+private void incrementCounter(DurationType durationType, CounterType counterType, String key, long time, long valueToIncrement) {
+  key = String.format("%s:%s:%s", key, getCounterName(counterType), getDurationName(durationType));
+  Boolean success = false;
+  while (!success) {
+    jedis.watch(key);
+    List<String> value = jedis.lrange(key, 0, 1);
+    pipeline = jedis.pipelined();
+    pipeline.multi();
+    Counter counter = new Counter(durationType, Long.parseLong(value.get(0)), Long.parseLong(value.get(1)));
+    if (updateStartingTime(counter, time, 0))
+      pipeline.lset(key, 0, Long.toString(counter.startTime));
+    counter.value += valueToIncrement;
+    pipeline.lset(key, 1, Long.toString(counter.value));
+    success = (pipeline.exec() != null);
+  }
+  pipeline.sync();
+}
+\end{lstlisting}
+
+We first generate in the Line 2 a proper key, that exactly exists in Redis, from a base key part.
+Then we do do watching for values, that we want to retrieve and then change.
+This is necessary to do, because this is the only way to protect the whole operation from race condition on the server side.
+We get value of the counter in the Line 6.
+Then in the Lines 7-8 we initialize pipeline and transaction.
+In the Lines 9-12 we update retrieved counter in memory.
+And in the Line 13 we set the new value of the counter into Redis server.
+If in the time between watch and update of key's value it was accessed by other client, operation will fail, and we try to execute it again.

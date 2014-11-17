@@ -1,3 +1,183 @@
-\begin{thebibliography}{}
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{CDG{\etalchar{+}}06}
+
+\bibitem[AMQ11]{AMQP2011}
+Amqp specification v1.0 final, October 2011.
+
+\bibitem[And12]{BitcoinFoundation2012}
+Gavin Andersen.
+\newblock Core development status report 1.
+\newblock
+  \url{https://bitcoinfoundation.org/2012/11/core-development-status-report-1/},
+  November 2012.
+\newblock Accessed 06.09.2014.
+
+\bibitem[BM05]{BroderMitzenmacher2005}
+Andrei Broder and Michael Mitzenmacher.
+\newblock Network applications of bloom filters: A survey.
+\newblock 2005.
+
+\bibitem[BROL13]{Boykin2013}
+Oscar Boykin, Sam Ritchie, Ian O'Connell, and Jimmy Lin.
+\newblock Summingbird: A framework for integrating batch and online mapreduce
+  computations.
+\newblock 2013.
+
+\bibitem[CDG{\etalchar{+}}06]{Bigtable/Chang_Dean_Ghemawat}
+Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
+  Mike Burrows, Tushar Chandra, Andrew Fikes, and Robert~E. Gruber.
+\newblock {Bigtable: A Distributed Storage System for Structured Data}.
+\newblock In {\em Proceedings of the 7th USENIX Symposium on Operating Systems
+  Design and Implementation - Volume 7}, OSDI '06, pages 15--15, Berkeley, CA,
+  USA, 2006. USENIX Association.
+
+\bibitem[CKR{\etalchar{+}}]{HDFSArchitecture2}
+Robert Chansler, Hairong Kuang, Sanjay Radia, Konstantin Shvachko, and Suresh
+  Srinivas.
+\newblock The hadoop distributed file system.
+\newblock \url{http://www.aosabook.org/en/hdfs.html}.
+\newblock Accessed 09.09.2014.
+
+\bibitem[Cor]{Cormode}
+Graham Cormode.
+\newblock Sketch techniques for approximate query processing.
+
+\bibitem[Dat]{Cassandra}
+DataStax.
+\newblock Apache cassandra 2.0 online documentation.
+\newblock
+  \url{http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html}.
+\newblock Accessed 07.10.2014.
+
+\bibitem[FFGM07]{Flajolet2007}
+Philippe Flajolet, Éric Fusy, Olivier Gandouet, and Frédéric Meunier.
+\newblock Hyperloglog: the analysis of a near-optimal cardinality estimation
+  algorithm.
+\newblock 2007.
+
+\bibitem[Foua]{Spark1}
+Apache~Software Foundation.
+\newblock Spark programming guide.
+\newblock \url{https://spark.apache.org/docs/latest/programming-guide.html}.
+\newblock Accessed 23.09.2014.
+
+\bibitem[Foub]{Spark2}
+Apache~Software Foundation.
+\newblock Spark streaming programming guide.
+\newblock
+  \url{https://spark.apache.org/docs/latest/streaming-programming-guide.html}.
+\newblock Accessed 11.09.2014.
+
+\bibitem[Fouc]{Thrift}
+Apache~Software Foundation.
+\newblock Thrift online documentation.
+\newblock \url{http://thrift.apache.org/docs/}.
+\newblock Accessed 29.09.2014.
+
+\bibitem[Fou14]{HDFSArchitecture1}
+Apache~Software Foundation.
+\newblock Hdfs architecture.
+\newblock
+  \url{http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html},
+  August 2014.
+\newblock Accessed 08.09.2014.
+
+\bibitem[Hew11]{Hewitt2011}
+Eben Hewitt.
+\newblock {\em Cassandra - The Definitive Guide}.
+\newblock 2011.
+
+\bibitem[HNH13]{Heule2013}
+Stefan Heule, Marc Nunkesser, and Alexander Hall.
+\newblock Hyperloglog in practice: Algorithmic engineering of a state of the
+  art cardinality estimation algorithm.
+\newblock 2013.
+
+\bibitem[Lei]{Jedis}
+Jonathan Leibiusky.
+\newblock Jedis github repository.
+\newblock \url{https://github.com/xetorthio/jedis}.
+\newblock Accessed 17.11.2014.
+
+\bibitem[LM]{Avinash2014}
+Avinash Lakshman and Prashant Malik.
+\newblock Cassandra - a decentralized structured storage system.
+\newblock
+  \url{http://www.datastax.com/documentation/articles/cassandra/cassandrathenandnow.html}.
+\newblock Accessed 08.10.2014.
+
+\bibitem[LYBB14]{JVM}
+Tim Lindholm, Frank Yellin, Gilad Bracha, and Alex Buckley.
+\newblock The java® virtual machine specification. java se 8 edition.
+\newblock \url{http://docs.oracle.com/javase/specs/jvms/se8/html/index.html},
+  March 2014.
+\newblock Accessed 09.09.2014.
+
+\bibitem[Mac13]{Macbeth2013}
+Soren Macbeth.
+\newblock Introduction to elephantdb, 2013.
+
+\bibitem[Mar]{ElephantDB}
+Nathan Marz.
+\newblock Elephantdb repository on github.
+\newblock \url{https://github.com/nathanmarz/elephantdb}.
+\newblock Accessed 14.10.2014.
+
+\bibitem[MW14]{Marz2014}
+Nathan Marz and James Warren.
+\newblock {\em Big Data. Principles and best practices of scalable realtime
+  data systems}.
+\newblock Manning Publications Co., meap 18 edition, 2014.
+
+\bibitem[PWB07]{Pinheiro2007}
+Eduardo Pinheiro, Wolf-Dietrich Weber, and Luiz~Andre Barroso.
+\newblock Failure trends in a large disk drive population.
+\newblock 2007.
+
+\bibitem[SAK07]{Slee2007}
+Mark Slee, Aditya Agarwal, and Marc Kwiatkowski.
+\newblock Thrift: Scalable cross-language services implementation.
+\newblock 2007.
+
+\bibitem[Seg12]{Seguin2012}
+Karl Seguin.
+\newblock {\em The Little Redis Book}.
+\newblock 2012.
+
+\bibitem[SN]{Redis}
+Salvatore Sanfilippo and Pieter Noordhuis.
+\newblock Redis online documentation.
+\newblock \url{http://redis.io/documentation}.
+\newblock Accessed 11.09.2014.
+
+\bibitem[Sof]{RabbitMQ}
+Pivotal Software.
+\newblock Rabbitmq online documentation.
+\newblock \url{http://www.rabbitmq.com/documentation.html}.
+\newblock Accessed 06.10.2014.
+
+\bibitem[TTS{\etalchar{+}}14]{Toshniwal2014}
+Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.
+  Patel, Sanjeev Kulkarni, Jason Jackson, Krishna Gade, Maosong Fu, Jake
+  Donham, Nikunj Bhagat, Sailesh Mittal, and Dmitriy Ryaboy.
+\newblock Storm @twitter.
+\newblock 2014.
+
+\bibitem[VW12]{AlvaroWilliams2012}
+Alvaro Videla and Jason~J.W. Williams.
+\newblock {\em RabbitMQ in Action. Distributed messaging for everyone}.
+\newblock 2012.
+
+\bibitem[ZCF{\etalchar{+}}10]{Zaharia2010}
+Matei Zaharia, Mosharaf Chowdhury, Michael~J. Franklin, Scott Shenker, and Ion
+  Stoica.
+\newblock Spark: Cluster computing with working sets.
+\newblock 2010.
+
+\bibitem[ZDL{\etalchar{+}}13]{Zaharia2013}
+Matei Zaharia, Tathagata Das, Haoyuan Li, Timothy Hunter, Scott Shenker, and
+  Ion Stoica.
+\newblock Discretized streams: Fault-tolerant streaming computation at scale.
+\newblock 2013.
 
 \end{thebibliography}
