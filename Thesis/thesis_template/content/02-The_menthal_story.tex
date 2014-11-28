@@ -10,7 +10,6 @@ This chapter describes the main functionality and technical details of this appl
 
 Nowadays mobile/smartphone excessive usage becomes a critical problem.
 People constantly use these devices, making calls, sending messages, surfing in the Internet or just playing.
-More than a half of adult population of United States own a smartphone.
 People are distracted by their phones even on personal meetings, parties and dates.
 When a person leaves his phone at home, quite often he feels nervous and irritated.
 Some people suffer from a cellphone vibration syndrome, when one feels as if a cellphone is vibrating but in fact it is not.
@@ -51,12 +50,12 @@ On the one hand, there is a need to provide a user with his smartphone use infor
 On the other hand, it is necessary to supply researches with a tool that tracks smartphone usage.
 Menthal, an application for smartphones, combines these two features and provides solutions for both of these problems. 
 
-\authorsection{Menthal - conceptual meaning}{SP}
+\authorsection{Study}{SP}
 Menthal is an application that gathers phone usage data and stores it on a server for further analysis, providing user with a feedback.
 Phone usage data includes the number of times user unlocks his phone, the number of performed calls and sent SMS, etc.
 The user receives a feedback about the smartphone usage statistics that is provided by the server.
 In this case Menthal uses the same concept as Google: it grants users a free service in return to data.
-This approach works well, and the high number of Menthal users (about 50 000 unique accounts) demonstrates it. 
+This approach works well, and the high number of Menthal users demonstrates it. 
 
 Prior to present Menthal application a pilot study was conducted. 
 It was a psychological experiment on 49 participants.
@@ -71,26 +70,36 @@ The application is not visible for the user, uploading data to the server automa
 Later collected data is analysed on the server in the context of personality traits.
 Among the result of the study one can observe a positive correlation between extraversion and the number and frequency of telephone calls.
 
-\authorsection{Menthal - technical details}{SP}
+\authorsection{Technical details}{SP}
 This experiment develops into an independent smartphone application for mass usage. 
 It collects data, providing user with a feedback and supplying psychologists with information that can be analysed later on.
 Figure~\ref{fig:menthal_architecture} illustrates the Menthal architecture.
 The application includes a client and a server part, that interact with each other via HTTPS.
 
-\begin{figure}
+\begin{figure}[h]
   \centering
-  \includegraphics [width=0.9\textwidth]{images/Menthal_architecture}
+  \includegraphics [width=0.7\textwidth]{images/Menthal_architecture}
   \caption{Menthal architecture}
   \label{fig:menthal_architecture}
 \end{figure}
 
 The client part consists of an Android application installed on a smartphone.
-It keeps track of all the user activity during the day, such as unlocking the phone, number of calls and SMS, running applications, etc.
-This data is structured as a key/value pairs, where the key is .. and the value is a particular event (e.g. ..).
-The information gathering process is hidden from users, the application runs in the background, automatically sending data to the server once per day.
-Menthal has a user interface to provide users with a feedback. 
+It keeps track of all the user activity during the day.
+All the activities are stored as \textit{events}.
+Each event contains such data as id, event type, timestamp, data itself and some additional information.
+The main types of events are: SMS\_RECEIVED, SMS\_SENT, CALL\_RECEIVED, CALL\_OUTGOING, CALL\_MISSED, SCREEN\_UNLOCK, SCREEN\_LOCK, LOCALISATION.
+The information gathering process is hidden from users, the application runs in the background, automatically sending data to the server.
 
+The application gathers this data from different sources, using standard Android operating system API.
+For example, to get the information about phone lock/unlock, it listens to the corresponding events and handles them.
+To be aware of application usage, Menthal periodically (every 2 seconds) checks the current top application in the application stack of the smartphone.
+If the application detects that the application has been changed, it writes the event into the database, adding a timestamp.
+Catching a lock event is also used as a sign that the current application was changed and leads to a new record into the database.
+The information about phone calls and sms can be queried from a local smartphone storage.
+Every six hours Menthal checks whether the day is changed and if it does, it makes a new query to the local storage to get the latest information about performed calls and sent/received sms. 
+ 
 \mnote{Menthal GUI}
+Menthal has a user interface to provide users with a feedback. 
 The main screen shows a 'score' - the relative phone usage measurement.
 Using this value, one could check how intensively he uses his phone today comparing to previous days statistics.
 UI provides also additional functionality.
@@ -102,7 +111,7 @@ The application is able to keep track of user mood, periodically checking his cu
 Using smartphone's GPS receiver, Menthal can determine and show on map the user location.
 Moreover the application gives an opportunity to put a time limit on a particular application, so when the limit is exceeded the phone warns a user about that.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
@@ -118,7 +127,7 @@ Moreover the application gives an opportunity to put a time limit on a particula
 \end{minipage}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \begin{minipage}{.5\textwidth}
   \centering
@@ -134,33 +143,49 @@ Moreover the application gives an opportunity to put a time limit on a particula
 \end{minipage}
 \end{figure}
 
+All the gathered data is temporarely stored on a phone in a cryptographically protected SQLCipher database.
+Every time a new event is created, the application increases a special counter by 1.
+When this value reaches 50, Menthal performs the following steps:
+
+1) Obtain all the data from the SQLCipher database.
+
+2) Convert it into JSON.
+
+3) Send it to the server.
+
+4) Wait for the reply.
+
+5) If the server does not respose, try again in approximally 2 minutes. 
+
+6) If the acknowledgment is received, delete the data that was sent from the SQLCipher database.
+
+However, this is done only when a phone is connected to WiFi to avoid unnecessary charges for the user.
+If the phone was not connected to WiFi during the day, Menthal still needs to send the data.
+In this case the application sends it at random time between 1:00 - 6:00 at night via 3G.
+All the data is sent in batches, where one batch contains no more than 50 events.
+
 \mnote{information security}
 Menthal uses secure connection, encryption of sensitive data and authentication mechanism to guarantee information security.
 Communication between the client and the server goes through HTTPS.
 This protocol is designed to provide a secure communication over a computer network. 
 OAuth 1.0a protocol guarantees an authorization control.
+When a client connects to the server the very first time, it receives a token.
+Later the client sends this token with every message and the server uses it for authentication.
 On the phone the data is stored in SQLCipher database.
 This database uses 256 bit AES encryption for storing information in a secure way.
 Moreover, Menthal hashes the sensitive data, such as the contact names or the phone numbers via SHA2. 
 
-% paragraph about sending patterns (Wifi, buffer) 
+On the Server side Menthal has a cluster of 3 machines.
+A PostgreSQL database is replicated between two of them.
+One of these machines serves as a master node and another as a slave node.
+The third machine hosts a key-value store that works as a read cache, message and task queues and a web application.
  
-The problem of scaling becomes urgent when Menthal is covered in mass media.
-The articles in newspapers and interview with a project leader lead to the explosive increase of the number of users.
-Menthal obtains around 50 000 unique users, that has a significant influence on the application performance.
-It becomes overflowed and is not able to write all incoming data into database, not to mention providing a feedback. 
-% run out of id-s on one of the machines?
-The architecture of the application is changed to meet the new requirements.
-
-% убрать этот абзац 
-The most suitable architectural solution is taking an advantage of recently developed Lambda Architecture.
-It is design specifically for handling large amounts of data.
-The detailed description of Lambda Architecture is presented in Chapter 5 of this work.
-Currently the process of moving Menthal to this architecture is conducted. 
-
 Menthal recently gained popularity among users.
-As it was mentioned almost 50 000 persons have this application installed on their phones.
+It happened when the application was covered in mass media.
+The articles in newspapers and interview with a project leader lead to the explosive increase of the number of users.
+Almost 50 000 persons have this application installed on their phones.
 All of these devices periodically send collected information to the server, that sums up to a vast amount of data.
 Totally around 34Gb of information is received per day, that is almost 1Tb per month.
-% number of machines
-% stop with problem with Postgres
+All these factors have a significant influence on the application performance.
+The Menthal server side becomes overflowed and is not able to write all incoming data into database, not to mention providing a feedback.
+Therefore, the application requires a new, enhanced server-side architecture that can meet the new requirements.
