@@ -4,7 +4,7 @@
 In the good old times, when we had hard disk drives of just several gigabytes, it was easy to write a program and do any kind of manipulations with the data, that were at the disposal.
 Back then we built a model, and decided what data we need to have, to make the model functioning.
 For example, if you had a company, it was easy to devise ER-model and to build a database with corresponding tables, that would be stored on a single machine.
-It would possible have a slave machine, that repeated the whole database for a case of failure.
+It would possibly have a slave machine, that repeated the whole database for a case of failure.
 In the normal case we would simply do a dump of the database once in week.
 All selects were fast and pretty, and nobody thought about need to make things scalable.
 We used only data that were necessary to maintain the company's meta information.
@@ -18,7 +18,7 @@ Such environment has brought us to a completely different way of thinking.
 We keep everything!
 This is our motto.
 There is no necessity any more to think about space, because it has become so cheap.
-We can store everything possible storable, and then answer any kind of queries later on, when they arise.
+We can store everything possibly storable, and then answer any kind of queries later on, when they arise.
 Such model can in theory provide much more information for a final client, but it has its drawback.
 All the methods of storage and computations have to be reinvented.
 We cannot anymore store everything on the single machine in the single relational database.
@@ -27,7 +27,7 @@ We cannot anymore store everything on the single machine in the single relationa
 To overcome this problem the whole new branch of computer science and information technology has appeared - \textit{Big Data}.
 This is a very broad term, that encompasses different topics as for example storage systems, data processing systems, cloud computing, etc.
 All these systems, no matter do they store data or do some processing, have one thing in common - \textit{distributivity}.
-Data storage systems in the big data context are usually cold \textit{noSQL} databases, because they have different data storing models comparing to relational databases.
+Data storage systems in the big data context are usually called \textit{noSQL} databases, because they have different data storing models comparing to relational databases.
 They lay on many machines and provide reliability of data, so that if one machine dies, data remains alive.
 Data processing systems use many machines to do computations.
 Processing model is so, that it is easy to add new machines and increase speed of processing almost linearly.
@@ -36,17 +36,17 @@ These systems also provide reliability in the sense, that all the data is always
 One of the ideas that arised in the depths of the Institute of Computer Science of the University of Bonn was to measure usage of smartphones by their owners.
 Menthal is a group, that works on this project.
 It created an application for Android operating system, that gathers and sends data about use of smartphone to the server, where different computations are being made.
-Important to mention, that no private data is ever sent, only different markers (numbers) about how often a person unlock the phone, launches a particular app, and so on.
+Important to mention, that no private data is ever sent, only different markers (numbers) about how often a person unlocks the phone, launches a particular app, and so on.
 As the bottom line, this emerged to a real big data system, where large amounts of data are being gathered continuously, and many different questions can be answered using this data.
 
 The classical approach of data processing and big data architecture was bacth processing.
-It means we gather data, and once in a while we do all computations we need to produce relevant results for query answering.
+It means we gather data, and once in a while we do all computations we need, to produce relevant results for query answering.
 Then we can answer any particular question easily.
 But it has become recently not enough, because the delay of the batch computations is too big.
 It can take hours or event days.
 In general, it is important to maintain the system in such state, that it can answer any specific query right away having the most relevant results ready.
 
-Here the online processing comes out of the scene, and we need to thing about how to answer with low latency to the query, that client of the system has.
+Here the online processing comes to the scene, and we need to think about how to answer with low latency to the query, that client of the system has.
 Low latency means that we must provide a time guarantee, that data, that has come, will be in the query answers not later from its coming time, than this guarantee.
 
 
