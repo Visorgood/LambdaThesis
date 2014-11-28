@@ -29,11 +29,9 @@ In other case, when the system stores raw string, that user typed, it can later 
 This example shows, that unstructured raw data is preferred to store in the batch layer.
 
 \mnote{Data immutability}
-The batch layer does not allow modification or deletion of data.
+The batch layer does not allow modification or deletion of data, what is called \textit{immutability}.
 It only allows to append new records.
-This propery is called \textit{immutability} of data.
-It gives two crucial advantages.
-
+This property gives two crucial advantages.
 Immutability drammatically simplifies complexity of the storage mechanisms.
 This is because maintainance of modifications in the distributed environment is not an easy task.
 To successfully update a record, the system must perform it for all replications, provide locks and prohibit simultaneous updates.
@@ -60,8 +58,7 @@ Such technique allows to have the whole history of logical updates of all record
 The actual value is the one with the oldest timestamp.
 
 \mnote{Eternal truthfulness of data}
-Immutability gives one more important property of data, stored in the batch layer.
-This is \textit{eternal truthfulness of data}.
+Immutability gives one more important property of data, stored in the batch layer, namely \textit{eternal truthfulness of data}.
 When new record is added, no matter is it a new piece of data or update of an old data, it represents true information in that particular moment in time.
 This never becomes false, because it describes event or state of the world, that is an occured fact.
 This property implies, that the batch layer not only stores data, describing the state of the system, but also the history of its state changes.
@@ -78,15 +75,27 @@ The master dataset is logically a large list of records.
 When new piece of data arrives into the system, the batch layer appends it to the master dataset.
 The more exact description of how the master dataset can look like will be discussed later on in this chapter.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics [width=0.8\textwidth]{images/MasterDatasetExample}
+  \caption{An example of the list of records in the master dataset.}
+  \label{fig:MasterDatasetExample}
+\end{figure}
+
+On the Figure~\ref{fig:MasterDatasetExample} there is an example of the list of records of the master dataset.
+The 5th and 6th records are updates of the 1st and 2nd, respectively.
+They are in the same list, but the current version is defined by the last timestamp.
+This model implies, that the whole history of updates is available at any time in the future. 
+
 \mnote{Fact-based model}
-In contrast to relational databases, data in the master data is stored using a so called \textit{fact-based model}.
-It supposes, that all data is divided to a simple units called facts.
+In contrast to relational databases, data in the master dataset is stored using a so called \textit{fact-based model}.
+It supposes, that all data is divided into simple units called facts.
 Fact has several properties.
 It is timestamped on addition to the master dataset.
 Fact cannot be divided to a smaller units, it is already atomic.
 Fact is identifiable in the sense that any two facts in the dataset must be distinguishable.
 
-Fact-based model affords several important advantages.
+Fact-based model offers several important advantages.
 It allows to make queries to a state of the dataset at any time in its history, because each piece of data (fact) is timestamped and immutable, or, in other words, eternally true.
 It provides human-fault tolerance, as long as facts are immutable, and if a fact is added mistakenly, administrator can delete it.
 If any of attributes of a complex object are absent, it is not necessary to store any NULL values, because data is stored in atomic facts.
@@ -96,12 +105,23 @@ Data can be stored in an unstructured denormalized form, because it is not queri
 To unite facts into related data there are so called \textit{graph schemas}.
 Graph schema is a graph that describes the structure of a fact-based model.
 It defines relations between entities similarly as entity-relationship model for relational databases does.
-Figure~ [add figure] shows an example of a graph schema for a simple data model.
-
 Graph schema consists of three elements: nodes, esdges and properties.
 Nodes are entities representing particular objects of a describable system.
 Edges define relationships that connect nodes into the specific structure.
 Properties provide information associated with nodes.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics [width=0.8\textwidth]{images/GraphSchema}
+  \caption{An example of graph schema.}
+  \label{fig:GraphSchema}
+\end{figure}
+
+Figure~\ref{fig:GraphSchema} shows an example of a graph schema for a simple data model.
+Entities are represented using ovals.
+They are persons in this case.
+Users are connected with their properties via dashed lines.
+Lines between entities are edges.
 
 \mnote{Serialization frameworks}
 To save developers from detailed implementation of graph schema every time, and from possibility to do mistakes during this process, there are so called \textit{serialization frameworks}.
