@@ -1,4 +1,4 @@
-\chapter{Google Architecture}
+\chapter{Industrial Approaches [SP]}
 \label{chap:google_architecture}
 
 Google is one of the well-known examples of corporations that deal with Big Data.
@@ -27,7 +27,7 @@ Let us explain in more detail the primary features and internal structure of the
   \label{fig:google_architecture}
 \end{figure}
 
-\authorsection{Google File System}{SP}
+\section{Google File System}
 [reference]
 \mnote{Google File System}
 Google File System (GFS) is a scalable distributed file system, which supports Big Data operations.
@@ -144,7 +144,7 @@ GFS meets the storage needs of Google corporation.
 Therefore Google uses GFS as the storage platform for many applications, both in research and production areas.
 Another Google technologies, like MapReduce or BigTable are based on it.  	 
 
-\authorsection{MapReduce}{SP}
+\section{MapReduce}
 \label{sec:mapreduce}
 [reference]
 MapReduce model finds wide application in a variety of real world tasks.
@@ -170,7 +170,7 @@ The Reduce function merges the values with the same key, possibly decreasing a g
 One Reduce function invocation most of the time produces a single output value, or even none.
 A pseudo-code for a simple MapReduce task is illustrated in Listing~\ref{lis:simple_mapreduce_task}.
 
-\begin{lstlisting}[caption=Simple MapReduce task, label=lis:simple_mapreduce_task]
+\begin{lstlisting}[float=h, caption=Simple MapReduce task, label=lis:simple_mapreduce_task]
 def map(key, value):
 	list = []
 	for x in value:
@@ -253,7 +253,7 @@ Google Search engine widely uses MapReduce functionality for indexing, computing
 Moreover MapReduce can significantly facilitate the problems of data mining and machine learning.
 Its key feature of dividing the computation into Map and Reduce phases helps to easily build distributed systems and makes the computation considerably more efficient.  
 
-\authorsection{BigTable}{SP}
+\section{BigTable}
 [reference]
 Some Google projects deal with so large amounts of data, that common storage systems cannot sustain such a load.
 For instance, personalized search, that stores user browser history and handles search queries based on the stored information about user activity.
@@ -382,7 +382,7 @@ Bigtable is successfully used in many Google products, that proves the high qual
 %Melnik - Dremel
 %Akidau - MillWheel
 
-\authorsection{Facebook architecture}{SP}
+\section{Facebook architecture}
 
 Facebook is another representative company that is strongly connected with Big Data storing and processing.
 The main difference is that Facebook applications often require real-time data processing, providing a user with immediate feedback.
