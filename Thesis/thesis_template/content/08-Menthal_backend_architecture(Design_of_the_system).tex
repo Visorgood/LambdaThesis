@@ -5,7 +5,7 @@ The system consists of three main components: data source, data processing, and 
 Figure~\ref{fig:SpeedLayerArchitecture} depicts the general structure of the system.
 Data source component is essentially beyond the inner architecture of the system.
 Nevertheless, we consider it as a part, because it provides data, and we use specific libraries and classes to work with it.
-Data processing component, implemented using Storm, is the core of the system.
+Data processing component, implemented in two ways, using Storm or Spark Streaming, is the core of the system.
 It executes computations, and stores results to the data storage for further use.
 Data storage component, that uses Redis key-value store, is a temporal database for maintaining real-time views.
 Those views are then accessed by the Serving layer for query answering.
@@ -31,6 +31,10 @@ For each event type Kafka queue server maintains a dedicated topic.
 It is possible then to subscribe for receiving of those events, that are needed for processing.
 Events are sent as Avro objects \ref{subs:avro}, and contain meaningful information about what user does on the phone.
 In our case we consider event types presented in the Table~\ref{table:event_types}.
+In the future this list can be changed or extended.
+Moreover, the event type detection can be done in different way.
+For instance, the information about the event type can be carried in a message header.
+However, currently the infrastructure of our project is constructed in a way that the message type is determined by the Kafka topic it goes from.
 
 \begin{table}[h]
 \begin{tabular}{ | l | p{10cm} |}
@@ -56,19 +60,27 @@ In our case we consider event types presented in the Table~\ref{table:event_type
 \end{table}
 
 \mnote{Kafka spout}
-To obtain events from the Kafka queue server, we use \textit{Kafka spouts}.
+In Storm, to obtain events from the Kafka queue server, we use \textit{Kafka spouts}.
 Kafka spout is the class in the Storm's external class library, that allows to use Kafka queue server as a source of data for processing in the topology.
 It listens for messages coming from Kafka in a particular topic.
 Each such spout works in a distributed fashion, so that no matter how many events of a particular type will come, we can overcome this simply adding more machines to the cluster.
 
+Spark does not have such a concept like a spout, but it has its own mechanism of integration with Kafka.
+Spark uses a \textit{DStream} that is created via \textit{KafkaUtils.createStream}, that receives data from Kafka topics.
+Similar to the Storm case, we also create one DStream for each Kafka topic.
+Because of this we have a possibility to handle each type of events separately.
+
 \subsection{Data processing}
 
-The data processing framework Storm \ref{subs:storm} is the main component of the system.
-It receives messages from Kafka queue server, and performs different computations on that data.
+The data processing part is the main component of the system.
+We have two different implementations of this component, one is written using Storm framework, while another is based on Spark Streaming.
+We tried both of the technologies to compare them and to choose one that best fits our needs.
+Data processing component receives messages from Kafka queue server, and performs different computations on that data.
 Its purpose is to provide different aggregatons on data coming from smartphones.
 These aggregations are then stored in the storage system, and can be accessed by the Speed layer for answering queries.
 
-The core of Storm framework is topology.
+\mnote{Storm implementation}
+The core of Storm \ref{subs:storm} framework is topology.
 Topology describes the flow of computational logic.
 It contains spouts and bolts, that represent data sources and data processing nodes, respectively.
 We have already discussed Kafka spout, that we use for receiving data from the Kafka queue server.
@@ -77,6 +89,32 @@ Our topology has simple structure, but nevertheless has many nodes inside.
 First of all, for each event type there is dedicated Kafka spout, that receives data from the Kafka queue server.
 For that sake each Kafka spout is subscribed for a specific Kafka topic, corresponding to that event type.
 When new message comes from the Kafka queue server, Storm runs particular spout on any available cluster node.
+
+\mnote{Spark implementation}
+Spark has another conception, different from Storm.
+In our project we use Spark Streaming - technology that allows to handle data in real time.
+Thus the main notion in Spark implementation is a \textit{discretized stream} (DStream).
+Later on this stream is divided inro batches and they are processed by a Spark engine.
+The Spark DStream can be considered as an analogue of a spout in Storm in a context of our work.
+Therefore, similarly to Storm, every Kafka topic has a corresponding DStream in Spark.
+In Storm we run a Topology, here we run a StreamingContext.
+
+In the case of Spark Streaming, we have to deal with its Resilient Distributed Datasets (RDD).
+RDD represents the Spark (not Spark Streaming) main concept, that allows to perform batch processing.
+To provide near real-time processing, Spark Streaming uses DStreams as sources of data.
+Each DStream than divided by Spark into a sequence of RDDS.
+From this moment Spark can perform the same operations on RDDs as it uses in batch processing.
+In our case we use \textit{foreachRDD} as an output operation on RDDs.
+This function triggers the computation of the corresponding stream.
+RDD is a distributed collection, and to execute a peace of code, the Spark driver node serializes this code and sends to the workers, where it can be deserialized and executed.
+Our problem is that we use several classes to process the input data and store the results in Redis, that are not serializable.
+Therefore we have to be careful with the place where the code, that calls the functions from nonserializable classes, is placed.
+The best solution in our case is to use \textit{foreachPartition} method, that is called for each RDD.
+As a result, we create an instance of this nonserializable class for the whole partition and then apply the needed operations on each record of this partition. 
+
+The rest parts of our system are very similar for Storm and Spark implementations, apart from the terminology that we have to use.
+To avoid the redundancy, we describe below only the Storm case.
+The same description can be applied to the Spark case, by replacing a \textit{bolt} notion to a \textit{stream} notion. 
 
 There is a dedicated bolt for each event type in our topology.
 For each bolt we create a dedicated class, that performs particular processing, depending on what event type is it.

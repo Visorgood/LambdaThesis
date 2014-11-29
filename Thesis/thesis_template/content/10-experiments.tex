@@ -1,19 +1,17 @@
 \chapter{Experiments}
 \label{chap:experiments}
-
 The goal of our work is to compare two implementations of the Speed layer, one using Storm and another using Spark Streaming.
 We evaluate both approaches from two sides.
 First, we measure the performance of the system to detect which techology allows to process more events for the specified time interval.
 Second, we compare the codability of these variants.
 Using the obtain results, we make a choice which technology fits better our case.
 
-Performance evaluation
-
+\section{Performance evaluation [SP]}
 Figure~\ref{fig:test_system_parameters} represents the parmeters of the test system.
 For the simplicity of testing we use only one machine.
-To obtain more reliable results one should also run these systemts on a cluster of several machines.
+To obtain more reliable results one should also test these systemts on a cluster of several machines.
 
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics [width=0.9\textwidth]{images/test_system_parameters}
   \caption{Test system parameters}
@@ -27,65 +25,74 @@ Each of these sets contains all types of events mentioned in Chapter % TODO.
 The values of event parameters are generated randomly.
 
 As an output, we obtain the speed of event processing.
-We measure how many events the system processes per second and compare these figures for both Storm and Spark implementations. 
+We measure how many events the system processes per millisecond and compare these figures for both Storm and Spark implementations.
+The horizontal axis of all 6 diagrams below is the time in milliseconds.
+The vertical axis represents the number of processed events.
+
+As we can see, in all cases graphic increases almost linearly.
+It is obvious that the more events we want to process the more time we need.
+Furthermore, the system processes the fixed number of events in approximately the same time interval.
+It gives the possibility to estimate the overall time needed to handle the specified number of events, measuring the time spenditure for a small part of the whole set.
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.0\textwidth]{images/storm1000}
-  \caption{Storm 1000}
+  \includegraphics [width=1.1\textwidth]{images/storm1000}
+  \caption{Processing 1000 events with Storm}
   \label{fig:storm1000}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.0\textwidth]{images/storm10000}
-  \caption{Storm 10000}
+  \includegraphics [width=1.1\textwidth]{images/storm10000}
+  \caption{Processing 10,000 events with Storm}
   \label{fig:storm10000}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.0\textwidth]{images/storm100000}
-  \caption{Storm 100000}
+  \includegraphics [width=1.1\textwidth]{images/storm100000}
+  \caption{Processing 100,000 events with Storm}
   \label{fig:storm100000}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.0\textwidth]{images/spark1000}
-  \caption{Spark 1000}
+  \includegraphics [width=1.1\textwidth]{images/spark1000}
+  \caption{Processing 1000 events with Spark}
   \label{fig:spark1000}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.0\textwidth]{images/spark10000}
-  \caption{Spark 10000}
+  \includegraphics [width=1.1\textwidth]{images/spark10000}
+  \caption{Processing 10,000 events with Spark}
   \label{fig:spark10000}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.0\textwidth]{images/spark100000}
-  \caption{Spark 100000}
+  \includegraphics [width=1.1\textwidth]{images/spark100000}
+  \caption{Processing 100,000 events with Spark}
   \label{fig:spark100000}
 \end{figure}
 
-
-
-% machines we use, parameters we set, parameters we want observe - for performance
-% number of client, number of messages
-
-% measure: latency, cpu overhead. Can be dependent on batch size in Batch layer
-
-It should be mentioned that they solve a bit different problems.
+It is clearly shown on diagrams, that Strom and Spark have different processing techniques.
 Storm performs indeed a real time processing.
+Its graphic, especially for the 100,000 events case is close to a straight line.
 Spark, in its turn, does a micro-batching.
-In the latter case the size of batch is small, so this technology can be considered close to real time processing.
-Spark has latency
+The size of batch is small, so this technology can be considered close to real time processing.
+However, as we look at processing in milliseconds scale, we can see obvious steps on Spark diagrams. 
+We expected to have straight steps of equal size, but in our case they a bit skew and have different size.
+This can happen because of the several reasons.
+For example, the system setting (batch size, etc.) can be not optimal for our case, so Spark works with delays.
+Or we can have an inaccurancy in our measurements, or the measurement supplements can distort the processing routine.    
 
-Codability comparison
+As a conclusion, we can say that on every scale - 1000, 10,000 and 100,000 events Spark processes events faster than Storm.
+The only disadvantage of Spark is that it cannot give the true real-time processing.
+Even if the size of batch in micro-batching technique is small, it still cannot guarantee the immediate result.
+In our case this delay is not critical, however in other applications this technique can be not feasible because of this reason.  
 
+\section{Codability comparison [SP]}
 In the previous section Storm and Spark implementations are compared from the performance point of view.
 However, it is not the decisive factor when choosing which technology to use in our project.
 In modern world the cost of hardware decreases significantly comparing to the prices that were ten years ago.
@@ -110,15 +117,18 @@ Furthermore, each Kafka spout stores consumer offsets in ZooKeeper.
 For this purpose we specify a root path in ZooKeeper and a unique id for every spout.
 There is a possibility to set from which offset to start consuming.
 Also we indicate a topic name for each spout.
-
-Similar to the Storm case, with Spark we create one DStream for each Kafka topic.
-Because of this we have a possibility to handle each type of events separately.
-In Storm we run a Topology, here we run a StreamingContext.
-To provide it with the data from Kafka, the following settings are needed.
+To provide Spark with the data from Kafka, the following settings are needed.
 We specify a list of ZooKeeper hosts, the name of Kafka consumer group and the topic name.
 The number of threads used for consuming data from a Kafka topic is also customizable.
 
 \mnote{usage}
+From our subjective point of view, the process of implementation is more intuitive for Storm comparing to Spark.
+The idea that data goes from source to spouts, from spouts to bolts is very transparent.
+It is easy to design a system architecture and implement its components.
+For Spark it is more complicated.
+One has to understand the concept of RDD, the difference between transformations and actions.
+We should take into account that when we run transformations on RDD, the transformation code is serialized, shipped to the node and deserialized.
+Hence we have to provide serializable classes, that complicates the implementation process.
 
 \mnote{documentation}
 Both Spark and Storm have an official online documentation available.
@@ -137,87 +147,18 @@ Moreover, they can determine that the unexpected behavior of the system is a bug
 We can compare the number of contributors of Spark and Storm using github statistics, because both these projects present there.
 Currently Spark has 355 contributors, while Storm has 115 contributors. 
 
-% paragraph about installation
-% about syntax (Storm close to MapReduce)
-% about debagging
-% paragraph about documentation
-% about maintainance - monitor the software, restart after failure, etc
+To summarize the aspects of Storm and Spark Streaming comparison we present the concluding table shown in Figure~\ref{fig:storm_spark_comparison}.
+The checkmark in one of the column means that the specified aspect of a specified technology gives better results than the competitor.
+If both columns contain a checkmark it means that this aspect is equal for both technologies.
 
-% TODO: installation of Storm and Spark on the machine
+\begin{figure}[h]
+  \centering
+  \includegraphics [width=0.6\textwidth]{images/storm_spark_comparison}
+  \caption{Summarizing comparison of Storm and Spark Streaming implementations}
+  \label{fig:storm_spark_comparison}
+\end{figure}
 
-
-% move to another part
-
-% kafka has to be adopted to spark or to storm independently
-\mnote{Compatibility with Kafka}
-We use Kafka as a message queue in the backend part of the Menthal project.
-Therefore it is needed to adjust necessary setting to allow Storm or Spark receive messages from Kafka topics.
-Currently for each event type we use a separate Kafka topic.
-For now there are 9 of them: app\_install, app\_session, call\_missed, call\_outgoing, call\_received, screen\_off, screen\_unlock, sms\_received and sms\_sent.  
-In the future this list can be changed or extended.
-Moreover, the event type detection can be done in different way.
-For instance, the information about the event type can be carried in a message header.
-However, currently the infrastructure of our project is constructed in a way that the message type is determined by the Kafka topic it goes from.
-
-% assume that we alreadu know about topologies and so on
-\mnote{Kafka and Strom}
-In Storm all the logic is based on the computation graph named \textit{Topology}.
-It consists of \textit{Spouts}, the sources of data and \textit{Bolts}, data consumers.
-In our project we have a single topology that contains one spout and one bolt for each Kafka topic.
-% part of implementation:
-To allow Kafka-Storm interaction, we use an existing storm-kafka module.
-It provides a special class \textit{KafkaSpout}, that receives data from Kafka.
-As Kafka and Storm interact through ZooKeeper, we specify ZooKeeper hosts, port and a path to Kafka brokers (clusters).
-Furthermore, each Kafka spout stores consumer offsets in ZooKeeper.
-For this purpose we specify a root path in ZooKeeper and a unique id for every spout.
-There is a possibility to set from which offset to start consuming.
-Also we indicate a topic name for each spout.
-There are some other settings that allow to adjust the Kafka-Storm interaction more precisely, that are not mentioned in our work.
-
-\mnote{Kafka and Spark}
-% the same problem
-Spark has another conception, different from Storm.
-In our project we use Spark Streaming - technology that allows to handle data in real time.
-Thus the main notion in Spark implementation is a \textit{discretized stream} (DStream).
-Later on this stream is divided inro batches and they are processed by a Spark engine.
-Similar to the Storm case, we also create one DStream for each Kafka topic.
-Because of this we have a possibility to handle each type of events separately.
-In Storm we run a Topology, here we run a StreamingContext.
-To provide it with the data from Kafka, the following settings are needed.
-We specify a list of ZooKeeper hosts, the name of Kafka consumer group and the topic name.
-The number of threads used for consuming data from a Kafka topic is also customizable.
-Not all the possible setting are mentioned here.
-
-As a result, we can note that both Spark and Storm have built-in modules to interact with Kafka.
-Moreover, the needed setting are almost the same and do not present any difficulties.
-
-
-\mnote{Usage}
-As regards the usability, Storm seems to be more intuitive than Spark Streaming.
-It was mentioned that Storm consists of spouts and bolts.
-We receive the data from Kafka spout.
-So, the only thing we have to implement is one or several bolts that process the received information.
-In our simple case we use only one bolt, that inherits \textit{BaseRichBolt}.
-We override its \textit{execute} method to perform our operations.
-
-In the case of Spark Streaming, we have to deal with its Resilient Distributed Datasets (RDD).
-RDD represents the Spark (not Spark Streaming) main concept, that allows to perform batch processing.
-To provide near real-time processing, Spark Streaming uses DStreams as sources of data.
-Each DStream than divided by Spark into a sequence of RDDS.
-From this moment Spark can perform the same operations on RDDs as it uses in batch processing.
-In our case we use \textit{foreachRDD} as an output operation on RDDs.
-This function triggers the computation of the corresponding stream.
-RDD is a distributed collection, and to execute a peace of code, the Spark driver node serializes this code and sends to the workers, where it can be deserialized and executed.
-Our problem is that we use several classes to process the input data and store the results in Redis, that are not serializable.
-Therefore we have to be careful with the place where the code, that calls the functions from nonserializable classes, is placed.
-The best solution in our case is to use \textit{foreachPartition} method, that is called for each RDD.
-As a result, we create an instance of this nonserializable class for the whole partition and than apply the needed operations on each record of this partition. 
- 
-\mnote{Redis}
-The finishing point of both Storm and Spark approaches is calculating aggregations on the received data and storing the results into a database (Redis).
-There is nothing to compare in this case, because both of these technologies use exactly the same code to perform these steps.
-
-% TODO: scaling of Storm and Kafka on several nodes
-
-
-\authorsection{Evaluation of possibilities of the system}{NO}
+It should be mentioned that the comparison of Storm and Spark Streaming as separate technologies is not our goal.
+We want to choose the technology that can be used to build a Speed layer of Lambda architecture in the context of the Menthal project.
+Looking at the summarizing table we can conclude that Spark has more advantages than Strom.
+Hence, for our purposes the Spark Streaming approach appears to be the best solution.
