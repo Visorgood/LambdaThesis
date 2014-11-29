@@ -46,10 +46,33 @@ But it has become recently not enough, because the delay of the batch computatio
 It can take hours or event days.
 In general, it is important to maintain the system in such state, that it can answer any specific query right away having the most relevant results ready.
 
-Here the online processing comes to the scene, and we need to think about how to answer with low latency to the query, that client of the system has.
-Low latency means that we must provide a time guarantee, that data, that has come, will be in the query answers not later from its coming time, than this guarantee.
+Here the online processing comes to the scene, and we need to think about how to answer with low latency queries, that client of the system has.
+Low latency means the time guarantee between coming of the new data and its presence in the query answering.
+The time guarantee can be very small, even seconds or milliseconds.
+This requires a completely different processing model, because there is no any more the whole data at the disposal.
+To solve this problem, we can use a data structure, that we update online when new data arrives.
+At the same time this data structure contains data, that can answer client's queries.
 
+The Lambda architecture is a solution, that combines batch and online processing.
+This is a new generic approach for big data systems, that fulfils all requirements, that big data information systems have.
+It processes data in two completely separated ways: batch and incremental.
+In the end the results of the two methods are merged to answer queries.
+Working in such a way, the Lambda architecture is able to answer any type of query having all arrived to the system data considered and processed.
 
-Lambda architecture as a solution, combining batch and online processing
+Our work concernes implementation and investigation of the efficiency of the incremental part of the Lambda architecture - the so called Speed layer.
+We consider two distributed data processing systems, namely Spark and Storm.
+They have different processing models, but provide mostly the same functionality.
+We compare efficiency of the both systems in different experiments.
+To build the whole system we use many different frameworks for data definition, queueing and storage.
 
-our system
+This thesis work contains eleven chapters.
+The chapter two describes the story of the Menthal project, that has opened a question of the use of the Lambda architecture.
+In the chapter three we describe what is the Big Data information system, what requirements it has, and the classical naive approach for building such system. 
+Two concrete examples of such approach are presented in the chapter four, where we describe Google's and Facebook's solution for several specific tasks.
+In the chapter five we present an issue of online processing, that arises, when low latency data propogation is required.
+The chapter six describes the Lambda architecture in all its details.
+Next there is a big chapter, namely chapter seven, where we present and describe all frameworks, that we use to build the concrete system.
+In the chapter eight we present the design of the Speed layer, that we implement.
+Chapter nine contains different details and aspects of the implementation.
+In the chapter ten there are efficiency experiments, that we have made.
+And all this ends in the chapter eleven, where we make a conclusion and summary of the accomplished work.
