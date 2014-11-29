@@ -9,6 +9,14 @@ It provides usually approximated results, because algorithms, used for online pr
 The speed layer computes real-time views, that are similar to batch views in the sense, that they store data useful for fast answering queries.
 Real-time views contain data, observed during ongoing batch processing in the batch layer.
 The speed layer also prepares indexes on those views, that allow to answer queries ``on the fly''.
+The general structure of the Speed layer is present on the Fugire~\ref{fig:SpeedLayer}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics [width=1.0\textwidth]{images/SpeedLayer}
+  \caption{The general structure of the Speed layer.}
+  \label{fig:SpeedLayer}
+\end{figure}
 
 \subsection{Computation of real-time views}
 
