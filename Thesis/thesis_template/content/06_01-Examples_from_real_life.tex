@@ -1,10 +1,49 @@
 \section{Examples from real life}
 
-Describe several examples how well-known companies apply real-time processing to the real data.
-What algorithms do they maybe use, what topology or schema of computations in general.
+% Describe several examples how well-known companies apply real-time processing to the real data.
+% What algorithms do they maybe use, what topology or schema of computations in general.
+% 
+% The real
+% Many companies as well as 
+% 
+% Twitter uses real-time processing immensely \cite{Toshniwal2014} \cite{Boykin2013}.
 
-The real
-Many companies as well as 
+Nowadays real-time processing founds its uses in many spheres of life.
+It can be found in such fields as stock market trading, market data management, pricing and analytics, e-commerce, risk management, fraud detection, network monitoring and many others. 
+Let us describe in more detail several examples.
 
-Twitter uses real-time processing immensely \cite{Toshniwal2014} \cite{Boykin2013}.
+\mnote{electronic trading}
+Currently floor-based trading in stock market field is replaced by electronic trading.
+This approach brings together buyers and sellers using an electronic trading platform.
+It gives a superior advantage against human-based trading because it can provide the fastest reaction and high-speed calculations.
+
+But this property also puts strict requirements on the system.
+For instance, we can take an official statistics from Options Price Reporting Authority (OPRA) that aggregates from options exchanges all the quotes and trades.   
+It recorded a peak of 31 million messages per second in January 2014 with a prediction that this number will constantly grow.
+Furthermore, electronic trading systems puts high demands on latency.
+Latency in this case has a direct impact on profit.
+System that is able to produce the most current result maximizes the profit. 
+
+A variety of electronic trading platforms are created, that meet the mentioned requirements.
+Some existing examples include CME Globex, Goldman Sachs, CQG, eExchange. 
+These platforms place orders over a network for stocks, currencies, bonds, etc.
+Typically an electronic trading platform provides a stream of live market prices, using dedicated real-time processing algorithms.
+The detailed observation of the inner structure of such systems requires in-depth study and is out of scope of our work.
+
+\mnote{military}
+Another example of application the real-time processing is military technologies.
+Technological progress allows to change the fighting methods.
+Soldiers can be supplied with vital-signs monitors.
+GPS sensors can be placed into military vehicles and even can be given to every soldier.
+This allows to monitor the overall situation of military operation in real time.
+Consequently it is required to use specific real-time processing algorithms to obtain the needed results and perform necessary calculations.
+
+Sensor-based monitoring also can be used in other, non-military domains.
+For example, automobiles and public transport vehicles, supplied with GPS sensors, can report about the situation on the roads to avoid traffic problems. 
+Sensors, placed inside industrial pipes or premises with a potential danger of disaster, is another example.
+Data obtained from such sensors helps to monitor the system and detect in proper time the anomaly to avoid a catastrophe.
+ 
+The examples mentioned above represents a small part of real-time processing applications.
+All of these systems require a dedicated approach and need specific algorithms that allow to handle real-time data most efficiently.
+Some of these algorithms we describe in the following section.
 
