@@ -1,4 +1,4 @@
-\section{Design of the system [VI]}
+\section{Design of the System [VI]}
 
 Architecture of our system essentially repeats common design of the Speed layer, described in the Section~\ref{sec:speed_layer}.
 The system consists of three main components: data source, data processing, and data storage.
@@ -17,7 +17,7 @@ Those views are then accessed by the Serving layer for query answering.
   \label{fig:SpeedLayerArchitecture}
 \end{figure}
 
-\subsection{Data source}
+\subsection{Data Source}
 
 The source of data, that is being processed, is the Kafka queue server \ref{subs:kafka}.
 In its turn, it receives data from the outer sources, specifically from smartphones.
@@ -70,7 +70,7 @@ Spark uses a \textit{DStream} that is created via \textit{KafkaUtils.createStrea
 Similar to the Storm case, we also create one DStream for each Kafka topic.
 Because of this we have a possibility to handle each type of events separately.
 
-\subsection{Data processing}
+\subsection{Data Processing}
 
 The data processing part is the main component of the system.
 We have two different implementations of this component, one is written using Storm framework, while another is based on Spark Streaming.
@@ -203,7 +203,7 @@ For each aggregation we store four cases for different time intervals: last hour
 Specifically, for each aggregations consists of two value: timestamp of the start of the current hour/day/week/month, and aggregation value itself.
 Each time we update aggregation, that requires to recompute its starting timestamp.
 
-\subsection{Data storage}
+\subsection{Data Storage}
 
 Data storage Redis \ref{subs:redis} keeps all results of computations.
 These results are different aggregations, specifically counters, that are stored in the complex data model.

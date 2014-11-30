@@ -1,4 +1,4 @@
-\section{Sketch algorithms for estimation of stream paramaters}
+\section{Sketch Algorithms for Estimation of Stream Paramaters [VI]}
 
 To create aggregations, indicies and views of data, coming from the stream, we have often to answer different mathematical questions.
 For example: ``has a particular item already been observed in the stream?'', ``how many times specific item has already arrived from the stream?'', ``what is the cardinality of the set of items so far observed in the stream?'', etc.
@@ -22,7 +22,7 @@ Technically speaking, it answers query with error that is the function of algori
 For example, if the answer to the query is a boolean answer (yes or no), wrong answer can occur with some probability.
 If the answer is a number, deviation from exact right value is possible.
 
-\subsection{Bloom filter}
+\subsection{Bloom Filter}
 
 The Bloom filter answers query ``has a particular item been observed in the stream?'' \cite{Cormode}.
 It works in a constant time and requires small amount of memory to hold.
@@ -74,7 +74,7 @@ The Bloom filter allows to store all unsuitable passwords, that users are not pe
 Bitcoin uses the Bloom filter to speed up wallet synchronization \cite{BitcoinFoundation2012}.
 Google BigTable and Cassandra systems use the Bloom filter to reduce the number of hard disk lookups \cite{Bigtable/Chang_Dean_Ghemawat}.
 
-\subsection{Count-min sketch}
+\subsection{Count-Min Sketch}
 
 The Count-min sketch answers the query ``how many times has an item been observed in the stream?'' \cite{Cormode}.
 It gives always estimated value of the number of occurances of a particular item.
@@ -117,9 +117,9 @@ $$
 \hat{f}(i) = min_{1 \leq j \leq d}C[j,h_j(i)]
 $$
 
-\subsection{HyperLogLog algorithm}
+%\subsection{HyperLogLog algorithm}
 
-The HyperLogLog algorithm answers the query ``how many distinct items have been observed in the stream?''.
-\cite{Heule2013, Flajolet2007}
+%The HyperLogLog algorithm answers the query ``how many distinct items have been observed in the stream?''.
+%\cite{Heule2013, Flajolet2007}
 
 

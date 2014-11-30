@@ -1,4 +1,4 @@
-\chapter{Experiments}
+\chapter{Experiments [SP]}
 \label{chap:experiments}
 The goal of our work is to compare two implementations of the Speed layer, one using Storm and another using Spark Streaming.
 We evaluate both approaches from two sides.
@@ -6,7 +6,8 @@ First, we measure the performance of the system to detect which techology allows
 Second, we compare the codability of these variants.
 Using the obtain results, we make a choice which technology fits better our case.
 
-\section{Performance evaluation [SP]}
+\section{Performance Evaluation}
+
 Figure~\ref{fig:test_system_parameters} represents the parmeters of the test system.
 For the simplicity of testing we use only one machine.
 To obtain more reliable results one should also test these systemts on a cluster of several machines.
@@ -92,7 +93,8 @@ The only disadvantage of Spark is that it cannot give the true real-time process
 Even if the size of batch in micro-batching technique is small, it still cannot guarantee the immediate result.
 In our case this delay is not critical, however in other applications this technique can be not feasible because of this reason.  
 
-\section{Codability comparison [SP]}
+\section{Codability Comparison}
+
 In the previous section Storm and Spark implementations are compared from the performance point of view.
 However, it is not the decisive factor when choosing which technology to use in our project.
 In modern world the cost of hardware decreases significantly comparing to the prices that were ten years ago.

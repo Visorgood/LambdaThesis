@@ -1,4 +1,4 @@
-\section{Speed layer}
+\section{Speed Layer}
 \label{sec:speed_layer}
 
 To overcome delay of the batch processing the Lambda architecture has the speed layer.
@@ -18,7 +18,7 @@ The general structure of the Speed layer is present on the Fugire~\ref{fig:Speed
   \label{fig:SpeedLayer}
 \end{figure}
 
-\subsection{Computation of real-time views}
+\subsection{Computation of Real-time Views}
 
 To compute real-time views, one could consider the same approach as for batch views, but use only new data for computations.
 This would simulate batch processing on the much smaller scale.
@@ -32,7 +32,7 @@ Basically, it is an incremental update with a small piece of data, everytime it 
 This normally leads to only approximated answers to the queries, provided by real-time views.
 But this is again not a problem, because error does not accumulate for too long.
 
-\subsection{Data storage}
+\subsection{Data Storage}
 
 Speed layer must obey low-latency requirement, and must allow application complex incemental algorithms.
 Having such demands, storing of real-time views requires several properties to be fulfiled: ability to make random reads and writes, scalability and fault-tolerance.
@@ -52,7 +52,7 @@ But it is not always the case, because it is not always easy to execute the same
 Also, as long as real-time views have to be updated incrementally, they have more complex data structure.
 Because of those factors, it often happens, that real-time views represent data differently, than batch views.
 
-\subsection{Issues of incremental computations}
+\subsection{Issues of Incremental Computations}
 
 We have already discussed the difference between incremental and recomputation algorithms.
 Batch computations imply, that computations of a specific function is executed on the whole dataset.
@@ -75,7 +75,7 @@ For example the G-Counter allows to maintain a counter, that allows only increme
 It stores different versions of an integer counters in different replicas, and the merge them to provide correct results.
 There is unfortunately no way to aboid this complexity, and to make the system fully consistent and available at once.
 
-\subsection{Expiration period of real-time views}
+\subsection{Expiration Period of Real-time Views}
 
 Real-time views, though more complex than batch views, but have only transient nature.
 They are discarded every time, when batch layer completes processing of batch views.

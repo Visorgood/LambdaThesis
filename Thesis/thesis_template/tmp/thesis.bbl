@@ -17,12 +17,6 @@ Andrei Broder and Michael Mitzenmacher.
 \newblock Network applications of bloom filters: A survey.
 \newblock 2005.
 
-\bibitem[BROL13]{Boykin2013}
-Oscar Boykin, Sam Ritchie, Ian O'Connell, and Jimmy Lin.
-\newblock Summingbird: A framework for integrating batch and online mapreduce
-  computations.
-\newblock 2013.
-
 \bibitem[CDG{\etalchar{+}}06]{Bigtable/Chang_Dean_Ghemawat}
 Fay Chang, Jeffrey Dean, Sanjay Ghemawat, Wilson~C. Hsieh, Deborah~A. Wallach,
   Mike Burrows, Tushar Chandra, Andrew Fikes, and Robert~E. Gruber.
@@ -48,12 +42,6 @@ DataStax.
 \newblock
   \url{http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html}.
 \newblock Accessed 07.10.2014.
-
-\bibitem[FFGM07]{Flajolet2007}
-Philippe Flajolet, Éric Fusy, Olivier Gandouet, and Frédéric Meunier.
-\newblock Hyperloglog: the analysis of a near-optimal cardinality estimation
-  algorithm.
-\newblock 2007.
 
 \bibitem[Foua]{Spark1}
 Apache~Software Foundation.
@@ -86,12 +74,6 @@ Apache~Software Foundation.
 Eben Hewitt.
 \newblock {\em Cassandra - The Definitive Guide}.
 \newblock 2011.
-
-\bibitem[HNH13]{Heule2013}
-Stefan Heule, Marc Nunkesser, and Alexander Hall.
-\newblock Hyperloglog in practice: Algorithmic engineering of a state of the
-  art cardinality estimation algorithm.
-\newblock 2013.
 
 \bibitem[Lei]{Jedis}
 Jonathan Leibiusky.
@@ -155,13 +137,6 @@ Pivotal Software.
 \newblock Rabbitmq online documentation.
 \newblock \url{http://www.rabbitmq.com/documentation.html}.
 \newblock Accessed 06.10.2014.
-
-\bibitem[TTS{\etalchar{+}}14]{Toshniwal2014}
-Ankit Toshniwal, Siddarth Taneja, Amit Shukla, Karthik Ramasamy, Jignesh~M.
-  Patel, Sanjeev Kulkarni, Jason Jackson, Krishna Gade, Maosong Fu, Jake
-  Donham, Nikunj Bhagat, Sailesh Mittal, and Dmitriy Ryaboy.
-\newblock Storm @twitter.
-\newblock 2014.
 
 \bibitem[VW12]{AlvaroWilliams2012}
 Alvaro Videla and Jason~J.W. Williams.

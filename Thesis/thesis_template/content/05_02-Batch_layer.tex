@@ -1,4 +1,4 @@
-\section{Batch layer}
+\section{Batch Layer}
 
 The batch layer is the heart of the Lambda architecture.
 It is the place where all ever gathered data resides and being processed.
@@ -6,7 +6,7 @@ The batch layer executes two main tasks: storing of data arriving from outer sou
 The first issue requires usage of a storage system, that provides fast appending, efficient batch reads, and no random reads/writes of data.
 Computation of batch views demands application of distributed efficient batch processing algorithms as for example MapReduce.
 
-\subsection{Data model}
+\subsection{Data Model}
 
 The batch layer requires usage of a specific data model to make the Lambda architecture scalable, highly efficient and fault-tolerant.
 This data model is based upon four main notions.
@@ -130,7 +130,7 @@ Serialization frameworks require only description of a key notions, e.g. nodes, 
 They enforce then generation of all additional data fields and proper structure and data types for defined elements, as for example timestamps.  
 Examples of serialization frameworks are Avro \ref{subs:avro} and Thrift \ref{subs:thrift}.
 
-\subsection{Data storage}
+\subsection{Data Storage}
 
 Physical data storage of the master dataset is another important issue.
 In the big data context it is not possible to store all the data on one server.
@@ -161,7 +161,7 @@ An example of abstraction of the access to files and directories, that can be us
 Pail is a Java library, that allows to work with HDFS in a more object-oriented way.
 It makes code shorter an easier to read, and saves from many standard mistakes, that occur working with HDFS directly.
 
-\subsection{Computation of batch views}
+\subsection{Computation of Batch Views}
 
 Answering particular query is often unreasonably expensive or even infeasible in the real time.
 This is because amount of available data is huge, and because this data is raw. 
@@ -187,7 +187,7 @@ These batch views store data, that is easy to use to answer particular queries o
 But it is important to mention, that this is not exact values, that satisfy clients queries.
 Rather, batch views hold data, that can be on the fly used by the serving layer.
 Storing of endpoint values would be in many cases way too expensive or even infeasible.
-Figure~ [add figure] shows this approach.
+%Figure~ [add figure] shows this approach.
 
 \mnote{Recomputation and incremental algorithms}
 There are two approaches to compute batch views: to recompute them from scratch, and to make incremental updates.
