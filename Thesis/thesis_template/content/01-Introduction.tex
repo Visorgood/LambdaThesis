@@ -1,32 +1,33 @@
 \chapter{Introduction [VI]}
 \label{chap:introduction}
 
-In the good old times, when we had hard disk drives of just several gigabytes, it was easy to write a program and do any kind of manipulations with the data, that were at the disposal.
-Back then we built a model, and decided what data we need to have, to make the model functioning.
+In the good old times, when we had hard disk drives of just several gigabytes, it was easy to write a program and do any kind of manipulations with the data that were at the disposal.
+Back then we built a model and decided what data we need to have to make the model functioning.
 For example, if you had a company, it was easy to devise ER-model and to build a database with corresponding tables, that would be stored on a single machine.
 It would possibly have a slave machine, that repeated the whole database for a case of failure.
-In the normal case we would simply do a dump of the database once in week.
-All selects were fast and pretty, and nobody thought about need to make things scalable.
+In the normal case we would simply do a dump of the database once in a week.
+All selects were fast and pretty, and nobody thought about the need to make things scalable.
 We used only data that were necessary to maintain the company's meta information.
 
 Nowdays everything has changed.
 We now have immense amount of data coming from everywhere.
-Hard disks are large, and get larger.
-They even evolved to solid state drives without any mechanical parts, and became hence much faster.
+Hard disks are large and get larger.
+They have even evolved to solid state drives without any mechanical parts, and hence have became much faster.
 Such environment has brought us to a completely different way of thinking.
 
 We keep everything!
 This is our motto.
-There is no necessity any more to think about space, because it has become so cheap.
+It is not necessary any more to think about space, because it has become so cheap.
 We can store everything possibly storable, and then answer any kind of queries later on, when they arise.
-Such model can in theory provide much more information for a final client, but it has its drawback.
+In theory such model provides much more information for the final client.
+However, it also has its drawbacks.
 All the methods of storage and computations have to be reinvented.
 We cannot anymore store everything on the single machine in the single relational database.
 
 \mnote{Big Data}
 To overcome this problem the whole new branch of computer science and information technology has appeared - \textit{Big Data}.
 This is a very broad term, that encompasses different topics as for example storage systems, data processing systems, cloud computing, etc.
-All these systems, no matter do they store data or do some processing, have one thing in common - \textit{distributivity}.
+All these systems, no matter if do they store data or do some processing, have one thing in common - \textit{distributivity}.
 Data storage systems in the big data context are usually called \textit{noSQL} databases, because they have different data storing models comparing to relational databases.
 They lay on many machines and provide reliability of data, so that if one machine dies, data remains alive.
 Data processing systems use many machines to do computations.
@@ -34,19 +35,19 @@ Processing model is so, that it is easy to add new machines and increase speed o
 These systems also provide reliability in the sense, that all the data is always processed in the end, no matter what happens in the meantime with machines used for computing.
 
 One of the ideas that arised in the depths of the Institute of Computer Science of the University of Bonn was to measure usage of smartphones by their owners.
-Menthal is a group, that works on this project.
+\textit{Menthal} is a group, that works on this project.
 It created an application for Android operating system, that gathers and sends data about use of smartphone to the server, where different computations are being made.
-Important to mention, that no private data is ever sent, only different markers (numbers) about how often a person unlocks the phone, launches a particular app, and so on.
-As the bottom line, this emerged to a real big data system, where large amounts of data are being gathered continuously, and many different questions can be answered using this data.
+It is important to mention, that no private data is ever sent, only different markers (numbers) about how often a person unlocks the phone, launches a particular app, and so on.
+Essentially, this emerged to a real big data system, where large amounts of data are being gathered continuously, and many different questions can be answered using this data.
 
-The classical approach of data processing and big data architecture was bacth processing.
-It means we gather data, and once in a while we do all computations we need, to produce relevant results for query answering.
-Then we can answer any particular question easily.
-But it has become recently not enough, because the delay of the batch computations is too big.
-It can take hours or event days.
-In general, it is important to maintain the system in such state, that it can answer any specific query right away having the most relevant results ready.
+The classical approach to data processing and big data architecture was batch processing.
+It means we gathered data, and occasionally we did all computations we needed, to produce relevant results for query answering.
+Then we could answer any particular question easily.
+But it has become recently not enough, because the delay of the batch computations was too big.
+It could take hours or even days.
+In general, it is important to maintain the system in such a state, that it can answer any specific query right away having the most relevant results ready.
 
-Here the online processing comes to the scene, and we need to think about how to answer with low latency queries, that client of the system has.
+Here the online processing comes to the scene, and we need to think about how to answer with low latency queries, that the client of the system has.
 Low latency means the time guarantee between coming of the new data and its presence in the query answering.
 The time guarantee can be very small, even seconds or milliseconds.
 This requires a completely different processing model, because there is no any more the whole data at the disposal.
@@ -60,19 +61,19 @@ In the end the results of the two methods are merged to answer queries.
 Working in such a way, the Lambda architecture is able to answer any type of query having all arrived to the system data considered and processed.
 
 Our work concernes implementation and investigation of the efficiency of the incremental part of the Lambda architecture - the so called Speed layer.
-We consider two distributed data processing systems, namely Spark and Storm.
+We consider two distributed data processing systems, namely \textit{Spark} and \textit{Storm}.
 They have different processing models, but provide mostly the same functionality.
 We compare efficiency of the both systems in different experiments.
 To build the whole system we use many different frameworks for data definition, queueing and storage.
 
 This thesis work contains eleven chapters.
-The chapter two describes the story of the Menthal project, that has opened a question of the use of the Lambda architecture.
-In the chapter three we describe what is the Big Data information system, what requirements it has, and the classical naive approach for building such system. 
-Two concrete examples of such approach are presented in the chapter four, where we describe Google's and Facebook's solution for several specific tasks.
-In the chapter five we present an issue of online processing, that arises, when low latency data propogation is required.
-The chapter six describes the Lambda architecture in all its details.
-Next there is a big chapter, namely chapter seven, where we present and describe all frameworks, that we use to build the concrete system.
-In the chapter eight we present the design of the Speed layer, that we implement.
+Chapter two describes the story of the Menthal project, that has opened a question of the use of the Lambda architecture.
+In Chapter three we describe what is the Big Data information system, what requirements it has, and the classical naive approach to building such system. 
+Two concrete examples of such approach are presented in Chapter four, where we describe Google's and Facebook's solution for several specific tasks.
+In Chapter five we present an issue of online processing, that arises, when low latency data propogation is required.
+Chapter six describes the Lambda architecture in all its details.
+Next, there is Chapter seven, where we present and describe all frameworks, that we use to build the concrete system.
+In Chapter eight we present design of the Speed layer that we implement.
 Chapter nine contains different details and aspects of the implementation.
-In the chapter ten there are efficiency experiments, that we have made.
-And all this ends in the chapter eleven, where we make a conclusion and summary of the accomplished work.
+In Chapter ten there are efficiency experiments, that we have made.
+Finally, in Chapter eleven we make a conclusion and summary of the accomplished work.
