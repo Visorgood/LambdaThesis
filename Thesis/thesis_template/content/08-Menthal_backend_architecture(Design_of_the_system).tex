@@ -21,7 +21,7 @@ Those views are then accessed by the Serving layer for query answering.
 
 The source of data, that is being processed, is the Kafka queue server \ref{subs:kafka}.
 In its turn, it receives data from the outer sources, specifically from smartphones.
-There are so far tens of thousends of smartphones, that use Menthal application and send data to the server.
+There are so far tens of thousands of smartphones, that use Menthal application and send data to the server.
 Their number can grow arbitrarily, what requires in essence to have such a complex distributed server.
 Smartphones send data to the server in small batches, that contain about fifty events, that happened since the last sending.
 Kafka queue server stores this data temporarily, and tries to send it to all consumers, until they acknowledge delivery.
@@ -76,7 +76,7 @@ The data processing part is the main component of the system.
 We have two different implementations of this component, one is written using Storm framework, while another is based on Spark Streaming.
 We tried both of the technologies to compare them and to choose one that best fits our needs.
 Data processing component receives messages from Kafka queue server, and performs different computations on that data.
-Its purpose is to provide different aggregatons on data coming from smartphones.
+Its purpose is to provide different aggregations on data coming from smartphones.
 These aggregations are then stored in the storage system, and can be accessed by the Speed layer for answering queries.
 
 \mnote{Storm implementation}
@@ -94,7 +94,7 @@ When new message comes from the Kafka queue server, Storm runs particular spout 
 Spark has another conception, different from Storm.
 In our project we use Spark Streaming - technology that allows to handle data in real time.
 Thus the main notion in Spark implementation is a \textit{discretized stream} (DStream).
-Later on this stream is divided inro batches and they are processed by a Spark engine.
+Later on this stream is divided into batches and they are processed by a Spark engine.
 The Spark DStream can be considered as an analogue of a spout in Storm in a context of our work.
 Therefore, similarly to Storm, every Kafka topic has a corresponding DStream in Spark.
 In Storm we run a Topology, here we run a StreamingContext.
@@ -127,7 +127,7 @@ We just need to create new class, that inherits from \lstinline{EventProcessingB
 Class \lstinline{EventProcessingBolt} has a method \lstinline{getEventProcessingBoltByEventName}, that creates new bolt class by its name.
 To achieve such functionality, class \lstinline{EventProcessingBolt} has protected field \lstinline{schemaName}.
 It must be initialized in each derived class with the name of this particular event type.
-This is useful again for the sake of extensibility, because it let's to leave code of topology initialization the same, no matter how many new event types we add for processing.
+This is useful again for the sake of extensibility, because it let to leave code of topology initialization the same, no matter how many new event types we add for processing.
 The main method of the \lstinline{EventProcessingBolt}, namely \lstinline{execute}, is presented on the Listing~\ref{listing:EventProcessingBolt_execute}.
 
 \begin{lstlisting}[float=h, caption=The main method of the EventProcessingBolt., label=listing:EventProcessingBolt_execute, language=Java]
@@ -194,13 +194,13 @@ public class AppSessionBolt extends EventProcessingBolt {
 
 On the events coming from smartphones we do different aggregations.
 They will be then taken by the Serving layer for answering queries.
-There are three types of aggregation, that we maintain in the data storage: counter, duration, and lenght.
+There are three types of aggregation, that we maintain in the data storage: counter, duration, and length.
 Counter collects the number of events of any particular type.
 Duration accumulates the total duration of the continuing action on the smartphone.
 Length contains the total length of sms or whatsapp messages, etc.
 There is a different logic of how to compute them for these three types of aggregations. 
 For each aggregation we store four cases for different time intervals: last hour, last day, last week, last month.
-Specifically, for each aggregations consists of two value: timestamp of the start of the current hour/day/week/month, and aggregation value itself.
+Specifically, each aggregations consists of two values: timestamp of the start of the current hour/day/week/month, and aggregation value itself.
 Each time we update aggregation, that requires to recompute its starting timestamp.
 
 \subsection{Data Storage}
@@ -250,7 +250,7 @@ user:$user_id:$phone_hash:outgoing_msg_length:length:monthly
 \end{lstlisting}
 
 To access Redis we use Jedis java library \cite{Jedis}.
-It provides the the whole functionality, that Redis offers itself.
+It provides the whole functionality, that Redis offers itself.
 The class \lstinline{RedisProxy} contains all the communication with Redis.
 It contains two fields, presentd on the Listing~\ref{listing:RedisProxyFields}.
 They are the part of the Jedis library, and provide exact access to the Redis database.
@@ -262,7 +262,7 @@ private Pipeline pipeline;
 
 \mnote{Pipeline}
 We use \textit{pipelines} to communicate with Redis database.
-Pipeline allows to combine several reqests to Redis into one batch, and send it altogether to the server through the network.
+Pipeline allows to combine several requests to Redis into one batch, and send it altogether to the server through the network.
 It reduces network congestion, and makes probability of race conditions on the server less.
 \mnote{Transaction}
 Inside of pipeline we use \textit{transaction} to tell Redis server, that we this set of commands must be executed as a one atomic command.
@@ -290,7 +290,7 @@ private void incrementCounter(DurationType durationType, CounterType counterType
 \end{lstlisting}
 
 We first generate in the Line 2 a proper key, that exactly exists in Redis, from a base key part.
-Then we do do watching for values, that we want to retrieve and then change.
+Then we do watching of values, that we want to retrieve and then change.
 This is necessary to do, because this is the only way to protect the whole operation from race condition on the server side.
 We get value of the counter in the Line 6.
 Then in the Lines 7-8 we initialize pipeline and transaction.
