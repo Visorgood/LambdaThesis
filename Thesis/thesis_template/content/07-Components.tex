@@ -25,7 +25,7 @@ They tie different components of a complex system, written in different language
 Efficient processing of big volumes of data is a crucial point for any big data system.
 It must be easy to model, develop and maintain.
 This section describes two data processing frameworks - \textit{Storm} and \textit{Spark}.
-They have different computational models, but allow to execute the same computations.
+They have different computational models, but allow execution of the same computations.
 The difference between them is that Storm is a truly real-time processing system, whereas Spark works essentially with batches, and has a streaming extension on top of batch computations.
 
 \input{content/07-Components(Storm)}
@@ -33,13 +33,13 @@ The difference between them is that Storm is a truly real-time processing system
 
 \section{Storage Systems}
 
-There are nowdays many different storage systems for big data management.
+There are nowadays many different storage systems for big data management.
 They have different data models and, hence, different applications.
 Often they store data in a key-value manner.
-In this section we consider three systems, that are relevant for our work.
-HDFS is a distributed filesystem, that keeps data essentially in a tree structure in files.
+In this section we consider three systems that are relevant for our work.
+HDFS is a distributed file system that keeps data essentially in a tree structure in files.
 Redis is a very simple in-memory key-value store.
-Cassandra is a more sophisticated column-style fully distributed data storage.
+Cassandra is more sophisticated column-style fully distributed data storage.
 
 \input{content/07-Components(HDFS)}
 \input{content/07-Components(Redis)}
@@ -48,6 +48,6 @@ Cassandra is a more sophisticated column-style fully distributed data storage.
 \section{Configuraion Management}
 
 As long as we use many software elements in the system, it is necessary to manage a lot of configuration data.
-ZooKeeper solve this task.
+ZooKeeper solves this task.
 
 \input{content/07-Components(ZooKeeper)}
