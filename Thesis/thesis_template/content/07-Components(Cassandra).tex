@@ -6,7 +6,7 @@ It is efficient and reliable, what is achieved via multinode topology and replic
 It keeps data on many commodity machines without having master node.
 This leads to a purely distributed approach, where there is no a single point of a failure.
 Cassandra is highly scalable, as long as any number of nodes can be added to the cluster at any time.
-It provides CQL language, that allows to write and query data in an SQL-style manner.
+It provides CQL language, that allows writing and querying data in an SQL-style manner.
 
 Cassandra's architecture is purely distributed.
 It consists of a set of nodes, and all of them are equal in the sense of functionality.
@@ -16,12 +16,12 @@ Every node maintains a \textit{commit log} of writes.
 Then it saves all written data to an in-memory data structure called \textit{memtable}, that functions as a cash.
 When memtable is full, node flushes it to an SSTable file, partitioning and replicating data among the cluster.
 Cassandra allows to connect to any node in the cluster, that works then as a coordinator.
-It routs then requests of the client to nodes, that have rquested data.
+It routs then requests of the client to nodes that have requested data.
 
 \mnote{Main structures}
 There are 5 main structures in Cassandra, that need to be defined.
 \textit{Cluster} is a set of nodes that store the data.
-\textit{Data center} is a subset of cluster's nodes, that are grouped together.
+\textit{Data center} is a subset of cluster's nodes that are grouped together.
 They have a common configuration to achieve optimal replication and segregation properties.
 Data still can be copied to several data centers, if replication factor is high.
 \textit{Commit log} is a local storage on each node, where data is stored for durability, before being distributed across the cluster.
@@ -34,14 +34,14 @@ It is immutable, append-only, and exists for every Cassandra's table.
 \mnote{Communication between nodes}
 For communication between nodes Cassandra has a protocol called \textit{gossip}.
 It allows to discover information about other nodes in the cluster, and to share information about state of the node.
-According to gossip protocol every node communicate with three other nodes every second, exchanging meta-information about state, data, and other nodes.
+According to gossip protocol every node communicates with three other nodes every second, exchanging meta-information about state, data, and other nodes.
 Such network learns fast about its topology and state.
 
 \mnote{Detection of failures and recovery}
 Cassandra analyses state of nodes using gossip information to check whether node is up or down.
 It tries whenever possible not to send any requests to nodes, that are out of service by any reason.
-Particular node tries to understand, which other nodes are down directly, by communicaitng with them, as well as indirectly, receiving information about them from directly communicated nodes.
-Node can fail due to many different reasons, e.g. hardware failures, software crashes, or network outgages.
+Particular node tries to understand, which other nodes are down directly, by communicating with them, as well as indirectly, receiving information about them from directly communicated nodes.
+Node can fail due to many different reasons, e.g. hardware failures, software crashes, or network outages.
 Cassandra does not remove the node from topology as soon as it seems to be down.
 Instead, nodes try to re-establish communication with failed node.
 It can be smart, because, for example, a network outgage can be recovered fast.
@@ -63,7 +63,7 @@ Partition key is any column name of a row.
 This allows to set for each node a subset of partition key values, that will be stored in this node.
 Consistent hashing has an advantage, that it minimizes reorganization needs, when nodes are removed or added.
 For a particular partition key, consistent hashing produces for each node an interval of hash-values.
-Then for a new row, it is stored on the node, so that hash-value of a key maps to the interval assigned to this node.
+Then for a new row, it is stored on the node, so that hash-value of key maps to the interval assigned to this node.
 
 %Virtual nodes
 
@@ -91,7 +91,7 @@ There are three partitioners in Cassandra: \lstinline{Murmur3Partitioner}, \lsti
 Snitches define mapping of nodes to data centers and racks.
 Using snitches Cassandra understands how to route requests.
 They provide topology information and allow to execute replications properly.
-Snitch monitors historical information about efficieny of reading from different replicas of a row, and uses this information to choose the best one for a request.
+Snitch monitors historical information about efficiency of reading from different replicas of a row, and uses this information to choose the best one for a request.
 
 When a client connects to Cassandra, it is able to communicate with any node. 
 Requests are then redirected by a connected node to the one, that has a particular data to be returned to a client or to be written.
