@@ -4,13 +4,13 @@ The goal of our work is to compare two implementations of the Speed layer, one u
 We evaluate both approaches from two sides.
 First, we measure the performance of the system to detect which techology allows to process more events for the specified time interval.
 Second, we compare the codability of these variants.
-Using the obtain results, we make a choice which technology fits better our case.
+Using the obtained results, we make a choice which technology fits better our case.
 
 \section{Performance Evaluation}
 
-Figure~\ref{fig:test_system_parameters} represents the parmeters of the test system.
+Figure~\ref{fig:test_system_parameters} represents the parameters of the test system.
 For the simplicity of testing we use only one machine.
-To obtain more reliable results one should also test these systemts on a cluster of several machines.
+To obtain more reliable results one should also test these systems on a cluster of several machines.
 
 \begin{figure}[h]
   \centering
@@ -21,79 +21,58 @@ To obtain more reliable results one should also test these systemts on a cluster
 
 As an input, we use automatically generated events, that imitate the real data flow.
 To make the comparison more objective, we vary the number of processed messages.
-In our tests we use three sets: 1000 events, 10,000 events and 100,000 events.
-Each of these sets contains all types of events mentioned in Chapter % TODO.
+In our tests we use three sets: \textit{1,000} events, \textit{10,000} events and \textit{100,000} events.
+Each of these sets contains all types of events mentioned in Chapter 8.
 The values of event parameters are generated randomly.
 
 As an output, we obtain the speed of event processing.
-We measure how many events the system processes per millisecond and compare these figures for both Storm and Spark implementations.
-The horizontal axis of all 6 diagrams below is the time in milliseconds.
-The vertical axis represents the number of processed events.
+We measure how much time it takes to process the fixed amount of events and compare these figures for both Storm and Spark implementations.
+The vertical axis of all 3 diagrams below is the time in milliseconds.
+The horizontal axis represents the number of processed events.
 
 As we can see, in all cases graphic increases almost linearly.
 It is obvious that the more events we want to process the more time we need.
 Furthermore, the system processes the fixed number of events in approximately the same time interval.
-It gives the possibility to estimate the overall time needed to handle the specified number of events, measuring the time spenditure for a small part of the whole set.
+It gives the possibility to estimate the overall time needed to handle the specified number of events, measuring the time expenditure for a small part of the whole set.
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.1\textwidth]{images/storm1000}
-  \caption{Processing 1000 events with Storm}
-  \label{fig:storm1000}
+  \includegraphics [width=1.0\textwidth]{images/exp1}
+  \caption{Processing 1,000 events}
+  \label{fig:1000events}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.1\textwidth]{images/storm10000}
-  \caption{Processing 10,000 events with Storm}
-  \label{fig:storm10000}
+  \includegraphics [width=1.0\textwidth]{images/exp2}
+  \caption{Processing 10,000 events}
+  \label{fig:10000events}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics [width=1.1\textwidth]{images/storm100000}
-  \caption{Processing 100,000 events with Storm}
-  \label{fig:storm100000}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics [width=1.1\textwidth]{images/spark1000}
-  \caption{Processing 1000 events with Spark}
-  \label{fig:spark1000}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics [width=1.1\textwidth]{images/spark10000}
-  \caption{Processing 10,000 events with Spark}
-  \label{fig:spark10000}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics [width=1.1\textwidth]{images/spark100000}
-  \caption{Processing 100,000 events with Spark}
-  \label{fig:spark100000}
+  \includegraphics [width=1.0\textwidth]{images/exp3}
+  \caption{Processing 100,000 events}
+  \label{fig:100000events}
 \end{figure}
 
 It is clearly shown on diagrams, that Strom and Spark have different processing techniques.
 Storm performs indeed a real time processing.
-Its graphic, especially for the 100,000 events case is close to a straight line.
+Its graphic, especially for the \textit{100,000} events case is close to a straight line.
 Spark, in its turn, does a micro-batching.
 The size of batch is small, so this technology can be considered close to real time processing.
 However, as we look at processing in milliseconds scale, we can see obvious steps on Spark diagrams. 
 We expected to have straight steps of equal size, but in our case they a bit skew and have different size.
 This can happen because of the several reasons.
 For example, the system setting (batch size, etc.) can be not optimal for our case, so Spark works with delays.
-Or we can have an inaccurancy in our measurements, or the measurement supplements can distort the processing routine.    
+Or we can have an inaccuracy in our measurements, or the measurement supplements can distort the processing routine.    
 
-As a conclusion, we can say that on every scale - 1000, 10,000 and 100,000 events Spark processes events faster than Storm.
+As a conclusion, we can say that on every scale - \textit{1000}, \textit{10,000} and \textit{100,000} - events Spark processes events faster than Storm.
 The only disadvantage of Spark is that it cannot give the true real-time processing.
 Even if the size of batch in micro-batching technique is small, it still cannot guarantee the immediate result.
 In our case this delay is not critical, however in other applications this technique can be not feasible because of this reason.  
 
-\section{Codability Comparison}
+\section{Codability}
 
 In the previous section Storm and Spark implementations are compared from the performance point of view.
 However, it is not the decisive factor when choosing which technology to use in our project.
@@ -149,16 +128,16 @@ Moreover, they can determine that the unexpected behavior of the system is a bug
 We can compare the number of contributors of Spark and Storm using github statistics, because both these projects present there.
 Currently Spark has 355 contributors, while Storm has 115 contributors. 
 
-To summarize the aspects of Storm and Spark Streaming comparison we present the concluding table shown in Figure~\ref{fig:storm_spark_comparison}.
-The checkmark in one of the column means that the specified aspect of a specified technology gives better results than the competitor.
-If both columns contain a checkmark it means that this aspect is equal for both technologies.
-
 \begin{figure}[h]
   \centering
   \includegraphics [width=0.6\textwidth]{images/storm_spark_comparison}
   \caption{Summarizing comparison of Storm and Spark Streaming implementations}
   \label{fig:storm_spark_comparison}
 \end{figure}
+
+To summarize the aspects of Storm and Spark Streaming comparison we present the concluding table shown in Figure~\ref{fig:storm_spark_comparison}.
+The checkmark in one of the column means that the specified aspect of a specified technology gives better results than the competitor.
+If both columns contain a checkmark it means that this aspect is equal for both technologies.
 
 It should be mentioned that the comparison of Storm and Spark Streaming as separate technologies is not our goal.
 We want to choose the technology that can be used to build a Speed layer of Lambda architecture in the context of the Menthal project.
