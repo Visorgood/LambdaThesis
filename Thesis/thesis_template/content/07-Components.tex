@@ -1,9 +1,9 @@
 \chapter{Components}
 \label{chap:components}
 
-In this chapter we describe different frameworks and technologies, that we use (or could use as alternative) in our system.
+In this chapter we describe different frameworks and technologies, that we use (or could use as alternatives) in our system.
 To build the complete Speed layer, we need several components.
-First of all, message queue server serves to receive message from the outer sources, and feed them to the processing system.
+First of all, message queue server receives messages from the outer sources, and feed them to the processing system.
 Data processing system is the core of the system, and it stores results of computations in the data storage system.
 Data storage system reliably keeps data in a distributed fashion. 
 
@@ -47,6 +47,7 @@ Cassandra is a more sophisticated column-style fully distributed data storage.
 
 \section{Configuraion Management}
 
-There is Zookeeper here.
+As long as we use many software elements in the system, it is necessary to manage a lot of configuration data.
+ZooKeeper solve this task.
 
 \input{content/07-Components(ZooKeeper)}
