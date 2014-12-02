@@ -9,6 +9,13 @@ Gmail, Google's email service, had 425 million users in 2012.
 These are just several examples of large-scale Google projects, that processes huge amounts of data.
 Therefore, Google introduces a batch of solutions for building scalable systems. 
 
+Facebook is another representative company that is strongly connected with Big Data
+storing and processing. The main difference is that Facebook applications often require
+real-time data processing, providing a user with immediate feedback. On the
+contrary, for most Google applications batch processing is sufficient to make necessary
+computations.
+
+\section{Google Architecture}
 The overall structure of Google Big Data architecture is presented on the
 Figure~\ref{fig:google_architecture}.
 The lowest layer is Linux kernel, that serves as a basis for Google File System.
@@ -27,7 +34,7 @@ Let us explain in more detail the primary features and internal structure of the
   \label{fig:google_architecture}
 \end{figure}
 
-\section{Google File System}
+\subsection{Google File System}
 
 [reference]
 \mnote{Google File System}
@@ -145,7 +152,7 @@ GFS meets the storage needs of Google corporation.
 Therefore Google uses GFS as the storage platform for many applications, both in research and production areas.
 Another Google technologies, like MapReduce or BigTable are based on it.  	 
 
-\section{MapReduce}
+\subsection{MapReduce}
 
 \label{sec:mapreduce}
 [reference]
@@ -255,7 +262,7 @@ Google Search engine widely uses MapReduce functionality for indexing, computing
 Moreover MapReduce can significantly facilitate the problems of data mining and machine learning.
 Its key feature of dividing the computation into Map and Reduce phases helps to easily build distributed systems and makes the computation considerably more efficient.  
 
-\section{BigTable}
+\subsection{BigTable}
 
 [reference]
 Some Google projects deal with so large amounts of data, that common storage systems cannot sustain such a load.
@@ -386,12 +393,6 @@ Bigtable is successfully used in many Google products, that proves the high qual
 %Akidau - MillWheel
 
 \section{Facebook Architecture}
-
-Facebook is another representative company that is strongly connected with Big Data storing and processing.
-The main difference is that Facebook applications often require real-time data processing, providing a user with immediate feedback.
-On the contrary, for most Google applications batch processing is sufficient to make necessary computations.
-
-\mnote{Facebook architecture}
 Figure~\ref{fig:facebook_data_flow} demonstrates the data flow in Facebook architecture.
 Data originates from two sources: web servers and federated MySQL instances.
 Web servers generate log data, that consists of variuos events, e.g. a user clicked a link or 'liked' a photo.
