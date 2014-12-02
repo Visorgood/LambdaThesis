@@ -7,7 +7,13 @@
 \input{content/07-Components(Redis)}
 \input{content/07-Components(Cassandra)}
 
-\section{Real-time Processing Systems}
+\section{Real-time Data Processing Systems}
+
+Efficient processing of big volumes of data is a crucial point for any big data system.
+It must be easy to model, develop and maintain.
+This section describes two data processing frameworks - \textit{Storm} and \textit{Spark}.
+They have different computational models, but allow to execute the same computations.
+The difference between them is that Storm is a truly real-time processing system, whereas Spark works essentially with batches, and has a streaming extension on top of batch computations.
 
 \input{content/07-Components(Storm)}
 \input{content/07-Components(Spark)}
