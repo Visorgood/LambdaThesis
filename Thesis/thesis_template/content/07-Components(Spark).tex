@@ -17,10 +17,10 @@ RDDs and shared variables provide basic batch processing framework, whereas DStr
 %\subsubsection{Data model and batch processing}
 
 \textit{Resilient Distributed Dataset} \mnote{Resilient Distributed Dataset} (RDD) is the main notion in Spark, that represents dataset in a distributed fashion.
-RDD is essentially a readonly collection of elements.
-It is fault-tolerant, so that if one partiotion is lost, the whole collection can be recovered.
+RDD is essentially a read-only collection of elements.
+It is fault-tolerant, so that if one partition is lost, the whole collection can be recovered.
 RDD does not need to exist physically on the cluster nodes.
-Instead, it is a lazy object, that can lay in a robust data storage, and be computed on the fly, when computations require particular pieces of data.
+Instead, it is a lazy object that can lie in robust data storage, and be computed on the fly, when computations require particular pieces of data.
 Figure~\ref{fig:RDDArchitecture} shows general architecture of an RDD object.
 
 \begin{figure}[h]
@@ -30,14 +30,14 @@ Figure~\ref{fig:RDDArchitecture} shows general architecture of an RDD object.
   \label{fig:RDDArchitecture}
 \end{figure}
 
-There are two methods how to obtain an RDD object: parallelizing exisiting collection in the driver program, and using external dataset.
+There are two methods how to obtain an RDD object: parallelizing existing collection in the driver program, and using external dataset.
 Existing collection is any collection of data, e.g. array, list, set, etc., that is directly handled in the program.
 Creating an RDD object in this way, elements of a collection are copied to a distributed dataset, that can be used then in parallel.
 It is possible to specify the number of slices, that is the number of tasks, each machine in the cluster will then execute for this collection.
 External dataset is an external file.
 It can reside in the local file system, and in the distributed file system like HDFS.
 The simple example of processing data from the external text file in Spark, is to count the sum of lines' lengths using functions \lstinline{map} and \lstinline{reduce} of an RDD object. 
-Additionally, it is possible to obtain RDD by transforming another RDD, or by changing persistance of an existing RDD, but this methods are derived in some sense.
+Additionally, it is possible to obtain RDD by transforming another RDD, or by changing persistence of an existing RDD, but these methods are derived in some sense.
 
 RDD supports two types of operations: transformations and actions.
 \textit{Transformation} \mnote{transformation} creates a new RDD object from existing one.
@@ -83,7 +83,7 @@ Normally, passing arguments to a function, that executes on the nodes of the clu
 Sometimes it is useful to have global variable or lookup table, that all nodes can access.
 Spark supports the notion of a \textit{shared variable}\mnote{shared variable}.
 There are two types of shared variables: broadcast variables and accumulators.
-\textit{Broadcast variable} \mnote{broadcast variable} represents readonly value or dataset, that is useful for all nodes as a lookup table or global predefined value.
+\textit{Broadcast variable} \mnote{broadcast variable} represents read-only value or dataset, that is useful for all nodes as a lookup table or global predefined value.
 It is copied to every node using method \lstinline{broadcast} of \lstinline{SparkContext}.
 There are efficient algorithms in Spark to make this transfer fast.
 \textit{Accumulator} \mnote{accumulator} is a distributed counter, that allows all nodes to add up to the global numeric variable.
@@ -97,7 +97,7 @@ Only driver program is able to read accumulator's value.
 It can process data stream in a distributed manner.
 Spark streaming receives data from the input stream, divides it into blocks, each represented as an RDD, and passes this sequence of blocks to the Spark engine.
 It can work with different sources, e.g. message queue server (Kafka), web service (Twitter API), or regular TCP socket.
-Processed data can be there stored to the filesystem or database.
+Processed data can be there stored to the file system or database.
 The main abstraction for streaming processing in Spark is a Discretized Stream or DStream.
 It is internally a sequence of RDDs.
 Several DStreams can be combined into one chain for application more complex algorithms. 
@@ -116,7 +116,7 @@ Figure~\ref{fig:SimpleDStream} depicts simple DStream.
 \end{figure}
 
 Every operation, applied to DStream, is applied to every RDD object in the stream.
-This implies, that transformation on the DStream produces new DStream.
+This implies that transformation on the DStream produces new DStream.
 All these transformations are executed by Spark engine in a standard batch fashion.
 Figure~\ref{fig:DStreamWithTransformation} depicts how it works.
 
@@ -135,7 +135,7 @@ There is a notion of \lstinline{Receiver}, that is an object that receives data 
 Every DStream is responsible only for one input data stream.
 Many DStreams can be created for different input streams to receive data from different data sources in parallel.
 Receiver is executing as a long running task, hence it occupies one core of the processor.
-This implies, that there should be more cores then receivers in the system.
+This implies that there should be more cores then receivers in the system.
 
 There is a list of transformation to apply on a DStream.
 They all are almost the same as transformations available for RDD, because DStream works on top of RDD.
@@ -168,11 +168,11 @@ Listing~\ref{listing:DStreamExampleCode} shows a simple example of a Spark strea
 Example is taken from \cite{Spark2}.
 This code counts frequencies of words coming in a text data from the TCP socket.
 First we create \lstinline{SparkStreamingContext} object, and specify it to work in a local mode using two execution threads.
-We set a duration of gathering data from the input stream to 1 second.
+We set duration of gathering data from the input stream to 1 second.
 In the Line 3 we create DStream responsible for an input stream associated with TCP socket.
 Then we apply two transformations and one action.
 Transformations are \lstinline{map}-functions, so that the first one splits lines to words, and the second transforms words to pairs of the form \lstinline{(word, 1)}.
-Action is a \lstinline{reduce} operation that sums up occurances of the same word.
+Action is a \lstinline{reduce} operation that sums up occurrences of the same word.
 Execution starts only when we call \lstinline{start} method of \lstinline{SparkStreamingContext}.
 In the Line 7 we print out partial results of the processing.
 Instead, we can push results to a database or to a file, what is usually a case.
