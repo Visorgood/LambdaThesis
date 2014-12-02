@@ -14,11 +14,11 @@ The first one is the common data type system, that saves programmer from using s
 The second is transport mechanism, that separates data exchange from other layers of the program.
 Next is a protocol, that defines how data is serialized to be transported.
 Versioning, that allows to alter data structures or add arguments to functions without interrupting functioning of the system.
-Processing of data streams, that is responsible for managamenet of raw data, coming from the input stream, or going to the output stream. 
+Processing of data streams, that is responsible for management of raw data, coming from the input stream, or going to the output stream. 
 
 Thrift has a \textit{type} \mnote{Types} system, that allows programmer to code in native data types of the language, he uses.
 It also saves him from writing any kind of serialization of his data structures or classes for transportation.
-The Thrift IDL (Interface Definition Language) allows to describe in a file all data structures, that are to use in the interaction with another programm, in a clear and compact way.
+The Thrift IDL (Interface Definition Language) allows to describe in a file all data structures, that are to use in the interaction with another program, in a clear and compact way.
 Thrift's type system contains only common types, that exist in almost any programming language.
 The base types are: \lstinline{bool}, \lstinline{byte}, \lstinline{i16}, \lstinline{i32}, \lstinline{i64}, \lstinline{double}, \lstinline{string}.
 All integer types are signed integers.
@@ -77,8 +77,8 @@ Facebook has implemented for its needs an efficient binary format, that is in us
 
 Thrift has a \textit{versioning} \mnote{Versioning} model, that allows to change and improve data structures and interfaces, and read old data without special additional adjustments.
 To provide this feature, Thrift uses identifiers for fields and methods' arguments.
-Each field in the structure has then a field, that is uniq.
-On deserialization, generated code recognizes old fields and simply omit them.
+Each field in the structure has then a field that is unique.
+On deserialization, generated code recognizes old fields and simply omits them.
 For the case, when there is no expected field, Thrift provides each structure with a so called \lstinline{isset} object.
 It specifies for each field whether it is present in the structure.
 Reading the structure, it is always explicitly to check \lstinline{isset} for a particular field to read.
@@ -134,4 +134,4 @@ Facebook implemented many services using Thrift \mnote{Facebook Thrift Services}
 Facebook Search service uses Thrift for realization of the underlying protocol and transport layer.
 Also Facebook Search service comprises components written on different languages.
 Web-part implemented using PHP, search engine using fast C++, statistical and testing components using Python.
-All these components need to communicate in a fast, robust and simple way, and Thrift fulfils these properies.
+All these components need to communicate in a fast, robust and simple way, and Thrift fulfils these properties.
