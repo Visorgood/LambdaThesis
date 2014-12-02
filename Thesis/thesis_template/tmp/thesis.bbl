@@ -1,5 +1,5 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
-\begin{thebibliography}{LYBB14}
+\begin{thebibliography}{DKK{\etalchar{+}}11}
 
 \bibitem[AMQ11]{AMQP2011}
 Amqp specification v1.0 final, October 2011.
@@ -11,6 +11,12 @@ Gavin Andersen.
   \url{https://bitcoinfoundation.org/2012/11/core-development-status-report-1/},
   November 2012.
 \newblock Accessed 06.09.2014.
+
+\bibitem[AZS{\etalchar{+}}10]{Thusoo2010}
+Thusoo Ashish, Shao Zheng, Anthony Suresh, Borthakur Dhruba, Jain Namit, and
+  Sarma Joydeep, Sen.
+\newblock Data warehousing and analytics infrastructure at facebook.
+\newblock 2010.
 
 \bibitem[Bey]{Beyer2011}
 Mark Beyer.
@@ -24,19 +30,19 @@ Andrei Broder and Michael Mitzenmacher.
 \newblock Network applications of bloom filters: A survey.
 \newblock 2005.
 
+\bibitem[CKB{\etalchar{+}}14]{Montag2014}
+Montag Christian, Blaszkiewicz Konrad, Lachmann Bernd, Andone Ionut, Sariyska
+  Rayna, Trendafilov Boris, Reuter Martin, and Markowetz Alexander.
+\newblock Correlating personality and actual phone usage. evidence from
+  psychoinformatics.
+\newblock 2014.
+
 \bibitem[CKR{\etalchar{+}}]{HDFSArchitecture2}
 Robert Chansler, Hairong Kuang, Sanjay Radia, Konstantin Shvachko, and Suresh
   Srinivas.
 \newblock The hadoop distributed file system.
 \newblock \url{http://www.aosabook.org/en/hdfs.html}.
 \newblock Accessed 09.09.2014.
-
-\bibitem[CMM14]{Montag2014}
-Bernd Lachmann Ionut Andone Rayna Sariyska Boris Trendafilov Martin~Reuter
-  Christian~Montag, Konrad~Blaszkiewicz and Alexander Markowetz.
-\newblock Correlating personality and actual phone usage. evidence from
-  psychoinformatics.
-\newblock 2014.
 
 \bibitem[Cor]{Cormode}
 Graham Cormode.
@@ -48,6 +54,35 @@ DataStax.
 \newblock
   \url{http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html}.
 \newblock Accessed 07.10.2014.
+
+\bibitem[DKK{\etalchar{+}}11]{Borthakur2011}
+Borthakur Dhruba, Muthukkaruppan Kannan, Ranganathan Karthik, Rash Samuel,
+  Sarma Joydeep, Sen, Spiegelberg Nicolas, Molkov Dmytro, and Schmidt Rodrigo.
+\newblock Apache hadoop goes realtime at facebook.
+\newblock 2011.
+
+\bibitem[DSH{\etalchar{+}}10]{Beaver2010}
+Beaver Doug, Kumar Sanjeev, Li~Harry, C., Sobel Jason, and Peter Vajgel.
+\newblock Finding a needle in haystack: Facebooks photo storage.
+\newblock 2010.
+
+\bibitem[Faca]{HBase}
+Facebook.
+\newblock Hbase architecture.
+\newblock \url{http://hbase.apache.org/book/architecture.html}.
+\newblock Accessed 02.11.2014.
+
+\bibitem[Facb]{Scribe}
+Facebook.
+\newblock Scribe overview.
+\newblock \url{https://github.com/facebookarchive/scribe/wiki/Scribe-Overview}.
+\newblock Accessed 02.11.2014.
+
+\bibitem[FJS{\etalchar{+}}06]{Chang2006}
+Chang Fay, Dean Jeffrey, Ghemawat Sanjay, Hsieh Wilson, C., Wallach Deborah,
+  A., Burrows Mike, Chandra Tushar, Fikes Andrew, and Gruber Robert, E.
+\newblock Bigtable: A distributed storage system for structured data.
+\newblock 2006.
 
 \bibitem[Foua]{Spark1}
 Apache~Software Foundation.
@@ -80,6 +115,17 @@ Apache~Software Foundation.
 Eben Hewitt.
 \newblock {\em Cassandra - The Definitive Guide}.
 \newblock 2011.
+
+\bibitem[Joh]{Johnson2008}
+Robert Johnson.
+\newblock Facebook's scribe technology now open source.
+\newblock \url{https://www.facebook.com/note.php?note_id=32008268919}.
+\newblock Accessed 02.11.2014.
+
+\bibitem[JS04]{Dean2004}
+Dean Jeffrey and Ghemawat Sanjay.
+\newblock Mapreduce: Simplifed data processing on large clusters.
+\newblock 2004.
 
 \bibitem[Lei]{Jedis}
 Jonathan Leibiusky.
@@ -132,6 +178,11 @@ Karl Seguin.
 \newblock {\em The Little Redis Book}.
 \newblock 2012.
 
+\bibitem[SHST03]{Ghemawat2003}
+Ghemawat Sanjay, Gobioff Howard, and Leung Shun-Tak.
+\newblock The google file system.
+\newblock 2003.
+
 \bibitem[SN]{Redis}
 Salvatore Sanfilippo and Pieter Noordhuis.
 \newblock Redis online documentation.
@@ -143,6 +194,11 @@ Pivotal Software.
 \newblock Rabbitmq online documentation.
 \newblock \url{http://www.rabbitmq.com/documentation.html}.
 \newblock Accessed 06.10.2014.
+
+\bibitem[VAV07]{Chandola2007}
+Chandola Varun, Banerjee Arindam, and Kumar Vipin.
+\newblock Anomaly detection: A survey.
+\newblock 2007.
 
 \bibitem[VW12]{AlvaroWilliams2012}
 Alvaro Videla and Jason~J.W. Williams.
