@@ -1,12 +1,12 @@
-\section{Sketch Algorithms for Estimation of Stream Paramaters [VI]}
+\section{Sketch Algorithms for Estimation of Stream Parameters [VI]}
 
-To create aggregations, indicies and views of data, coming from the stream, we have often to answer different mathematical questions.
+To create aggregations, indexes and views of data, coming from the stream, we have often to answer different mathematical questions.
 For example: ``has a particular item already been observed in the stream?'', ``how many times specific item has already arrived from the stream?'', ``what is the cardinality of the set of items so far observed in the stream?'', etc.
 We can represent all these questions in a mathematical way, in the form of sets, values and functions.
 
 To answer such questions stream processing algorithms, or \textit{sketch algorithms}\mnote{sketch algorithm}, exist.
 They consider data coming from the stream as a mathematical space of values of a particular type, and compute functions on that space.
-The result of those functions, a set of values, that gives an opportunity to answer particular query.
+The result of those functions is a set of values that gives an opportunity to answer particular query.
 
 Sketch algorithm receives data from the stream and continuously builds the \textit{sketch}\mnote{sketch}.
 Sketch is a data structure that persists only the part of information that stream produces.
@@ -14,12 +14,12 @@ It is always compact and stores not original values from the stream, but specifi
 
 In comparison with the amount of original data, sketch algorithm uses small amount of memory to maintain sketch.
 Sketch is usually a variation of hash-table or combination of several hash-tables.
-It allows to answer particular query fast, mostly in a constant time, that does not depend on the size of the sketch.
+It allows answering particular query fast, mostly in a constant time, that does not depend on the size of the sketch.
 
 Sketch algorithm produces usually only approximated result.
 This is logical, because it condenses data set coming from the stream.
 Technically speaking, it answers query with error that is the function of algorithm's parameters.
-For example, if the answer to the query is a boolean answer (yes or no), wrong answer can occur with some probability.
+For example, if the answer to the query is a Boolean answer (yes or no), wrong answer can occur with some probability.
 If the answer is a number, deviation from exact right value is possible.
 
 \subsection{Bloom Filter}
@@ -31,7 +31,7 @@ It has several parameters that affect its size, time of request and rate of erro
 The Bloom filter is essentially a hash-table, but it does not store elements themselves.
 Instead, it is internally a bitset.
 It uses several hash-functions, so that when we put new element into the Bloom filter, it computes hash-values using each hash-function, interpret them as indices, and put 1 by each of them.
-To query an element, it does the same thing, it computes all hash-functions, and checks, whether all positions are equal to 1.
+To query an element, it does the same thing; it computes all hash-functions, and checks, whether all positions are equal to 1.
 If so, the Bloom filter answers ``yes'', and it can be false positive, because hash-functions produce collisions.
 We can adjust rate of false positives, changing parameters of the Bloom filter.
 If answers is ``no'', it is always true by definition of the filter.
@@ -68,7 +68,7 @@ $$
 k = \frac{m}{n}ln2
 $$
 
-Bloom filter is a great algorithm, that finds many examples of use.
+Bloom filter is a great algorithm that finds many examples of use.
 Early UNIX spell-checkers used the Bloom filter to check spelling fast, prestoring the whole dictionary in the filter \cite{BroderMitzenmacher2005}.
 The Bloom filter allows to store all unsuitable passwords, that users are not permitted to choose \cite{BroderMitzenmacher2005}.
 Bitcoin uses the Bloom filter to speed up wallet synchronization \cite{BitcoinFoundation2012}.
@@ -77,7 +77,7 @@ Google BigTable and Cassandra systems use the Bloom filter to reduce the number 
 \subsection{Count-Min Sketch}
 
 The Count-min sketch answers the query ``how many times has an item been observed in the stream?'' \cite{Cormode}.
-It gives always estimated value of the number of occurances of a particular item.
+It gives always estimated value of the number of occurrences of a particular item.
 The rate of error is again a matter of adjusting parameters.
 The Count-min sketch can only overestimate the result, meaning give a value equal or greater than true frequency.
 
@@ -85,13 +85,13 @@ The Count-min sketch consists of several arrays of counters.
 We denote the matrix, that represents it, as $C$.
 Matrix $C$ has $d$ rows and $w$ columns.
 The number of rows $d$ is at the same time the number of used hash-functions, so that one function corresponds to one row.
-The number of columns $w$ is simply a lenght of the sketch, and it influences accuracy of the algorithm.
+The number of columns $w$ is simply a length of the sketch, and it influences accuracy of the algorithm.
 
 The Count-min sketch works in the following way.
 When new item $i$ arrives from the stream, sketch computes each hash-function $h_j(i)$.
 For $j$-th hash-function it increments the counter (with index equal to $h_j(i)$) in the $j$-th row of the matrix $C$.
 So for each item $i$ sketch increments exactly $d$ counters.
-Finnaly, entry of the matrix $C$ has the next form
+Finally, entry of the matrix $C$ has the next form
 
 $$
 C[j, k] = \sum_{h_j(i)=k}f(i)

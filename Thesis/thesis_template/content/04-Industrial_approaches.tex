@@ -30,15 +30,14 @@ Let us explain in more detail the primary features and internal structure of the
 \begin{figure}
   \centering
   \includegraphics [width=0.4\textwidth]{images/Google_architecture}
-  \caption{Google Architecture}
+  \caption{Google architecture}
   \label{fig:google_architecture}
 \end{figure}
 
 \subsection{Google File System}
 
-[reference]
 \mnote{Google File System}
-Google File System (GFS) is a scalable distributed file system, which supports Big Data operations.
+Google File System (GFS) is a scalable distributed file system, which supports Big Data operations \cite{Ghemawat2003}.
 The underlying idea is the following: Google Search Engine and some other Google systems process vast amount of data, which is spread all over the world.
 Hence the file system should be highly extensible, give an opportunity to use cheap hardware components and, consequently, be fault tolerate. 
 Furthermore, it has some specific usage features.
@@ -48,19 +47,17 @@ Most of the time the stored data stays unchanged and new data is only appended.
 The append operation, in its turn, should provide the concurrent access for multiple clients.
 GFS architecture design helps to meet all these requirements.
 
-The Figure~\ref{fig:GFS_architecture} illustrates the main components of the GFS
-Architecture.
+The Figure~\ref{fig:GFS_architecture} (according to \cite{Ghemawat2003}) illustrates the main components of the GFS architecture.
 Each GFS cluster contains one master server and several chunkservers.
 The master has a "shadow" node, that provides read-only access when the primary master is down. 
 Chunkserver stores chunks as Linux files on local disk.
 Every chunk is replicated on several chunkservers for reliability.
 One chunk combines multiple files and has a fixed size of 64 megabytes.
 
-% Figure: according to [66]
 \begin{figure}
   \centering
   \includegraphics [width=0.8\textwidth]{images/GFS_architecture}
-  \caption{GFS Architecture}
+  \caption{GFS architecture}
   \label{fig:GFS_architecture}
 \end{figure}
 
@@ -106,7 +103,7 @@ To keep a mutation order consistent at all the replicas, GFS uses a technique of
 The master gives a lease to one of the replicas, that becomes a primary replica.
 The primary chooses an order for all the chunk's mutations and each replica then follows this order when applying mutations.
 
-The flow of write control is shown on the Figure~\ref{fig:write_control_flow} in
+The flow of write control is shown on the Figure~\ref{fig:write_control_flow} (according to \cite{Ghemawat2003}) in
 more details.
 
 \begin{figure}
@@ -150,13 +147,12 @@ The master performs a regular scan of the namespace and removes a hidden file, i
 All the described features help the Google File System to successfully cope with a large-scale data processing workload.
 GFS meets the storage needs of Google corporation.
 Therefore Google uses GFS as the storage platform for many applications, both in research and production areas.
-Another Google technologies, like MapReduce or BigTable are based on it.  	 
+The other Google technologies, like MapReduce or BigTable are based on it.  	 
 
 \subsection{MapReduce}
 
 \label{sec:mapreduce}
-[reference]
-MapReduce model finds wide application in a variety of real world tasks.
+MapReduce model finds wide application in a variety of real world tasks \cite{Dean2004}.
 For example, search engines use web crawling to gather a vast amount of information.
 They process this information to create inverted indices, construct web graphs, figure out the most frequent search queries, etc.
 Any of these tasks can be divided into two steps, namely Map and Reduce.
@@ -201,7 +197,7 @@ def reduce(key, list_of_values):
   \label{fig:mapreduce_operation_flow}
 \end{figure}
 
-We visualize the overall flow of a MapReduce operation in the Figure~\ref{fig:mapreduce_operation_flow}.
+We visualize the overall flow of a MapReduce operation in the Figure~\ref{fig:mapreduce_operation_flow} (according to \cite{Dean2004}).
 
 1. The MapReduce library divides the input files into M splits.
 The size of one piece varies from 16Mb to 64Mb depending on the chosen settings.
@@ -219,7 +215,7 @@ Also it informs the master about the location of these files.
 
 5. The master passes the locations to workers that handle a reduce operation.
 A reduce worker reads the intermediate pairs from a specified location using remote procedure calls.
-After compliting the reading, the worker groupes together all the pairs that share the same key.
+After completing the reading, the worker groups together all the pairs that share the same key.
 
 6. These pairs are then passed to the Reduce function, one key and one or several related values at a time.
 The output of the Reduce function is written to one of the output files.
@@ -227,7 +223,7 @@ The output of the Reduce function is written to one of the output files.
 7. After finishing all the map and reduce tasks, the MapReduce library returns the control to the user code.
 The derived output files can be directly processed or be used as an input to another MapReduce task.
 
-The MapReduce library has an optional Combine function that can be used for optimisation.
+The MapReduce library has an optional Combine function that can be used for optimization.
 For example, let us consider the task of counting the number of words in English text.
 Most probably it contains a lot of articles `a` and `the`.
 Each Map task sends thousands of pairs <a, 1> to a single Reduce operation over the network. 
@@ -258,20 +254,18 @@ The MapReduce master uses a special mechanism to solve this problem.
 On termination of an operation it executes the remaining in-process tasks on two different machines.
 When either primary or backup worker completes computations, the task is considered to be completed.
 
-Google Search engine widely uses MapReduce functionality for indexing, computing different statistics and analysing data.  
+Google Search engine widely uses MapReduce functionality for indexing, computing different statistics and analyzing data.  
 Moreover MapReduce can significantly facilitate the problems of data mining and machine learning.
 Its key feature of dividing the computation into Map and Reduce phases helps to easily build distributed systems and makes the computation considerably more efficient.  
 
 \subsection{BigTable}
-
-[reference]
 Some Google projects deal with so large amounts of data, that common storage systems cannot sustain such a load.
 For instance, personalized search, that stores user browser history and handles search queries based on the stored information about user activity.
 It is necessary to warehouse each user's data.
 Taking into account the huge number of Google Search users, the amount of data to be stored is also tremendous. 
 
 The company introduces its own storage system for these purposes - a Bigtable.
-It is a sparse, distributed, persistent multidimensional sorted map. [reference]
+It is a sparse, distributed, persistent multidimensional sorted map \cite{Chang2006}.
 Bigtable uses three-dimensional mapping: row key, column key and timestamp are mapped to an array of bytes.
 It is created to store petabytes of data in a distributed way.
 As Google uses Bigtable in various projects, it puts different requirements on data size and latency of the storage system. 
@@ -318,12 +312,12 @@ The expired session loses all the locks.
 
 Bigtable uses Chubby for several purposes.
 First, Chubby guarantees to have at most one active master at a time.
-Second, it handles the appearance of new tablets and finilizes the dead ones.
+Second, it handles the appearance of new tablets and finalizes the dead ones.
 Third, it stores the schema of Bigtable and access control lists.
 
 The major components of Bigtable are a master server, a number of tablet servers and a library linked into each client.
 It is possible to dynamically add or remove tablet servers according to given workload.
-The master assignes tablets to tablet servers, performs load-balancing, garbage collection.
+The master assigns tablets to tablet servers, performs load-balancing, garbage collection.
 Furthermore, it is responsible for creation of tables and column families.
 Each tablet server controls a tablets set.
 When a client sends a read or write request to the tablet, this request is processed by the tablet server.
@@ -343,7 +337,7 @@ When the table becomes larger than a specified threshold, it automatically split
 The root tablet uses a special METADATA table to store the location of tablets.
 The root tablet is a first tablet in this table.
 However, it is never split in contrast to the rest of the tablets to keep the number of hierarchy levels constant.
-Figure~\ref{fig:bigtable_tablets_hierarchy} illustrates the tablets hierarchy.
+Figure~\ref{fig:bigtable_tablets_hierarchy} (according to \cite{Chang2006}) illustrates the tablets hierarchy.
 The METADATA table also stores logs of operations on each tablet.
 This data can be used for preformance analysis and debugging.  
 
@@ -360,7 +354,7 @@ Each SSTable consists of several blocks of a fixed size (64Kb by default).
 To locate blocks it stores their indexes, that are loaded into memory on opening the SSTable.
 The blocks indexes considerably decrease the lookup time.
 First the binary search is performed on in-memory index to find the needed block.
-Than the appropriate block is read from disk.
+Then the appropriate block is read from disk.
 The whole SSTable can be loaded into memory if necessary to perform lookup and scan operations avoiding touching disk.
 
 A tablet can be recovered using a commit log.
@@ -374,26 +368,21 @@ A tablet server checks the incoming read and write operations.
 The operation should be well-formed and the sender should be authorized to perform a mutation.
 First the server writes a valid mutation to the commit log.
 Then for write operation it inserts its content to memtable.
-When the size of the memtable goes beyond the given threshold, the system frozes it.
+When the size of the memtable goes beyond the given threshold, the system freezes it.
 It creates a new memtable and converts the frozen one into an SSTable. 
 Read operation is performed on a merged view of the memtable and corresponding SSTables.
 
 Periodically a merging compaction on SSTables and the memtable are used to create new SSTables out of old ones.
 A regular compaction merges the memtable and a few SSTables, keeping the deletion information and deleted data.
 A major compaction merges all SSTables into exactly one SSTable, cleaning deletion entries.
-Bigtable performes the compaction mechanism regularly to keep the system up-to-date.
+Bigtable performs the compaction mechanism regularly to keep the system up-to-date.
 
 The variable number of tablets makes the system flexible and therefore easy to scale.
 The implementation features provide good performance and high availability.
 Bigtable is successfully used in many Google products, that proves the high quality of this storage system.
 
-% Other BigData systems:
-%Malewicz - Pregel
-%Melnik - Dremel
-%Akidau - MillWheel
-
 \section{Facebook Architecture}
-Figure~\ref{fig:facebook_data_flow} demonstrates the data flow in Facebook architecture.
+Figure~\ref{fig:facebook_data_flow} (according to \cite{Thusoo2010}) demonstrates the data flow in Facebook architecture.
 Data originates from two sources: web servers and federated MySQL instances.
 Web servers generate log data, that consists of variuos events, e.g. a user clicked a link or 'liked' a photo.
 The federated MySQL contains the descripting data, such as the time of posting the link and the place where it was done.
@@ -408,7 +397,7 @@ The federated MySQL contains the descripting data, such as the time of posting t
 Data flow goes from web servers to Scribe-Hadoop clusters.
 Such cluster is actually a Hadoop cluster with a running Scribe server on the top of it.
 The main function of Scribe is to aggregate the input data and write it into HDFS.
-This data is transferred uncompressed [Data Warehousing and Analytics Infrastructure at Facebook] that can be a bottleneck for the whole system.
+This data is transferred uncompressed that can be a bottleneck for the whole system.
 Facebook alleviates the problem by putting Scribe-Hadoop close to web servers, decreasing the network transfer load.
 Periodically Scribe-Hadoop clusters send compressed data (mostly as HDFS files) to Hive-Hadoop clusters.
 It is loaded to Hive and becomes available for other modules.
@@ -416,21 +405,21 @@ It is loaded to Hive and becomes available for other modules.
 Scrape processes load data from federated MySQL to Hive-Hadoop cluster.
 They get a dump of needed data from database, compress it and move it to the cluster.
 This process should be resilient and avoid putting extra load on the databases.
-The former is accomplished by using the previous days data when the database is not reachable at the moment.
+The former is accomplished by using the previous days' data when the database is not reachable at the moment.
 To meet the latter requirement, scrape process runs on a MySQL database replica.
 
 There are two types of Hive-Hadoop clusters - a production cluster and an adhoc one.
-The purpose of the production cluster is to execute high prioriy tasks with strict deadlines.
+The purpose of the production cluster is to execute high priority tasks with strict deadlines.
 On the contrary, the ad hoc cluster processes batch jobs with low priority and makes ad hoc analysis.
 These tasks are separated, because it can be dangerous to run ad hoc user query on a production cluster.
 
 When the data is needed for both clusters, it is replicated from the production to the adhoc cluster.
 It is done in this order, because the data should be available earlier for critical jobs on the production server.
 Moreover, the production server is more reliable.
-During the replication process the data is transferred in a raw form accompaned by the respective metadata.
+During the replication process the data is transferred in a raw form accompanied by the respective metadata.
 
 The stored data can be either transformed or queried by users.
-Most of the time Hive-Hadoop clusters keep the data for future analysis.
+Most of the time Hive-Hadoop clusters keeps the data for future analysis.
 However, in some cases the federal MySQL tier gets the data back.
 This data can be uploaded on the Facebook site and participate in the further interaction with Facebook users. 
 
@@ -444,7 +433,7 @@ Later on it is possible to recover the original message using only a subset of \
 
 Facebook widely uses such technologies for distributed data warehousing and computation as HDFS, Hive and Scribe. 
 While HDFS is an exterior module, Hive and Scribe were initially developed at Facebook and only later became open-source under the Apache Software Foundation.
-HDFS is described in detail in Chapter 7 (Components), Hive and Scribe are presented in the following sections.
+HDFS is described in detail in section \ref{subs:HDFS}, Hive and Scribe are presented in the following sections.
 
 \mnote{Hive}
 Hive is a framework designed for storing data.
@@ -452,10 +441,10 @@ Facebook uses it to query and analyze data.
 Hive provides an SQL-like interface for accessing the data from Hadoop.
 This makes the process of development easier comparing with a direct interaction with Hadoop via map-reduce.
 
-Figure~\ref{fig:hive} presents the Hive structure.
+Figure~\ref{fig:hive} (according to \cite{Thusoo2010}) presents the Hive structure.
 Hive has a \textit{Metastore} that stores mappings between Hive and Hadoop.
 The \textit{Driver} communicates with the Metastore and uses the obtained information for converting Hive query language (HiveQL) expressions into map-reduce jobs.
-Hive provides various types of interfaces for interaction: web based Graphiclal User Interface (GUI), a command line, Open Database Connectivity (ODBC), Java Database Connectivity (JDBC).
+Hive provides various types of interfaces for interaction: web based Graphical User Interface (GUI), a command line, Open Database Connectivity (ODBC), Java Database Connectivity (JDBC).
 The latter two communicate with the Driver using Thrift server, that represents a communication protocol for performing remote procedure calls in numerous programming languages.
 
 \begin{figure}
@@ -470,19 +459,19 @@ First, it uses file pruning and filtering to reduce the amount of data that shou
 Then it uses column pruning to exclude columns that are not needed for the query.
 Also the Driver uses such aggregations as 'group by' or 'join' for optimization.
 Join techniques vary in the effect they have on the way of processing data.
-For instance, reordering join allows to stream large tables to a reduce task avoiding helding it in memory.
+For instance, reordering join allows to stream large tables to a reduce task avoiding holding it in memory.
 
 Hive is a flexible framework and can be customized for the user needs.
 A user can define functions, table functions or scripts written in HiveQL.
 Moreover, it is possible to define custom types and data formats.
 
 \mnote{Scribe}
-Scribe is a distributed logging system designed for logging huge amounts of data. %[https://github.com/facebookarchive/scribe/wiki]
+Scribe is a distributed logging system designed for logging huge amounts of data \cite{Scribe}.
 It can be spread to thousands of nodes.
 At the same time it guarantees fail tolerance in the case of network or node crashes.
 
-There are two types of servers in Scribe: general servers and central servers.
-They are connected by a directed graph.%[https://www.facebook.com/note.php?note_id=32008268919]
+There are two types of servers in Scribe: general servers and central servers \cite{Johnson2008}.
+They are connected by a directed graph.
 In this graph each node knows only the next node and is not aware about the others.
 This makes the communication easier, because it saves the sender from the necessity to know the network topology.
 
@@ -491,7 +480,7 @@ The data model of Scribe is simple, without timestamping, message ordering, logg
 A message in Scribe consists of two strings: a category and a message itself.
 A category reflects the message topic.
 It is implied that the messages in one category have the same destination.
-Categories allows to move a data store without changing a client code.
+Categories allow to move a data store without changing a client code.
 For this purpose Scribe uses the server configuration settings.
 Moreover, the server can be configured to put into the file path a category name.
 The message string contains the information that should be logged.
@@ -512,23 +501,23 @@ Or when the local disk capacity is exceeded while the central server is not avai
 
 Scribe is based on Thrift, a software stack designed for code generation for RPC in multi-language environment.
 It allows to use different languages like PHP, C++, Java or python for working with it.
-The detailed discussion about Thrift is presented in Chapter 7 (Components). 
+The detailed discussion about Thrift is presented in section \ref{subs:thrift}. 
 Thrift reach functionality solves many hard problems connected with logging, extending Scribe capabilities.
 
 Scribe configuration files specify which store should be a destination for a particular directory.
 There are various types of stores.
-Some of them consists of other stores, like a batch store, that is build of a number of file stores.
+Some of them consist of other stores, like a batch store, that is built of a number of file stores.
 The configuration file has a section for every store along with a global section.
 Such setting as the maximum message number per second or the listening port are stored in the global section.
-All the store sections contains information about a type and a category.
+All the store sections contain information about a type and a category.
 The number of categories is not limited as well as the number of stores for one category.
 Also the store section can include specific settings that are needed for a particular store type, like maximum size of a file or its location.
 
 \mnote{Databee}
-Facebook uses Databee for managing job dependencies.
+Facebook uses Databee for managing job dependencies \cite{Thusoo2010}.
 Databee is a framework written in python.
 Its aim is to make the interaction process between parts of the system easier.
-For example, it transmitts data from one part of the system to another, transforms data and allows to run queries on it.
+For example, it transmits data from one part of the system to another, transforms data and allows to run queries on it.
 Also Databee creates monitoring information, that contains such details as job latency or job completion time.
 It allows to specify dependency on some data set.
 Thus it is possible to run a job at the time when a needed data set becomes available.
@@ -537,7 +526,7 @@ As Facebook supports both ad hoc and periodic batch jobs, it needs a proper mech
 Periodic jobs, in contrast to ad hoc ones, have strict deadlines.
 At the same time, it can happen that a long running periodic batch job blocks a short ad hoc query, holding the resources.
 For the purpose of the proper sharing Facebook introduces Hadoop Fair Share Scheduler.
-It divides users into pools and each of these pools are provided by the same quota of resources.
+It divides users into pools and each of these pools is provided by the same quota of resources.
 This scheduler limits the amount of concurrent jobs running in one pool.
 The periodic batch jobs have their own pools.
 It is guaranteed that even in the case of high load these pools are provided at least a minimum quota of resources.
@@ -545,8 +534,7 @@ Hadoop Fair Share Scheduler keeps track of the CPU and memory consumption by eve
 The scheduler is able to kill a job that consumes memory more than allowed threshold.
 
 \mnote{HDFS in Facebook}
-[Apache Hadoop Goes Realtime at Facebook]
-In matters of warehousing Facebook relies on HDFS.
+In matters of warehousing Facebook relies on HDFS \cite{Borthakur2011}.
 This file system provides a reliable, extensible and highly available store.
 However, for use cases, specific for Facebook, it has a significant disadvantage.
 It is designed for batch processing, while Facebook needs a system that can handle data in real time.
@@ -566,7 +554,7 @@ There are two AvatarNodes in a cluster.
 One of them is an Active AvatarNode, that represents a wrapper around a NameNode.
 The second one is a hot-standby copy of the former.
 
-Figure~\ref{fig:facebook_avatarnode}  illustrates how two AvatarNodes interact with each other.
+Figure~\ref{fig:facebook_avatarnode} (according to \cite{Borthakur2011}) illustrates how two AvatarNodes interact with each other.
 The Active AvatarNode stores a filesystem image and a transaction log in a Network file system (NFS).
 Simultaneously the Standby node reads this information and applies all the transactions.
 DataNodes send the location information to both Active and Standby node.
@@ -589,9 +577,9 @@ Also Facebook added a possibility to specify an RPC timeout.
 Originally, Hadoop was designed in such a way that the client is waiting for the reply from an RPC server infinitely.
 However this is inadmissible for real-time applications.
 
-HDFS was extended by \textit{recoverLease} API, that significantly decreases the lease revokation time.
+HDFS was extended by \textit{recoverLease} API, that significantly decreases the lease revocation time.
 Before this enhancement HDFS used a soft lease mechanism.
-In this case, when the clien cannot read the file, it continues read tries until success or until the soft lease expires (that was one minute by default).
+In this case, when the client cannot read the file, it continues read tries until success or until the soft lease expires (that was one minute by default).
 Due to the \textit{recoverLease} it becomes possible to revoke a lease immediately.
 A \textit{recoverLease} request is received by the NameNode.
 At that moment it becomes a holder of the file and starts to recover the lease.
@@ -600,7 +588,7 @@ Then the client can start reading from the file.
 
 \mnote{HBase}
 Facebook uses HBase as a database. 
-HBase is a distributed database that is built on a basis of BigTable and runs on top of HDFS.%[http://hbase.apache.org/book/architecture.html]
+HBase is a distributed database that is built on a basis of BigTable and runs on top of HDFS \cite{HBase}.
 HBase can be called as one of the implementations of BigTable, therefore it has an identical structure.
 
 Facebook optimizes the database for its own needs.
@@ -615,7 +603,7 @@ This process is called files compaction.
 
 \mnote{Haystack}
 Haystack is another technology used by Facebook to solve problems of large-scale data.
-It is an object storage system designed for working with billions of files.%[Finding a needle in Haystack: Facebook’s photo storage]
+It is an object storage system designed for working with billions of files \cite{Beaver2010}.
 Facebook uses it for photo warehousing.
 
 Photo storing differs from other storage system applications.
@@ -625,10 +613,10 @@ Photos do not need most of the metadata information usually stored by a file sys
 Moreover, Facebook requires a fast way to find and read a photo.
 
 Haystack is specifically designed to meet all the Facebook requirements.
-Figure~\ref{fig:haystack_architecture} shows the Haystack architecture.
+Figure~\ref{fig:haystack_architecture} (according to \cite{Beaver2010}) shows the Haystack architecture.
 The main three parts of Haystack are Haystack Directory, Haystack Store and Haystack Cache.
 The Store contains photos and associated metadata.
-The Store is devided into logical volumes, each of them combines several physical volumes.
+The Store is divided into logical volumes, each of them combines several physical volumes.
 The Directory is responsible for mapping between logical and physical volumes.
 The Cache is a content delivery network (CDN), that provides access for most frequently asked photos.
 
@@ -644,7 +632,7 @@ The typical scenario of a user-Haystack interaction can be described as follows.
 1. The user visits a page that contains some photos.
 
 2. The web server receives a request from the browser and asks the Directory for the photo URL.
-The URL has the following structure: http://[CDN]/[Cache]/[Machine id]/[Logical volume, Photo id] %[Finding a needle in Haystack: Facebook’s photo storage]
+The URL has the following structure: http://[CDN]/[Cache]/[Machine id]/[Logical volume, Photo id] \cite{Beaver2010}.
 
 3. The browser communicates with the CDN specified in the URL. 
 In some scenarios the browser communicates directly with the Cache, passing over the CDN.
@@ -657,11 +645,11 @@ In some scenarios the browser communicates directly with the Cache, passing over
 
 When the user uploads a photo:
 
-1. The web server askes the Directory for the logical volume where the photo can be written.
+1. The web server asks the Directory for the logical volume where the photo can be written.
 
-2. Then the server assignes an id to this photo.
+2. Then the server assigns an id to this photo.
 
-3. Finally it saves the photo on every physical volume assiciated with the given logical module. 
+3. Finally it saves the photo on every physical volume associated with the given logical module. 
  
 \mnote{Haystack Directory}
 The Directory has four main applications in Haystack.
@@ -698,7 +686,7 @@ First, the photo can be written.
 A Cache machine sends a request to Store machines, containing a key, an alternative key, a logical volume id, a cookie and the data to be stored.
 Every store machine saves the data and updates mapping that are stored in memory.
 The Store supports only append operation, so the data once written cannot be modified.
-Thus when a new version of a photo should be stored, the Store adds an updated niddle that has the same key and alternative key.
+Thus when a new version of a photo should be stored, the Store adds an updated needle that has the same key and alternative key.
 Different versions are distinguished by different offsets in a file.
 
 Second, the Store allows to read photos.
@@ -730,17 +718,10 @@ The Store machine gets rid of orphans during the reboot process: for each orphan
 To solve the second problem, the Store checks the deleted flag on receiving a read request.
 
 Haystack uses a background task called \textit{pitchfork} to recover from failures.
-This task is responsible for checking the state of all the Store machines peroidically.
+This task is responsible for checking the state of all the Store machines periodically.
 It should check the connection, volume files availability and the ability to read data.
 If the tests are failed, all the logical volumes of this machine are marked as read-only.
 Then such machines are manually examined to find the reason of failure.    
-
- 
-
-
-
-
-
 
 
 % 1. Flow of data (Data Warehousing and Analytics Infrastructure at Facebook)

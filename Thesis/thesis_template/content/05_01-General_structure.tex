@@ -25,8 +25,8 @@ It takes the whole dataset and executes batch computations on it.
 Views, that are the result of the batch processing, are called \textit{batch views}\mnote{batch view}.
 This operation is efficient, because all data is at once in disposal.
 We can execute any algorithm, and produce any kind of index or aggregation.
-It is also easy to programm using such greate batch processing approaches as MapReduce.
-This paradighm is inherently distributed and scalable, what allows to use hunderds and thousends of machines for batch processing.
+It is also easy to program using such great batch processing approaches as MapReduce.
+This paradigm is inherently distributed and scalable, what allows to use hundreds and thousands of machines for batch processing.
 
 After the batch layer has precomputed views, it places them into the \textit{serving layer}\mnote{serving layer}.
 The serving layer is responsible for storage of batch views.
@@ -38,7 +38,7 @@ Batch processing always starts again from scratch using all data, available to t
 When the batch layer stores computed views into the serving layer, it discards old ones.
 
 Batch computations, although easy and efficient, take long time to be done.
-This cannot be underestimated, because on the BigData scale computations can last hours even if we setup cluster of thousends of machines.
+This cannot be underestimated, because on the BigData scale computations can last hours even if we setup cluster of thousands of machines.
 
 As long as batch computations take much time, views are always outdated for several hours.
 During this time new data arrives to the system, and it must be also counted in query answers.
@@ -50,7 +50,7 @@ It also computes views, but in incremental fashion.
 Such views are called \textit{real-time views}\mnote{real-time view}.
 As new data arrives, the speed layer updates incrementally real-time views.
 Hence, they always has information from data, gathered during current batch processing.
-When batch processing finishes and old batch views are replaced by new, the speed layer drops real-time views and start to accumulate them from the beginning.
+When batch processing finishes and old batch views are replaced by new, the speed layer drops real-time views and starts to accumulate them from the beginning.
 
 Finally, to answer queries system uses both batch and real-time views.
 Batch views contain result of the last batch processing.
