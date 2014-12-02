@@ -1,10 +1,10 @@
 \subsection{Redis [VI]}
 \label{subs:redis}
 
-Redis is an in-memory storage, that keeps data in a key-value fashion \cite{Seguin2012, Redis}.
+Redis is an in-memory storage that keeps data in a key-value fashion \cite{Seguin2012, Redis}.
 It maintains data handled by a single application or by a cluster.
 Redis is easy to deploy, learn and use.
-It provides 5 data types, e.g. string, list, set, ordered set and hash, that are useful for different tasks, and give a powerful tool in combination.
+It provides 5 data types, e.g. string, list, set, ordered set and hash that are useful for different tasks, and give a powerful tool in combination.
 Redis is an open source database system.
 
 %\subsubsection{Basics}
@@ -34,9 +34,9 @@ This command is rather for administrative issues.
 Another point is that operation of receiving a value by a key works in a constant time, basically instantly.
 This makes Redis in fact fast and useful, because grow of the database does not affect its performance.
 
-Although Redis is an in-memory database system, it swaps data continuously to disk to provide persistance in case of application's failure.
+Although Redis is an in-memory database system, it swaps data continuously to disk to provide persistence in case of application's failure.
 Redis stores the database to disk every minute if at least 1000 keys have been changed.
-It makes less swaps, if less keys have been changed.
+It makes fewer swaps, if fewer keys have been changed.
 It does swap completely as a snapshot.
 There is though an alternative way to set Redis to make appending swaps.
 
@@ -181,7 +181,7 @@ OK
 (integer) 1
 \end{lstlisting}
 
-There is a mechanism of subscribtion and publication in Redis.
+There is a mechanism of subscription and publication in Redis.
 To subscribe to a channel, command \lstinline{SUBSCRIBE} exists.
 When somebody publishes something to this channel using command \lstinline{PUBLISH}, subscribers receive this message.
 This tool allows to notify different nodes in the system, that connect to Redis database, about events.
