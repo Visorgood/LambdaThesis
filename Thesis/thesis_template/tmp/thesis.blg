@@ -4,8 +4,33 @@ The top-level auxiliary file: thesis.aux
 The style file: alpha.bst
 Database file #1: bibliography/literature.bib
 Warning--I didn't find a database entry for "Bigtable/Chang_Dean_Ghemawat"
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1185 of file alpha.bst
 Warning--to sort, need author or key in AMQP2011
 Warning--empty journal in BroderMitzenmacher2005
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1250 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1250 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1250 of file alpha.bst
+Too many commas in name 1 of "Christian Montag, Konrad Blaszkiewicz, Bernd Lachmann, Ionut Andone, Rayna Sariyska, Boris Trendafilov, Martin Reuter and Alexander Markowetz" for entry Montag2014
+while executing---line 1250 of file alpha.bst
+Warning--empty journal in Montag2014
 Warning--empty journal in Cormode
 Warning--empty year in Cormode
 Warning--empty publisher in Hewitt2011
@@ -15,45 +40,45 @@ Warning--empty publisher in Seguin2012
 Warning--empty publisher in AlvaroWilliams2012
 Warning--empty journal in Zaharia2010
 Warning--empty journal in Zaharia2013
-You've used 25 entries,
+You've used 27 entries,
             2543 wiz_defined-function locations,
-            689 strings with 7857 characters,
-and the built_in function-call counts, 7829 in all, are:
-= -- 733
-> -- 391
-< -- 13
-+ -- 132
-- -- 127
-* -- 444
-:= -- 1313
-add.period$ -- 84
-call.type$ -- 25
-change.case$ -- 146
-chr.to.int$ -- 23
-cite$ -- 37
-duplicate$ -- 301
-empty$ -- 598
-format.name$ -- 161
-if$ -- 1579
+            699 strings with 8283 characters,
+and the built_in function-call counts, 8421 in all, are:
+= -- 791
+> -- 418
+< -- 14
++ -- 140
+- -- 135
+* -- 473
+:= -- 1413
+add.period$ -- 91
+call.type$ -- 27
+change.case$ -- 157
+chr.to.int$ -- 25
+cite$ -- 40
+duplicate$ -- 325
+empty$ -- 643
+format.name$ -- 172
+if$ -- 1699
 int.to.chr$ -- 3
 int.to.str$ -- 0
-missing$ -- 14
-newline$ -- 138
-num.names$ -- 72
-pop$ -- 274
+missing$ -- 15
+newline$ -- 149
+num.names$ -- 78
+pop$ -- 294
 preamble$ -- 1
-purify$ -- 174
+purify$ -- 187
 quote$ -- 0
-skip$ -- 238
+skip$ -- 258
 stack$ -- 0
-substring$ -- 179
-swap$ -- 19
-text.length$ -- 13
-text.prefix$ -- 13
+substring$ -- 193
+swap$ -- 20
+text.length$ -- 14
+text.prefix$ -- 14
 top$ -- 0
-type$ -- 184
-warning$ -- 11
-while$ -- 59
-width$ -- 27
-write$ -- 303
-(There were 12 warnings)
+type$ -- 200
+warning$ -- 12
+while$ -- 64
+width$ -- 29
+write$ -- 327
+(There were 12 error messages)

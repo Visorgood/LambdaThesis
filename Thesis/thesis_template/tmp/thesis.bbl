@@ -12,6 +12,13 @@ Gavin Andersen.
   November 2012.
 \newblock Accessed 06.09.2014.
 
+\bibitem[Bey]{Beyer2011}
+Mark Beyer.
+\newblock Gartner says solving 'big data' challenge involves more than just
+  managing volumes of data.
+\newblock \url{http://www.gartner.com/newsroom/id/1731916}.
+\newblock Accessed 21.09.2014.
+
 \bibitem[BM05]{BroderMitzenmacher2005}
 Andrei Broder and Michael Mitzenmacher.
 \newblock Network applications of bloom filters: A survey.
@@ -23,6 +30,13 @@ Robert Chansler, Hairong Kuang, Sanjay Radia, Konstantin Shvachko, and Suresh
 \newblock The hadoop distributed file system.
 \newblock \url{http://www.aosabook.org/en/hdfs.html}.
 \newblock Accessed 09.09.2014.
+
+\bibitem[CMM14]{Montag2014}
+Bernd Lachmann Ionut Andone Rayna Sariyska Boris Trendafilov Martin~Reuter
+  Christian~Montag, Konrad~Blaszkiewicz and Alexander Markowetz.
+\newblock Correlating personality and actual phone usage. evidence from
+  psychoinformatics.
+\newblock 2014.
 
 \bibitem[Cor]{Cormode}
 Graham Cormode.

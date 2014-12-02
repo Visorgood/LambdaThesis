@@ -29,7 +29,7 @@ For instance, afterwards it can be used in targeted advertising, or for performi
 \mnote{Big Data}
 There is no consensus about the origins of the term "Big Data", but most of the sources claim that it is first mentioned in the press in 2008.
 People start actively using it since 2009 and it spreads quickly owing to its precise and capacious meaning. 
-Big Data is characterized by its high (i) variety, (ii) velocity and (iii) volume. [reference - find from wikipedia]
+Big Data is characterized by its high (i) variety, (ii) velocity and (iii) volume \cite{Beyer2011}. 
 All these three "v" constitute a criterion that allocates Big Data observation into a distinct sector of computer science, which requires ad hoc decisions and a special approach.
 
 \mnote{Variety}
@@ -45,7 +45,7 @@ Moreover, Big Data differ in the way how it is collected, how urgently it should
 The diversity of Big Data sources causes the high velocity of data input flow.
 For example, Menthal, mentioned above, currently receives data from 50 000 users.
 It sums up to almost 30Gb input data per day.
-Therefore, Menthal reseives on average around 24Mb per minute, that sends a challenge how to handle input data flow on such a hight speed.
+Therefore, Menthal receives on average around 24Mb per minute, that sends a challenge how to handle input data flow on such a high speed.
 
 \mnote{Volume}
 In the end, massive sources variety, multiplied by high velocity of data generation, results in its enormous size.
@@ -82,10 +82,10 @@ To give a naive example how batching improves the performance, let us describe t
 For instance, an application every second receives data that should be written to the hard disk. 
 There are two options how to implement the writing procedure.
 On one hand, an application can write the input data every time it receives it, i.e. in our case every second.
-On the other hand, it is possible to accumulate input data in memory until it reaches the defined size and than write the whole batch at a time.
+On the other hand, it is possible to accumulate input data in memory until it reaches the defined size and then write the whole batch at a time.
 It is known that I/O operations involve physical movement of mechanical devices (e.g. seek motion of hard drive).
 Thus, the speed of sequential writes to a file is higher than random writes, because in the latter case additional time is spent for seek operations between each write.
-This means that in our simple example the second option is preferable, because it decreses the number of seek operation and therefore makes the writing faster.    
+This means that in our simple example the second option is preferable, because it decreases the number of seek operation and therefore makes the writing faster.    
 The same principle also works in general case, i.e. combining multiple operations in one batch can significantly enhance performance.
 However, Batch processing has one significant drawback: the results are always obtained with an arbitrary time delay.
 
@@ -138,7 +138,7 @@ Special systems monitor the state of a patient, immediately alerting caregivers 
 
 
 There are some requirements that are common for most of the Big Data architectures.
-Big Data systems deal with a large volumes of information, that constantly growth, therefore a system should be highly scalable.
+Big Data systems deal with large volumes of information, that constantly growth, therefore a system should be highly scalable.
 Scalability has a direct impact on performance, thus it is essential to maintain a system performance on a proper level.
 Moreover, availability and reliability are important attributes of a distributed architecture.
 All these properties are described in the following paragraphs.
@@ -167,7 +167,6 @@ The usage of inexpensive hardware helps considerably decrease the cost of the sy
 It is especially relevant in the context of Big Data because of its overwhelming scales.
 One of the well-known examples is the Google Lego server.
 In 1996 two students, Larry Page and Sergey Brin, needed a cheap but capacious server to test the Pagerank algorithm on a huge data. 
-[picture?]
 They assembled it using 10 drives 4Gb each and a Lego enclosure. 
 Nowadays Google uses commodity computers for building their computing clusters.
 
@@ -183,7 +182,7 @@ It is not rare to work with a file of several gigabytes.
 Storing the data in large files simplifies data processing.
 The size of data itself is huge and it is more efficient to work with several large files than with great number of small files.
 
-There are two metrics to measure the robustbness of a system, namely availability and reliability.
+There are two metrics to measure the robustness of a system, namely availability and reliability.
 At first sight they look similar, however these two metrics assess a system from different perspective.
 \mnote{Availability}
 Availability means that a system operates properly at any given moment.
@@ -195,7 +194,7 @@ That means that even if the system fails every hour, but for negligible time, it
 In contrast, reliability denotes the capability of a system to operate continuously without failing.
 Reliability and availability are the opposite concepts.
 The highly available system mentioned above is not reliable, because the intervals of working without failing are relatively short.
-However, the system that is down for one hour but only once per month can be reffered to sufficiently reliable.
+However, the system that is down for one hour but only once per month can be referred to sufficiently reliable.
 
 Big Data architectures have to be targeted to each specific scenario.
 For instance, architecture, designed for processing video data from a web camera, differs significantly from one for handling server log files.
@@ -208,12 +207,12 @@ Each of the presented steps involves a batch of technologies.
 For example, depending on data type and size, one can choose SQL (MySQL, Oracle, Teradata, etc.) or NoSQL (Cassandra, MongoDB, Apache HBase, etc.) solutions for storing Big Data.
 Similarly, depending on the application, Real-Time processing (Storm, Spark Streaming, etc.) or Batch processing (Apache Hadoop, etc.) technologies are used. 
 Thereby, it is apparent that no one general solution exists for every Big Data problem.
-Further we describe the existing Big Data architectures in the context of Menthal needs.
+Further we describe the existing Big Data architectures in the context of the Menthal needs.
 
 \begin{figure}
   \centering
   \includegraphics [width=0.8\textwidth]{images/big_data_flow}
-  \caption{Big Data Flow}
+  \caption{Big Data flow}
   \label{fig:big_data_flow}
 \end{figure}
 
@@ -233,8 +232,8 @@ Menthal uses a Representational state transfer (REST) API for communication betw
 In this context RESTful API means that all the required information is transferred as parameters inside of an HTTP request (GET or POST).
 The application uses stateless type of data exchange, that means that the server does not store a client state.
 It helps to decrease the load on the server side, however increasing the amount of exchange traffic.
-This straigforward approach is easy to implement, however, at a certain point, it cannot anymore sustain a constantly growing load.
-The datatbase cannot cope anymore with the increased input flow, returning a timeout error.
+This straightforward approach is easy to implement, however, at a certain point, it cannot anymore sustain a constantly growing load.
+The database cannot cope anymore with the increased input flow, returning a timeout error.
 
 \mnote{Database mirroring}
 Database mirroring avoids the database overload.
@@ -248,7 +247,7 @@ It does not grant the same information consistency as a hot standby mode, but it
 \mnote{Database caching}
 Database caching is another technique for improving architecture scalability. 
 In this case data is cached in high-performance store, e.g. in memory.
-The access to memory is faster than the reading from a file or a database or transfering data via HTTP.
+The access to memory is faster than the reading from a file or a database or transferring data via HTTP.
 When the application often uses such external resources, database caching significantly increases performance. 
 The drawback of both approaches is that they only improve reading, leaving the problem of large-scale writing unsolved. 
 

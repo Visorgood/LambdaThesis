@@ -58,7 +58,7 @@ In this case Menthal uses the same concept as Google: it grants users a free ser
 This approach works well, and the high number of Menthal users demonstrates it. 
 
 Prior to present Menthal application a pilot study was conducted. 
-It was a psychological experiment on 49 participants.
+It was a psychological experiment on 49 participants \cite{Montag2014}.
 During 5 weeks their telephone/SMS usage was measured by means of a mobile phone application.
 The personality dimensions were determined using questionnaire.
 The goal of this study was to detect a connection between smartphone usage patterns and personality traits.
@@ -67,12 +67,12 @@ In contrast to other similar attempts, this work uses automatized approach for g
 The application tracks tuples for calls of the format (anonymized number, start time, end time, in/out).
 SMS tuples have a form (anonymized number, length of the message, time sent for outgoing messages / time received, time read for incoming SMS).
 The application is not visible for the user, uploading data to the server automatically.
-Later collected data is analysed on the server in the context of personality traits.
+Later collected data is analyzed on the server in the context of personality traits.
 Among the result of the study one can observe a positive correlation between extraversion and the number and frequency of telephone calls.
 
 \section{Technical Details}
 This experiment develops into an independent smartphone application for mass usage. 
-It collects data, providing user with a feedback and supplying psychologists with information that can be analysed later on.
+It collects data, providing user with a feedback and supplying psychologists with information that can be analyzed later on.
 Figure~\ref{fig:menthal_architecture} illustrates the Menthal architecture.
 The application includes a client and a server part, that interact with each other via HTTPS.
 
@@ -107,7 +107,7 @@ UI provides also additional functionality.
 It shows overall daily/weekly/monthly statistics about the phone usage such as most used application, number of calls or the number of times user unlocked the phone.
 After a short questionary it can display personality characteristics diagram, that includes five sides: extraversion, neuroticism, openness, conscientiousness, agreeableness.
 Furthermore a user can check the list of contacts with whom he communicates more often over a period of time.
-The next screen shows the daily time spenditure with the phone for the last 30 days.
+The next screen shows the daily time expenditure with the phone for the last 30 days.
 The application is able to keep track of user mood, periodically checking his current state of mind.
 Using smartphone's GPS receiver, Menthal can determine and show on map the user location.
 Moreover the application gives an opportunity to put a time limit on a particular application, so when the limit is exceeded the phone warns a user about that.
@@ -144,7 +144,7 @@ Moreover the application gives an opportunity to put a time limit on a particula
 \end{minipage}
 \end{figure}
 
-All the gathered data is temporarely stored on a phone in a cryptographically protected SQLCipher database.
+All the gathered data is temporarily stored on a phone in a cryptographically protected SQLCipher database.
 Every time a new event is created, the application increases a special counter by 1.
 When this value reaches 50, Menthal performs the following steps:
 
@@ -156,7 +156,7 @@ When this value reaches 50, Menthal performs the following steps:
 
 4) Wait for the reply.
 
-5) If the server does not respose, try again in approximally 2 minutes. 
+5) If the server does not respond, try again in approximately 2 minutes. 
 
 6) If the acknowledgment is received, delete the data that was sent from the SQLCipher database.
 
