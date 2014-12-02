@@ -1,6 +1,36 @@
 \chapter{Components}
 \label{chap:components}
 
+In this chapter we describe different frameworks and technologies, that we use (or could use as alternative) in our system.
+To build the complete Speed layer, we need several components.
+First of all, message queue server serves to receive message from the outer sources, and feed them to the processing system.
+Data processing system is the core of the system, and it stores results of computations in the data storage system.
+Data storage system reliably keeps data in a distributed fashion. 
+
+\section{Message Queueing}
+
+Message queue servers are the important part of any data system.
+They fill the gap between data sources and processing components or storage systems.
+There are many message queue servers, here two of them - Kafka and RabbitMQ.
+Additionally in this section we mention two serialization frameworks.
+They tie different components of a complex system, written in different languages, together.
+
+\input{content/07-Components(Kafka)}
+\input{content/07-Components(RabbitMQ)}
+\input{content/07-Components(Avro)}
+\input{content/07-Components(Thrift)}
+
+\section{Real-time Data Processing Systems}
+
+Efficient processing of big volumes of data is a crucial point for any big data system.
+It must be easy to model, develop and maintain.
+This section describes two data processing frameworks - \textit{Storm} and \textit{Spark}.
+They have different computational models, but allow to execute the same computations.
+The difference between them is that Storm is a truly real-time processing system, whereas Spark works essentially with batches, and has a streaming extension on top of batch computations.
+
+\input{content/07-Components(Storm)}
+\input{content/07-Components(Spark)}
+
 \section{Storage Systems}
 
 There are nowdays many different storage systems for big data management.
@@ -15,30 +45,8 @@ Cassandra is a more sophisticated column-style fully distributed data storage.
 \input{content/07-Components(Redis)}
 \input{content/07-Components(Cassandra)}
 
-\section{Real-time Data Processing Systems}
-
-Efficient processing of big volumes of data is a crucial point for any big data system.
-It must be easy to model, develop and maintain.
-This section describes two data processing frameworks - \textit{Storm} and \textit{Spark}.
-They have different computational models, but allow to execute the same computations.
-The difference between them is that Storm is a truly real-time processing system, whereas Spark works essentially with batches, and has a streaming extension on top of batch computations.
-
-\input{content/07-Components(Storm)}
-\input{content/07-Components(Spark)}
-
-\section{Message Queueing}
-
-Queue servers are the important part of any data system.
-They fill the gap between data sources and processing components or storage systems.
-There are many queue servers, here two of them - Kafka and RabbitMQ.
-Additionally in this section we mention two serialization frameworks.
-They tie different components of a complex system, written in different languages, together.
-
-\input{content/07-Components(Kafka)}
-\input{content/07-Components(RabbitMQ)}
-\input{content/07-Components(Avro)}
-\input{content/07-Components(Thrift)}
-
 \section{Configuraion Management}
+
+There is Zookeeper here.
 
 \input{content/07-Components(ZooKeeper)}
