@@ -1,10 +1,10 @@
 \chapter{The Menthal Story [SP]}
 \label{chap:menthal_story}
 Such devices as smartphones became an integral part of modern life.
-People use it not only for communication, but for plenty of other purposes, like reading books, surfing in the Internet, playing games, etc.
-However, most of the users can not correctly estimate the time spent on their phone during the day.
+People use them not only for communication, but for a plenty of other purposes, like reading books, surfing in the Internet, playing games, etc.
+However, most of the users cannot correctly estimate the time spent on their phone during the day.
 Besides, information about how people use their phones can be analysed from different sides.
-Psychological research, statistical calculations, medicine and healthcare projects, advertising - these are several examples of where such data can yield a profit.
+Psychological research, statistical calculations, medicine and healthcare projects, advertising, - these are several examples of where such data can yield a profit.
 Menthal is an application that is designed specifically for these purposes.
 This chapter describes the main functionality and technical details of this application.
 
@@ -87,7 +87,8 @@ The client part consists of an Android application installed on a smartphone.
 It keeps track of all the user activity during the day.
 All the activities are stored as \textit{events}.
 Each event contains such data as id, event type, timestamp, data itself and some additional information.
-The main types of events are: SMS\_RECEIVED, SMS\_SENT, CALL\_RECEIVED, CALL\_OUTGOING, CALL\_MISSED, SCREEN\_UNLOCK, SCREEN\_LOCK, LOCALISATION.
+The main types of events are: SMS\_RECEIVED, SMS\_SENT, CALL\_RECEIVED, CALL\_OUTGOING, CALL\_MISSED, SCREEN\_UNLOCK, \\*
+ SCREEN\_LOCK, LOCALISATION.
 The information gathering process is hidden from users, the application runs in the background, automatically sending data to the server.
 
 The application gathers this data from different sources, using standard Android operating system API.
@@ -187,5 +188,5 @@ Almost 50 000 persons have this application installed on their phones.
 All of these devices periodically send collected information to the server, that sums up to a vast amount of data.
 Totally around 34Gb of information is received per day, that is almost 1Tb per month.
 All these factors have a significant influence on the application performance.
-The Menthal server side becomes overflowed and is not able to write all incoming data into database, not to mention providing a feedback.
+The Menthal server side becomes overflowed and is not able to write all incoming data into the database, not to mention providing a feedback.
 Therefore, the application requires a new, enhanced server-side architecture that can meet the new requirements.
