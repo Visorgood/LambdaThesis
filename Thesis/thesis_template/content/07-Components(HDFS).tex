@@ -6,7 +6,7 @@ The Apache Software Foundation has developed HDFS originally for its web search 
 Today it is a widely-used distributed file system, that is an infrastructure for such distributed computational frameworks as Hadoop, Storm, etc.
 HDFS allows to use cheap commodity hardware, because it does not require much computational or storage power for one particular node.
 It is written in Java, hence, any platform with JVM \cite{JVM} can run HDFS's software.
-HDFS supports standard hierarchical file organisation with directories and files.
+HDFS supports standard hierarchical file organization with directories and files.
 
 %\subsubsection{Use cases and requirements}
 
@@ -15,9 +15,9 @@ Applications, that use HDFS, require fast writing and reading of files of gigaby
 HDFS is suitable for the batch processing, and it is important to say, that low-latency is not a goal property.
 It allows to operate with the large number of files.
 
-Fault-tolerance, detecting of failed machines, and recovering from unconsistent state of the file system are inherent properties of HDFS.
-This is a key property, because disk failures, and machine failures in general, happen more often, than we could think.
-When we consider a cluster of hundreds and even thousends of nodes, this is actually a normal case.
+Fault-tolerance, detecting of failed machines, and recovering from inconsistent state of the file system are inherent properties of HDFS.
+This is a key property, because disk failures and machine failures in general, happen more often, than we could think.
+When we consider a cluster of hundreds and even thousands of nodes, this is actually a normal case.
 Google has made a deep research on this topic, and has found out that 8\% of hard drives fail in two years \cite{Pinheiro2007}.
 This statistic shows that it is reasonably expected that in the large cluster there are always machines that are out of service.
 
@@ -39,7 +39,7 @@ HDFS consists of two main elements: NameNode and DataNode.
 These are applications that run on JVM.
 They both do not require any particular operational system or hardware, and use local file system for storage of HDFS data pieces.
 
-NameNode is a master programm of the cluster.
+NameNode is a master program of the cluster.
 It stores meta information about the file system's namespace, regulates access of the clients to files, maintains consistent state of the file system, initializes operations like create, rename or delete file.
 NameNode is of the highest importance, because its failure can be dangerous for the whole system.
 It runs usually on a special separated machine.
@@ -77,7 +77,7 @@ You can see the overall structure of HDFS and the way of its functioning on the 
 
 %\subsubsection{Replications}
 
-HDFS stores large files reliably, so that failures of particular machines can lead to an unrecoverable lost of a part of a file with a very small probability.
+HDFS stores large files reliably, so that failures of particular machines can lead to an unrecoverable loss of a part of a file with a very small probability.
 It also provides high throughput, placing blocks of files onto different DataNodes, to give parallel access of many clients to many files in the cluster.
 The number of replicas and the block size are configurable parameters for every file.
 Replication factor also can be changed for already existing files.
