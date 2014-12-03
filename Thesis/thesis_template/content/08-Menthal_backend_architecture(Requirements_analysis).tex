@@ -3,11 +3,11 @@ To determine the Menthal functional and non-functional requirements, first of al
 Figure~\ref{fig:menthal_use_case_diagram} represents the Use case diagram of Menthal project.
 The system consists of two main parts, the client and the server.
 This already gives a separation among its users.
-On the one side, a user interact with a client application.
+On the one side, a user interacts with a client application.
 Menthal tracks the user behavior and provides a feedback, that is based on the gathered data analysis.
 On the other side, system administrators and scientists interact with a server part.
-Scientists carry on researches, analysing the obtained information.
-A system administrator maintains the system, controls event processing and performes new analysis required by scientists.
+Scientists carry on researches, analyzing the obtained information.
+A system administrator maintains the system, controls event processing and performs new analysis required by scientists.
 
 \begin{figure}[h]
   \centering
@@ -19,18 +19,12 @@ A system administrator maintains the system, controls event processing and perfo
 
 \subsection{Functional Requirements}
 
-% to analyze speed layer architecture
 The scope of our work is a part of Lambda Architecture named a Speed Layer.
-% it consists o three components
-% three parts for: receivivg data, ..
 It requires to implement three main parts: data receiving part, real-time data processing and the store of the results of computations.
-The data receiving part does not need to provide any feedback except the acknoledgement that the data was succeessfully received.
+The data receiving part does not need to provide any feedback except the acknowledgement that the data was successfully received.
 Thus on this end of the system we do not need any special API.
 On the contrary, the results of computations can be used further by the other components of the Lambda architecture.
 Therefore it can be useful to provide an API that allows to request the necessary information.
-
-% проверить главу про speed layer, есть ли там уже эти названия?
-% or give a big picture (how data goes)
 
 
 \mnote{Event receiving}
@@ -41,7 +35,7 @@ The responsibility of the data receiver is to deserialize incoming messages, ide
 \mnote{Aggregations}
 The processing part of the Speed Layer performs various aggregations on the incoming data.
 The distinctive feature of the Speed Layer is that it works only with limited amount of data, processing only the recent events.
-Hence it can calculate aggregations and perform analisys in real time.
+Hence it can calculate aggregations and perform analysis in real time.
 The created aggregations have different granularities and characterize the different aspects of user-smartphone interaction.
 
 \mnote{Anomaly detection}
@@ -53,7 +47,7 @@ The system should detect the strange behavior in proper time and immediately not
 The results of aggregations are stored while the Batch layer of the Lambda architecture performs its calculations.
 During this time they should be available for queries.
 Our system should provide an API for these purposes.
-When the results of aggreagtions are collected from the Speed Layer and merged with the results from the Batch Layer, they can be deleted from a storage.
+When the results of aggregations are collected from the Speed Layer and merged with the results from the Batch Layer, they can be deleted from the storage.
  
 \subsection{Non-functional Requirements}
 
@@ -116,7 +110,7 @@ It should use the given resources in a proper way, allowing other components of 
 
 \mnote{Scalability}
 The system load in the Menthal project depends on two main factors.
-First, the increasing number of users auguments the load.
+First, the increasing number of users augments the load.
 This can happen with the growth of popularity of the Menthal application.
 Second, the variety of gathered information about user can be extended.
 Hence our system should meet the requirement of scalability.
@@ -136,9 +130,9 @@ It should be easily configurable.
 It need to provide a convenient mechanism to perform the tracking of the running tasks, e.g. using log files.
 Finally, our system should have necessary tools for testing its functionality.
 
-These requirements vary in their origins, goals and realisation complexity.
+These requirements vary in their origins, goals and realization complexity.
 For example, scalability and extensibility are the essential properties of any distributed system.
 The real-time processing requires availability, reliability and fault tolerance.
 The maintainability and good documentation are easily reachable, they only need a proper approach for software development process.
 On the contrary, such requirements as high security and good performance can be hard to implement.
-In our work we tried to meet most of these requierements.  
+In our work we tried to meet most of these requirements.  

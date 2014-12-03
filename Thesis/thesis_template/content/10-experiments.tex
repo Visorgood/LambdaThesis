@@ -8,16 +8,16 @@ Using the obtained results, we make a choice which technology fits better our ca
 
 \section{Performance Evaluation}
 
-Figure~\ref{fig:test_system_parameters} represents the parameters of the test system.
+Table~\ref{fig:test_system_parameters} represents the parameters of the test system.
 For the simplicity of testing we use only one machine.
 To obtain more reliable results one should also test these systems on a cluster of several machines.
 
-\begin{figure}[h]
+\begin{table}[h]
   \centering
   \includegraphics [width=0.9\textwidth]{images/test_system_parameters}
   \caption{Test system parameters}
   \label{fig:test_system_parameters}
-\end{figure}
+\end{table}
 
 As an input, we use automatically generated events, that imitate the real data flow.
 To make the comparison more objective, we vary the number of processed messages.
@@ -128,14 +128,14 @@ Moreover, they can determine that the unexpected behavior of the system is a bug
 We can compare the number of contributors of Spark and Storm using github statistics, because both these projects present there.
 Currently Spark has 355 contributors, while Storm has 115 contributors. 
 
-\begin{figure}[h]
+\begin{table}[h]
   \centering
   \includegraphics [width=0.6\textwidth]{images/storm_spark_comparison}
   \caption{Summarizing comparison of Storm and Spark Streaming implementations}
   \label{fig:storm_spark_comparison}
-\end{figure}
+\end{table}
 
-To summarize the aspects of Storm and Spark Streaming comparison we present the concluding table shown in Figure~\ref{fig:storm_spark_comparison}.
+To summarize the aspects of Storm and Spark Streaming comparison we present the concluding table shown in Table~\ref{fig:storm_spark_comparison}.
 The checkmark in one of the column means that the specified aspect of a specified technology gives better results than the competitor.
 If both columns contain a checkmark it means that this aspect is equal for both technologies.
 

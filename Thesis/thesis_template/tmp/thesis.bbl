@@ -30,6 +30,12 @@ Andrei Broder and Michael Mitzenmacher.
 \newblock Network applications of bloom filters: A survey.
 \newblock 2005.
 
+\bibitem[CCCJ]{libsvm}
+Chang Chih-Chung and Lin Chih-Jen.
+\newblock Libsvm -- a library for support vector machines.
+\newblock \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}.
+\newblock Accessed 02.11.2014.
+
 \bibitem[CKB{\etalchar{+}}14]{Montag2014}
 Montag Christian, Blaszkiewicz Konrad, Lachmann Bernd, Andone Ionut, Sariyska
   Rayna, Trendafilov Boris, Reuter Martin, and Markowetz Alexander.
