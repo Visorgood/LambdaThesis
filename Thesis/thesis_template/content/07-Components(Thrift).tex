@@ -68,7 +68,7 @@ It provides specific structure of messaging, but it need not to be aware about h
 Data only must to support a set of operations defined by a protocol's interface.
 
 Interface of Thrift's protocol contains two types of methods: for messaging and for encoding particular types of data and structures.
-It has many methods, several examples are: \lstinline{writeMessageBegin(name, type, seq)}, \lstinline{writeMessageEnd()}, \lstinline{writeStructBegin(name)}, \lstinline{writeStructEnd()}, \lstinline{writeFieldBegin(name, type, id)}, \lstinline{writeFieldEnd()}, \lstinline{writeBool(bool)}, \lstinline{writeI32(i32)}, \lstinline{writeDouble(double)}, \lstinline{writeString(string)}.
+It has many methods, several examples are: \lstinline{writeMessageBegin(name, type, seq)}, \lstinline{writeMessageEnd()}, \lstinline{writeStructBegin(name)}, \lstinline{writeStructEnd()}, \lstinline{writeFieldBegin(name, type, id)}, \lstinline{writeFieldEnd()}, \lstinline{writeBool(bool)}, \\* \lstinline{writeI32(i32)}, \lstinline{writeDouble(double)}, \lstinline{writeString(string)}.
 There are similar reading methods, that we omit here for conciseness.
 Basically, every writing function has it reading pair.
 Thrift supports streaming writing of data, that allows to write and read data simultaneously.
