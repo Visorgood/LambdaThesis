@@ -7,19 +7,19 @@ The main advantage of real-time processing, the guaranteed time delay between a 
 Therefore new systems, designed for real-time processing, have appeared.
 One of such systems is an open source project named \textit{Storm}.
 
-Storm is a \textit{complex event-processing} (CEP) system.
+Storm is a \textit{complex event-processing} (CEP) system \cite{Storm}.
 Complex event processing means gathering data from different sources, combining it and making conclusions from it.
 For example, such system keeps track of significant changes in traffic reports or stock market feeds and immediately responds to them. 
 
 Storm is implemented in a dialect of the Lisp language named Clojure.
 Clojure is a functional language like Lisp, but it also supports multithreaded programming.
 Clojure runs on the Java Virtual Machine, however applications within Storm can be written in Java, Scala, JRuby, Perl and PHP.
-Moreover, one can use a Structured Query Language adapter for streaming data directly into Storm topoloy.
+Moreover, one can use a Structured Query Language adapter for streaming data directly into Storm topology.
 
 \mnote{Storm architecture}
 The Storm cluster has a master node called \textit{Nimbus} and \textit{worker} nodes.
-Nimbus assignes tasks for workers and monitors failures.
-There is a deamon called \textit{Supervisor} on every worker node.
+Nimbus assigns tasks for workers and monitors failures.
+There is a daemon called \textit{Supervisor} on every worker node.
 The supervisor is responsible for starting and stopping worker processes assigned by Nimbus.
 ZooKeeper coordinates the interaction between Nimbus and Supervisors.
 It stores the state of all the nodes, making the system stable to failures.
@@ -50,11 +50,11 @@ A bolt can receive information from several spouts and stream it to multiple bol
 \end{figure}
 
 For example, MapReduce word counting example can be easily implemented with Storm.
-Such system counts how many times each word occures in a given input data.
+Such system counts how many times each word occurs in a given input data.
 In the case of Storm one needs 
 (1) a spout to generate text data, 
 (2) one bolt to implement the Map function for word tokenisation and 
-(3) one bolt to implement the Reduce function for aggregation the amounts of words occurences. 
+(3) one bolt to implement the Reduce function for aggregation the amounts of words occurrences. 
 
 Storm allows to group the stream of tuples in different ways.
 For instance, shuffle grouping randomly distributes tuples to bolts such as each bolt receives approximately the same number of tuples.
@@ -72,10 +72,10 @@ builder.setBolt("mybolt2", new TestBolt(), 2) .shuffleGrouping("mybolt1");
 
 Here topology consists of one spout and two bolts.
 The stream of tuples originates from \textit{myspout}, then it is passed to \textit{mybolt1} and finally to \textit{mybolt2}.
-In both cases tuples are grupped using the schuffle grouping method.
+In both cases tuples are grouped using the schuffle grouping method.
 The integer numbers in \textit{setSpout} and \textit{setBolt} define the amount of parallelism for the node.
 
-The implementation charasteristics of Storm lead to high performance and guaranteed fault tolerance.
+The implementation characteristics of Storm lead to high performance and guaranteed fault tolerance.
 It uses ZeroMQ for passing messages between the tasks.
 Messages are automatically serialized and deserialized to Storm primitive types.
 The usage of this message queue helps to avoid intermediate queueing, thus improving performance.
@@ -85,14 +85,14 @@ There is also a fault detection mechanism on task level, when the failed task is
 Storm has supervisors to manage the processes, that leads to efficient usage of resources.
 
 Storm cooperates with message queue systems in such a way that every message is fully processed.
-It builds a tuple tree, that reflects the motion af all the tuples.
+It builds a tuple tree, that reflects the motion of all the tuples.
 Only when every message in the tuple tree is processed, a tuple is considered to be fully processed.
 
 To give an example, let us take a message queue that supplies a spout with messages.
 When the spout takes a message from the queue, the message state changes to 'pending'.
 In this state it cannot be sent to other consumers.
 Moreover, all the messages in pending state are returned to message queue if their consumer disconnects.
-Storm assignes a unique id to the message, if it is not given by the message queue.
+Storm assigns a unique id to the message, if it is not given by the message queue.
 Using this id Storm can keep track of this message during processing.
 The system receives this message when the \textit{nextTuple} method of the spout is called.
 The spout emits the message along with its id to the consuming bolts.
@@ -115,7 +115,7 @@ The acker task is responsible for acking the tuple.
 First, Strom stores the mapping between an acker task and a spout tuple id.
 As every tuple keeps ids of spout tuples in the tree it exists within, it knows the acker tasks it should communicate with.
 A tuple informs an acker task when the tree is fully processed and the tuple is acked.
-Second, the acker task should send a complition message to the spout task that emitted this tuple.
+Second, the acker task should send a completion message to the spout task that emitted this tuple.
 For this purpose, on creation of a new tuple a spout task notifies the appropriate acker task that its task id is linked to that spout tuple.
 
 For acker task tracking the huge tuple trees explicitly is not efficient.

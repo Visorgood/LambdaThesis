@@ -90,24 +90,48 @@ Chang Fay, Dean Jeffrey, Ghemawat Sanjay, Hsieh Wilson, C., Wallach Deborah,
 \newblock Bigtable: A distributed storage system for structured data.
 \newblock 2006.
 
-\bibitem[Foua]{Spark1}
+\bibitem[Foua]{Avro1}
+Apache~Software Foundation.
+\newblock Avro online documentation.
+\newblock \url{http://avro.apache.org/docs/current/spec.html}.
+\newblock Accessed 21.09.2014.
+
+\bibitem[Foub]{Kafka}
+Apache~Software Foundation.
+\newblock Kafka online documentation.
+\newblock \url{http://kafka.apache.org/documentation.html}.
+\newblock Accessed 21.09.2014.
+
+\bibitem[Fouc]{Spark1}
 Apache~Software Foundation.
 \newblock Spark programming guide.
 \newblock \url{https://spark.apache.org/docs/latest/programming-guide.html}.
 \newblock Accessed 23.09.2014.
 
-\bibitem[Foub]{Spark2}
+\bibitem[Foud]{Spark2}
 Apache~Software Foundation.
 \newblock Spark streaming programming guide.
 \newblock
   \url{https://spark.apache.org/docs/latest/streaming-programming-guide.html}.
 \newblock Accessed 11.09.2014.
 
-\bibitem[Fouc]{Thrift}
+\bibitem[Foue]{Storm}
+Apache~Software Foundation.
+\newblock Storm online documentation.
+\newblock \url{https://storm.incubator.apache.org/documentation/Tutorial.html}.
+\newblock Accessed 21.09.2014.
+
+\bibitem[Fouf]{Thrift}
 Apache~Software Foundation.
 \newblock Thrift online documentation.
 \newblock \url{http://thrift.apache.org/docs/}.
 \newblock Accessed 29.09.2014.
+
+\bibitem[Foug]{Zookeeper}
+Apache~Software Foundation.
+\newblock Zookeeper online documentation.
+\newblock \url{http://zookeeper.apache.org/doc/trunk/zookeeperOver.html}.
+\newblock Accessed 21.09.2014.
 
 \bibitem[Fou14]{HDFSArchitecture1}
 Apache~Software Foundation.
@@ -132,6 +156,12 @@ Robert Johnson.
 Dean Jeffrey and Ghemawat Sanjay.
 \newblock Mapreduce: Simplifed data processing on large clusters.
 \newblock 2004.
+
+\bibitem[KJJ{\etalchar{+}}12]{Goodhope2012}
+Goodhope Ken, Koshy Joel, Kreps Jay, Narkhede Neha, Park Richard, Rao Jun, and
+  Ye~Victor, Yang.
+\newblock Building linkedins real-time activity data pipeline.
+\newblock 2012.
 
 \bibitem[Lei]{Jedis}
 Jonathan Leibiusky.
@@ -162,6 +192,11 @@ Nathan Marz.
 \newblock Elephantdb repository on github.
 \newblock \url{https://github.com/nathanmarz/elephantdb}.
 \newblock Accessed 14.10.2014.
+
+\bibitem[Med12]{Medeiros2012}
+Andre Medeiros.
+\newblock Zookeeper's atomic broadcast protocol: Theory and practice.
+\newblock 2012.
 
 \bibitem[MW14]{Marz2014}
 Nathan Marz and James Warren.

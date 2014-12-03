@@ -15,6 +15,8 @@ Warning--empty journal in Beaver2010
 Warning--empty journal in Chang2006
 Warning--empty publisher in Hewitt2011
 Warning--empty journal in Dean2004
+Warning--empty journal in Goodhope2012
+Warning--empty journal in Medeiros2012
 Warning--empty journal in Pinheiro2007
 Warning--empty journal in Slee2007
 Warning--empty publisher in Seguin2012
@@ -23,45 +25,45 @@ Warning--empty journal in Chandola2007
 Warning--empty publisher in AlvaroWilliams2012
 Warning--empty journal in Zaharia2010
 Warning--empty journal in Zaharia2013
-You've used 38 entries,
+You've used 44 entries,
             2543 wiz_defined-function locations,
-            749 strings with 9893 characters,
-and the built_in function-call counts, 12734 in all, are:
-= -- 1180
-> -- 741
-< -- 17
-+ -- 259
-- -- 252
-* -- 783
-:= -- 2187
-add.period$ -- 128
-call.type$ -- 38
-change.case$ -- 248
-chr.to.int$ -- 35
-cite$ -- 58
-duplicate$ -- 459
-empty$ -- 883
-format.name$ -- 298
-if$ -- 2518
-int.to.chr$ -- 4
+            773 strings with 10555 characters,
+and the built_in function-call counts, 14566 in all, are:
+= -- 1354
+> -- 826
+< -- 22
++ -- 290
+- -- 279
+* -- 878
+:= -- 2490
+add.period$ -- 150
+call.type$ -- 44
+change.case$ -- 284
+chr.to.int$ -- 37
+cite$ -- 66
+duplicate$ -- 530
+empty$ -- 1023
+format.name$ -- 335
+if$ -- 2888
+int.to.chr$ -- 8
 int.to.str$ -- 0
-missing$ -- 22
-newline$ -- 208
-num.names$ -- 111
-pop$ -- 423
+missing$ -- 24
+newline$ -- 242
+num.names$ -- 129
+pop$ -- 494
 preamble$ -- 1
-purify$ -- 289
+purify$ -- 331
 quote$ -- 0
-skip$ -- 364
+skip$ -- 414
 stack$ -- 0
-substring$ -- 271
-swap$ -- 24
-text.length$ -- 17
-text.prefix$ -- 17
+substring$ -- 313
+swap$ -- 28
+text.length$ -- 22
+text.prefix$ -- 22
 top$ -- 0
-type$ -- 288
-warning$ -- 19
-while$ -- 94
-width$ -- 42
-write$ -- 456
-(There were 20 warnings)
+type$ -- 336
+warning$ -- 21
+while$ -- 107
+width$ -- 48
+write$ -- 530
+(There were 22 warnings)

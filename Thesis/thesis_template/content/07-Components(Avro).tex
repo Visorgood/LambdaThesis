@@ -5,10 +5,10 @@ Data should be structured when it is transferred over the network.
 Data objects are converted into some form, in which they can be stored or transferred and later be reconstructed in a new environment.
 This process is called serialization.
 The naive serialization approaches are XML or JSON.
-Drawbacks of these formats that they require too much space for storing, because the data is kept it a text form.
+Drawback of these formats is that they require too much space for storing, because the data is kept it a text form.
 The better solution is to use binary format for serialization and Apache Avro is one of the frameworks that use such approach.
 
-Avro differs from the other serialization frameworks in that it does not require the code generation on receivivg.
+Avro differs from the other serialization frameworks in that it does not require the code generation on receiving \cite{Avro1}.
 It even allows to efficiently sort binary-encoded data without deserialization.
 Also Avro supports easy schema changes, because it stores both old and new schemas and can associate fields with each other using their names.
 This framework provides two types of encoding: binary encoding and using JSON.
@@ -17,7 +17,7 @@ Avro uses \textit{schemas} that are defined using JSON.
 It needs a schema for serialization and in most cases this schema is transmitted along with the data.
 Thus the receiving application does not need to store schemas for deserialization.
 However, in some scenarios the transmission of schema is redundant, because both sides have the full schema stored locally.
-In this case it is possible to transmitt only a binary representation of serialized objects.
+In this case it is possible to transmit only a binary representation of serialized objects.
 
 The schema can contain both primitive and complex types.
 Primitive types include: \textit{null}, \textit{boolean}, \textit{bytes}, \textit{int}, \textit{long}, \textit{string}, \textit{float} and \textit{double}.
@@ -44,7 +44,7 @@ Avro uses an \textit{object container format} for storing objects in a file.
 A file has a specified schema, that consists of blocks with synchronization markers between them.
 Blocks contain data objects and can be compressed.
 Synchronization markers allow to split file for processing it with MapReduce.
-Moreover, Avro file comtains metadata section, where it stores a schema.
+Moreover, Avro file contains metadata section, where it stores a schema.
 
 A file has the following structure: it has a header and one or several file data blocks.
 The header contains information about encoding type and file metadata.
@@ -57,13 +57,13 @@ Avro provides a \textit{Remote Procedure Call} (RPC) interface for implementing 
 RPC protocol is defined using JSON.
 Its attributes include a \textit{messages} object, that specifies the messages that are exchanged.  
 \textit{Message} is a byte sequence, that is transmitted using a transport mechanism.
-Transport system sends requests and receives responces.
+Transport system sends requests and receives responses.
 
 Transport can have a stateless or stateful design.
 \textit{Stateless} means that a server does not store any information about a client state.
-The client transmitts all the needed data in every request message.
+The client transmits all the needed data in every request message.
 In \textit{stateful} design the server keeps the persistent client state.
-This approaches has two problems.
+This approach has two problems.
 First, the server should have a mechanism to discard client state at some point.
 It is not possible to store the states of all the client for unlimited period of time.
 Second, the server should be able to restore the client state in the case of the server crash.
@@ -91,9 +91,9 @@ Framing makes read and write operations more efficient.
 
 Avro uses a handshake procedure before sending any RPC requests and responses.
 It is used to make sure that the protocol definition is the same on both the server and the client side.
-Only in this case the server and the client can correctly deserialize requests and responces.
+Only in this case the server and the client can correctly deserialize requests and responses.
 To avoid extra network exchanges the server and the client stores recently used protocols in a cache.
-Stateless and stateful transport differs in that the former requres a handshake before every request and response.
+Stateless and stateful transport differs in that the former requires a handshake before every request and response.
 In contrast, the latter needs only one handshake and for the lifetime of the connection.
 
 The handshake procedure is the following.
