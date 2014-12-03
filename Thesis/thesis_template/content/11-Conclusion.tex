@@ -9,30 +9,29 @@ We need to store it so, that it is robust and can be efficiently accessed.
 We must be able to process it in a linearly scalable way.
 As a result, the whole new field of computer science and information technology arose - namely Big Data.
 
-In this thesis we have considered the new generic approach for the big data systems - the Lambda architecture.
-
 We start this thesis with the description of the Menthal project that encountered a problem to store and process large amounts of data.
 We describe the standard approaches to do that.
 We consider MapReduce programming paradigm.
-We showed examples of how Google and Facebook solve several big data issues.
+We show examples of how Google and Facebook solve several big data issues.
 
 Then we examine why and how those standard methods do not fulfill all the requirements of the generic big data system.
 Specifically, there is a necessity to process data in the real-time manner, and reflect it in the query answering fast.
 We investigate the Lambda architecture, that combines two approaches of data processing - batch and incremental.
 It is a new generic big data architecture that fulfils all requirements that big data systems have.
 
-We design and develop the Speed layer of the Lambda architecture, that completes the whole system in the Menthal project.
+We design and develop the Speed layer of the Lambda architecture that completes the whole system in the Menthal project.
 For that sake we use such open-source frameworks as Kafka, Storm, Spark and Redis.
-We conduct several experiments to measure and compare efficiency of two data processing frameworks - Spark and Storm.
+Specifically, the structure of the system is as follows - message queueing server Kafka, data processing framework Storm or Spark, data storage system Redis.
+All these components work in a distributed fashion.
+The whole code is in Java.
+We do also practical measurements of this implementation.
+We conduct several experiments to compare efficiency of two data processing frameworks - Spark and Storm.
 They show that Spark processes messages faster than Storm, and also has better codability.
 
-The result of our work is the system, namely the Speed layer of the Lambda architecture.
-It consists of three components - message queueing server Kafka, data processing framework Storm or Spark, data storage system Redis.
-All components work in a distributed fashion.
-The whole code is in Java. 
-We do also practical measurements of this implementation.
-We make experiments on the efficiency of events processing of two data processing frameworks - Storm and Spark.
-
-To make this system more robust, efficient and flexible additional investigation is required.
-Research on different storage systems must be made.
-More different setups of the cluster can be tested to achieve good performance.
+There are several issues to consider in the future researches.
+From the side of Menthal, it is to run this system in different setup.
+Various configuraions of cluster and different types of machines are to try.
+It is also interesting to check other storage systems.
+This can make the system more robust, efficient and flexible.
+From the side of researchers it is important to investigate more what data that we consider, can additionally bring.
+What information is inside, and how to organize processing to retrieve this information efficiently.
