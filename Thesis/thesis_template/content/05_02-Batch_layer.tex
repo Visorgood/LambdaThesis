@@ -75,14 +75,14 @@ The master dataset is logically a large list of records.
 When new piece of data arrives into the system, the batch layer appends it to the master dataset.
 The more exact description of how the master dataset can look like will be discussed later on in this chapter.
 
-\begin{figure}[h]
+\begin{table}[h]
   \centering
   \includegraphics [width=0.8\textwidth]{images/MasterDatasetExample}
   \caption{An example of the list of records in the master dataset.}
-  \label{fig:MasterDatasetExample}
-\end{figure}
+  \label{tab:MasterDatasetExample}
+\end{table}
 
-On the Figure~\ref{fig:MasterDatasetExample} there is an example of the list of records of the master dataset.
+On the Table~\ref{tab:MasterDatasetExample} there is an example of the list of records of the master dataset.
 The 5th and 6th records are updates of the 1st and 2nd, respectively.
 They are in the same list, but the current version is defined by the last timestamp.
 This model implies, that the whole history of updates is available at any time in the future. 

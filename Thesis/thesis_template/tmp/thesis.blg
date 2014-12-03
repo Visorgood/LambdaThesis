@@ -1,6 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2012/W32TeX)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: thesis.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: thesis.aux
 The style file: alpha.bst
 Database file #1: bibliography/literature.bib
 Warning--I didn't find a database entry for "Bigtable/Chang_Dean_Ghemawat"
@@ -23,45 +21,4 @@ Warning--empty journal in Chandola2007
 Warning--empty publisher in AlvaroWilliams2012
 Warning--empty journal in Zaharia2010
 Warning--empty journal in Zaharia2013
-You've used 38 entries,
-            2543 wiz_defined-function locations,
-            749 strings with 9893 characters,
-and the built_in function-call counts, 12734 in all, are:
-= -- 1180
-> -- 741
-< -- 17
-+ -- 259
-- -- 252
-* -- 783
-:= -- 2187
-add.period$ -- 128
-call.type$ -- 38
-change.case$ -- 248
-chr.to.int$ -- 35
-cite$ -- 58
-duplicate$ -- 459
-empty$ -- 883
-format.name$ -- 298
-if$ -- 2518
-int.to.chr$ -- 4
-int.to.str$ -- 0
-missing$ -- 22
-newline$ -- 208
-num.names$ -- 111
-pop$ -- 423
-preamble$ -- 1
-purify$ -- 289
-quote$ -- 0
-skip$ -- 364
-stack$ -- 0
-substring$ -- 271
-swap$ -- 24
-text.length$ -- 17
-text.prefix$ -- 17
-top$ -- 0
-type$ -- 288
-warning$ -- 19
-while$ -- 94
-width$ -- 42
-write$ -- 456
 (There were 20 warnings)
